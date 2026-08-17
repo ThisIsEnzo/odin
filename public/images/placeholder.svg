@@ -1,0 +1,11 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ODIN photo placeholder">
+  <rect width="800" height="600" fill="#F1EDE1"/>
+  <rect x="0" y="0" width="800" height="600" fill="none" stroke="#E8E2D2" stroke-width="2"/>
+  <!-- simple rolling-hills + sun mark, standing in for real farm photography -->
+  <circle cx="620" cy="150" r="55" fill="#C98B4A" opacity="0.85"/>
+  <path d="M0 420 C 140 340, 260 340, 400 400 C 540 460, 660 380, 800 410 L 800 600 L 0 600 Z" fill="#3F4B3A"/>
+  <path d="M0 470 C 160 410, 320 430, 480 470 C 620 505, 720 470, 800 460 L 800 600 L 0 600 Z" fill="#2C352A"/>
+  <text x="400" y="560" font-family="Georgia, serif" font-size="20" fill="#7A4B32" text-anchor="middle" opacity="0.8">
+    ODIN — placeholder image
+  </text>
+</svg>

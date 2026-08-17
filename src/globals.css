@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — see /docs/ARCHITECTURE.md §14.
+ * Grounded in the actual subject (Thai countryside farmland, teak and
+ * saddle leather, golden-hour light) rather than a generic "rustic
+ * premium" template. Tailwind v4 is CSS-first: these @theme values become
+ * both CSS custom properties (--color-moss etc.) and Tailwind utilities
+ * (bg-moss, text-moss, etc. are NOT auto-generated for arbitrary names —
+ * components in this project reference tokens via bg-[--color-moss] style
+ * arbitrary-value utilities for clarity during the foundation phase).
+ */
+@theme {
+  --color-ink: #20241f;
+  --color-canvas: #f1ede1;
+  --color-canvas-soft: #e8e2d2;
+  --color-moss: #3f4b3a;
+  --color-moss-dark: #2c352a;
+  --color-saddle: #7a4b32;
+  --color-dusk: #c98b4a;
+  --color-dusk-light: #e0ab74;
+
+  /* Display face for en/ru headings. Th/zh headings fall back to
+     font-sans automatically — Lora has no Thai/Chinese glyphs, so the
+     browser resolves those characters against the next font in the stack
+     without any per-locale branching in components. Values reference the
+     CSS variables next/font/google generates (set on <html> in
+     app/[locale]/layout.tsx) — not literal font names — since these are
+     self-hosted, optimized files, not a system/Google-CDN font. */
+  --font-display: var(--font-lora), var(--font-noto-thai), var(--font-noto-sc), Georgia, serif;
+  --font-sans: var(--font-inter), var(--font-noto-thai), var(--font-noto-sc), system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-button: 0.625rem;
+
+  --breakpoint-xs: 480px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Never suppress the focus ring — CLAUDE.md §27, ARCHITECTURE.md §11. */
+:focus-visible {
+  outline: 2px solid var(--color-moss);
+  outline-offset: 2px;
+}
+
+/* Respect reduced-motion preferences everywhere, not just in one component. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -34,6 +34,26 @@ restrictions, all prices, package contents/prices. Full audit in `MOCK_DATA.md`.
 **Weight is required only for Horse Riding and Pony Riding** (§11) — no other experience asks for
 it, and the UI must not ask users for fields irrelevant to what they selected.
 
+## 2a. Operating Hours Boundary — Decision (finalized in Phase 2)
+
+`OperatingHours.open`/`close` needed an explicit rule for how the boundary itself behaves, since
+"07:00–18:00" is ambiguous about whether 18:00 is itself bookable. Decision:
+
+- **`open` is inclusive** — the first valid booking start time.
+- **`close` is exclusive** — never itself a valid start time.
+
+So for Horse Riding (07:00–18:00), valid start times satisfy `07:00 <= time < 18:00`; `18:00` is
+rejected. Rationale: a guest starting a fresh session at the exact moment an experience closes
+would necessarily run past closing, which isn't realistic for a staffed physical activity. This is
+implemented once, in `isTimeWithinOperatingHours()` (`src/lib/booking/rules.ts`), and is covered by
+unit tests asserting `18:00` is rejected for Horse Riding, `20:00` for ATV, and `21:00` for Sauna.
+
+This governs the *boundary check* only — it doesn't by itself compute the last practical bookable
+slot (that depends on `bookingIntervalMinutes` too, e.g. the last horse-riding slot is 17:00 on a
+60-minute grid). A slot-generation helper for the UI to offer only valid times, rather than letting
+guests pick 18:00 and then rejecting it, is a natural near-term addition once the booking UI
+(Phase 4) exists — not built yet, since nothing consumes it until then.
+
 ## 3. Field-by-Field Validation
 
 | Field | Rule |
@@ -45,26 +65,34 @@ it, and the UI must not ask users for fields irrelevant to what they selected.
 | Weight | Required and validated against `restrictions.maxWeightKg` **only if** `experience.requiresWeight` |
 | Customer info | Name, valid email, valid phone required; notes optional and length-capped |
 
-## 4. Validation Architecture — one schema, two enforcement points
+## 4. Validation Architecture — one rules module, two callers
 
-A single Zod schema, built from `src/data/odin/experiences.ts` rather than from hardcoded
-numbers, is used both for instant client feedback and as the actual security boundary server-side.
-This is what "the server must independently validate the same business rules" (§9) means in
-practice: not two separately-written rule sets that could drift, but one schema imported twice.
+**Update (Phase 2):** the business rules themselves are now implemented — not just planned — as a
+standalone, framework-agnostic module: `src/lib/booking/rules.ts`. It has no dependency on Zod,
+React, or Next.js; it only reads `Experience.operatingHours` / `Experience.restrictions` from the
+data layer and returns a structured result (`{ valid: true }` or `{ valid: false, issues: [...] }`,
+where each issue carries a `messageKey` into `messages/{locale}.json` under `booking.errors.*`,
+never a raw string — kept consistent with the facts/content split in `ARCHITECTURE.md` §5, now
+extended to validation errors too).
+
+This changes the original plan below in one way: **Zod (Phase 4, once the booking form exists)
+wraps `rules.ts`, it doesn't reimplement it.** The Zod schema's job becomes structural validation
+(shape, types, string formats) plus a `.superRefine()` that calls `validateBookingRequest()` and
+forwards any issues — so there is exactly one place the 90kg/60kg/operating-hours logic lives, not
+one copy in `rules.ts` and a second, slightly-different copy inline in a Zod refinement:
 
 ```ts
-// src/lib/validation/booking.schema.ts
+// src/lib/validation/booking.schema.ts — Phase 4, not built yet. Sketch only.
 import { z } from 'zod';
 import { experiences } from '@/data/odin/experiences';
-
-const experienceMap = Object.fromEntries(experiences.map((e) => [e.id, e]));
+import { validateBookingRequest } from '@/lib/booking/rules';
 
 export const bookingSchema = z
   .object({
-    experienceId: z.enum(experiences.map((e) => e.id) as [string, ...string[]]),
-    date: z.string().date(),
-    time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
-    guests: z.number().int().min(1),
+    experienceId: z.string(),
+    date: z.string(),
+    time: z.string(),
+    guests: z.number().int(),
     weightKg: z.number().positive().optional(),
     customer: z.object({
       name: z.string().min(1).max(120),
@@ -74,29 +102,26 @@ export const bookingSchema = z
     }),
   })
   .superRefine((data, ctx) => {
-    const experience = experienceMap[data.experienceId];
-
-    // Operating hours — re-derived from the facts layer, never trusted from the client
-    if (data.time < experience.operatingHours.open || data.time >= experience.operatingHours.close) {
-      ctx.addIssue({ code: 'custom', path: ['time'], message: 'Outside operating hours' });
-    }
-
-    // Conditional weight requirement — driven by data, not an "if experience === 'horse'" branch
-    if (experience.requiresWeight && data.weightKg === undefined) {
-      ctx.addIssue({ code: 'custom', path: ['weightKg'], message: 'Weight is required' });
-    }
-    const max = experience.restrictions.maxWeightKg;
-    if (max && data.weightKg !== undefined && data.weightKg > max) {
-      ctx.addIssue({ code: 'custom', path: ['weightKg'], message: `Maximum weight is ${max}kg` });
+    const result = validateBookingRequest(data, experiences);
+    if (!result.valid) {
+      for (const issue of result.issues) {
+        ctx.addIssue({ code: 'custom', path: [issue.field], message: issue.messageKey });
+      }
     }
   });
 ```
 
-- **Client:** `useForm({ resolver: zodResolver(bookingSchema) })` — instant inline errors, good UX.
-- **Server (`app/api/booking/route.ts`):** `bookingSchema.parse(await req.json())` — the same
-  import, the actual gate. A request that skips the browser entirely (curl, a modified client, a
-  bypassed form) hits exactly the same rules. Price, hours, and restrictions are never accepted
-  from the request body — only re-read server-side from `experiences.ts` by `experienceId`.
+- **Client (Phase 4):** `useForm({ resolver: zodResolver(bookingSchema) })` — instant inline
+  errors, resolved to display text via `t(issue.message)` since `message` here is a translation
+  key, not English copy.
+- **Server (Phase 4, `app/api/booking/route.ts`):** the same schema, `.parse(await req.json())` —
+  the actual gate. A request that skips the browser entirely hits exactly the same
+  `validateBookingRequest()` call the client used for instant feedback. Price, hours, and
+  restrictions are never accepted from the request body — only re-read server-side from
+  `experiences.ts` by `experienceId`.
+- **Today (Phase 2):** `rules.ts` is already fully unit tested (`tests/unit/booking-rules.test.ts`)
+  independent of Zod, React, or any UI — so the business logic is verified before the form or API
+  route that will eventually call it exist.
 
 ## 5. Conditional Fields — pattern, not a special case
 

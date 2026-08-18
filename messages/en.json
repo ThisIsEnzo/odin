@@ -70,5 +70,60 @@
     "title": "Something went wrong",
     "description": "Please try again, or contact us directly if the problem continues.",
     "retry": "Try again"
+  },
+  "restaurant": {
+    "title": "Restaurant",
+    "description": "Farm-to-table dining after a day of riding and exploring — see the Restaurant page for hours and cuisine."
+  },
+  "packages": {
+    "familyDay": {
+      "title": "Family Day",
+      "description": "A relaxed day for the whole family: pony riding, time on the farm, and a meal at our restaurant."
+    },
+    "adventureDay": {
+      "title": "Adventure Day",
+      "description": "Off-road ATV exploring followed by a meal at our restaurant."
+    },
+    "coupleEscape": {
+      "title": "Couple Escape",
+      "description": "Horse riding, sauna, and dinner for two."
+    }
+  },
+  "gallery": {
+    "items": {
+      "horse01": { "alt": "A horse being led across a paddock at ODIN farm" },
+      "pony01": { "alt": "A pony ready for a guided ride at ODIN farm" },
+      "atv01": { "alt": "An ATV on a dirt trail at ODIN farm" },
+      "sauna01": { "alt": "A wood-fired sauna at ODIN farm" },
+      "restaurant01": { "alt": "Dining area at the ODIN restaurant" }
+    }
+  },
+  "faq": {
+    "items": {
+      "howToBook": {
+        "question": "How do I book an experience?",
+        "answer": "Submit a booking request through our booking form. Our team confirms availability with you directly — a request isn't an automatic reservation."
+      },
+      "whatToBring": {
+        "question": "What should I bring?",
+        "answer": "Comfortable clothing and closed-toe shoes are recommended. Anything specific to an experience is listed on its page."
+      },
+      "gettingThere": {
+        "question": "How do I get to ODIN?",
+        "answer": "ODIN is located approximately {distance} from Pattaya. See the Location page for directions and a map link."
+      }
+    }
+  },
+  "booking": {
+    "errors": {
+      "invalidExperience": "We couldn't find that experience. Please choose one from the list.",
+      "invalidTimeFormat": "Please choose a valid time.",
+      "outsideOperatingHours": "This experience is bookable between {open} and {close}.",
+      "weightRequired": "Please enter the rider's weight.",
+      "weightExceedsMaximum": "The maximum weight for this experience is {max}kg.",
+      "weightBelowMinimum": "The minimum weight for this experience is {min}kg.",
+      "invalidGuestCount": "Please enter at least 1 guest.",
+      "invalidDate": "Please choose a valid, upcoming date."
+    }
   }
 }

@@ -33,10 +33,10 @@ export default async function HomePage({ params }: PageProps) {
           <Badge variant="dusk" className="mb-6">
             {t("badge")}
           </Badge>
-          <h1 className="font-[--font-display] text-4xl leading-tight text-[--color-ink] sm:text-5xl">
+          <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl">
             {t("heroTitle")}
           </h1>
-          <p className="mt-4 text-lg text-[--color-ink]/75">{t("heroSubtitle")}</p>
+          <p className="mt-4 text-lg text-ink/75">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>
               {tNav("bookNow")}
@@ -50,10 +50,10 @@ export default async function HomePage({ params }: PageProps) {
 
       <Section tone="canvas-soft">
         <Container>
-          <h2 className="font-[--font-display] text-2xl text-[--color-ink] sm:text-3xl">
+          <h2 className="font-display text-2xl text-ink sm:text-3xl">
             {t("experiencesHeading")}
           </h2>
-          <p className="mt-2 max-w-2xl text-[--color-ink]/70">{t("experiencesIntro")}</p>
+          <p className="mt-2 max-w-2xl text-ink/70">{t("experiencesIntro")}</p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {experiences.map((experience) => (
@@ -63,7 +63,7 @@ export default async function HomePage({ params }: PageProps) {
                   <CardDescription>
                     {tExperiences(`${toCamelCase(experience.id)}.shortDescription`)}
                   </CardDescription>
-                  <p className="mt-4 text-sm text-[--color-ink]/60">
+                  <p className="mt-4 text-sm text-ink/60">
                     {experience.operatingHours.open}–{experience.operatingHours.close}
                   </p>
                 </CardBody>

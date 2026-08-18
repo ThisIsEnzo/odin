@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { Inter, Lora, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import "../../globals.css";
+import "../globals.css";
 
 // Latin/Cyrillic fonts cover en + ru directly. Thai/Chinese are loaded
 // alongside and referenced later in the CSS font-family fallback stack
@@ -58,16 +58,23 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   // Enables static rendering for this locale subtree.
   setRequestLocale(locale);
 
+  // Required so CLIENT components (LanguageSwitcher, MobileNav) have
+  // messages to read — useTranslations() in a Server Component reads the
+  // request context directly and doesn't need this, but it does need to
+  // cross the server/client boundary explicitly for anything marked
+  // "use client". Without this, next-intl throws in those components.
+  const messages = await getMessages();
+
   return (
     <html
       lang={locale}
       className={`${inter.variable} ${lora.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
     >
       <body className="flex min-h-screen flex-col antialiased">
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[--radius-button] focus:bg-[--color-moss] focus:px-4 focus:py-2 focus:text-[--color-canvas]"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-button focus:bg-moss focus:px-4 focus:py-2 focus:text-canvas"
           >
             Skip to content
           </a>

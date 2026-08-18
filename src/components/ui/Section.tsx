@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 export type SectionTone = "canvas" | "canvas-soft" | "moss";
 
 const tones: Record<SectionTone, string> = {
-  canvas: "bg-[--color-canvas]",
-  "canvas-soft": "bg-[--color-canvas-soft]",
-  moss: "bg-[--color-moss] text-[--color-canvas]",
+  canvas: "bg-canvas",
+  "canvas-soft": "bg-canvas-soft",
+  moss: "bg-moss text-canvas",
 };
 
 export interface SectionProps extends HTMLAttributes<HTMLElement> {

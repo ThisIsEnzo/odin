@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "siteName": "ODIN",
+    "defaultTitle": "ODIN — Farm & Resort Experience near Pattaya",
+    "description": "Ride, explore, relax and eat at ODIN, a countryside farm and resort experience about 20 km from Pattaya, Thailand."
+  },
+  "common": {
+    "logoSuffix": "Farm & Resort Experience near Pattaya",
+    "primaryNavigation": "Primary navigation",
+    "languageSwitcherLabel": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "mobileMenuLabel": "Mobile navigation"
+  },
+  "nav": {
+    "experiences": "Experiences",
+    "restaurant": "Restaurant",
+    "packages": "Packages",
+    "gallery": "Gallery",
+    "location": "Location",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "bookNow": "Book Now"
+  },
+  "footer": {
+    "tagline": "Ride. Explore. Relax. Eat.",
+    "openDaily": "Restaurant open daily {hours}",
+    "navigationHeading": "Explore",
+    "contactHeading": "Contact",
+    "languageHeading": "Language",
+    "distanceFromPattaya": "Approximately {distance} from Pattaya",
+    "rightsReserved": "All rights reserved."
+  },
+  "home": {
+    "badge": "Foundation preview",
+    "heroTitle": "ODIN — Farm & Resort Experience near Pattaya",
+    "heroSubtitle": "Ride. Explore. Relax. Eat.",
+    "secondaryCta": "See experiences",
+    "experiencesHeading": "Experiences",
+    "experiencesIntro": "Four ways to spend your day at ODIN, each with its own pace."
+  },
+  "experiences": {
+    "horseRiding": {
+      "title": "Horse Riding",
+      "shortDescription": "A guided ride through the farm's open countryside."
+    },
+    "ponyRiding": {
+      "title": "Pony Riding",
+      "shortDescription": "A gentle, family-friendly ride for younger riders."
+    },
+    "atv": {
+      "title": "ATV",
+      "shortDescription": "Off-road exploring across the farm's trails."
+    },
+    "sauna": {
+      "title": "Sauna",
+      "shortDescription": "Wind down after a day of riding and exploring."
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has moved.",
+    "backHome": "Back to home"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "Please try again, or contact us directly if the problem continues.",
+    "retry": "Try again"
+  }
+}

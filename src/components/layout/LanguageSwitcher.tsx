@@ -28,9 +28,9 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           router.replace(pathname, { locale: nextLocale });
         }}
         className={cn(
-          "rounded-[--radius-button] border border-[--color-ink]/20 bg-transparent",
-          "px-2 py-1.5 text-[--color-ink]",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-moss]",
+          "rounded-button border border-ink/20 bg-transparent",
+          "px-2 py-1.5 text-ink",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
         )}
       >
         {routing.locales.map((code) => (

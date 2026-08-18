@@ -11,11 +11,11 @@ export function Header() {
   const tCommon = useTranslations("common");
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[--color-ink]/10 bg-[--color-canvas]/95 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-ink/10 bg-canvas/95 backdrop-blur">
       <Container className="flex h-16 items-center justify-between sm:h-20">
         <Link
           href="/"
-          className="font-[--font-display] text-2xl tracking-tight text-[--color-ink] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-moss]"
+          className="font-display text-2xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
         >
           ODIN
           <span className="sr-only"> — {tCommon("logoSuffix")}</span>
@@ -29,7 +29,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-[--radius-button] px-3 py-2 text-sm font-medium text-[--color-ink]/80 hover:bg-[--color-moss]/10 hover:text-[--color-ink] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-moss]"
+              className="rounded-button px-3 py-2 text-sm font-medium text-ink/80 hover:bg-moss/10 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
             >
               {t(item.translationKey)}
             </Link>

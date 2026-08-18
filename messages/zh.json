@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "siteName": "ODIN",
+    "defaultTitle": "ODIN — 芭提雅附近的农场度假体验",
+    "description": "在 ODIN 骑马、探索、放松和用餐——一个距芭提雅约20公里的乡村农场度假胜地。"
+  },
+  "common": {
+    "logoSuffix": "芭提雅附近的农场度假体验",
+    "primaryNavigation": "主导航",
+    "languageSwitcherLabel": "语言",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "menu": "菜单",
+    "mobileMenuLabel": "移动端导航"
+  },
+  "nav": {
+    "experiences": "体验项目",
+    "restaurant": "餐厅",
+    "packages": "套餐",
+    "gallery": "图库",
+    "location": "位置",
+    "about": "关于我们",
+    "faq": "常见问题",
+    "contact": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "bookNow": "立即预订"
+  },
+  "footer": {
+    "tagline": "骑马。探索。放松。用餐。",
+    "openDaily": "餐厅每日营业 {hours}",
+    "navigationHeading": "探索",
+    "contactHeading": "联系方式",
+    "languageHeading": "语言",
+    "distanceFromPattaya": "距芭提雅约 {distance}",
+    "rightsReserved": "版权所有。"
+  },
+  "home": {
+    "badge": "基础预览版",
+    "heroTitle": "ODIN — 芭提雅附近的农场度假体验",
+    "heroSubtitle": "骑马。探索。放松。用餐。",
+    "secondaryCta": "查看体验项目",
+    "experiencesHeading": "体验项目",
+    "experiencesIntro": "在 ODIN，四种方式度过您的一天，每种都有自己的节奏。"
+  },
+  "experiences": {
+    "horseRiding": {
+      "title": "骑马",
+      "shortDescription": "在农场开阔的乡村中进行有导游带领的骑行。"
+    },
+    "ponyRiding": {
+      "title": "小马骑乘",
+      "shortDescription": "适合小朋友和家庭的温和骑乘体验。"
+    },
+    "atv": {
+      "title": "越野车（ATV）",
+      "shortDescription": "在农场小径上探索越野路线。"
+    },
+    "sauna": {
+      "title": "桑拿",
+      "shortDescription": "在骑行和探索一天后放松身心。"
+    }
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "您要查找的页面不存在或已被移动。",
+    "backHome": "返回首页"
+  },
+  "error": {
+    "title": "出现了一些问题",
+    "description": "请重试，如果问题持续存在，请直接联系我们。",
+    "retry": "重试"
+  }
+}

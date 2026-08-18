@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 export type BadgeVariant = "moss" | "saddle" | "dusk" | "outline";
 
 const variants: Record<BadgeVariant, string> = {
-  moss: "bg-[--color-moss] text-[--color-canvas]",
-  saddle: "bg-[--color-saddle] text-[--color-canvas]",
-  dusk: "bg-[--color-dusk] text-[--color-ink]",
-  outline: "border border-[--color-ink]/20 text-[--color-ink]/80 bg-transparent",
+  moss: "bg-moss text-canvas",
+  saddle: "bg-saddle text-canvas",
+  dusk: "bg-dusk text-ink",
+  outline: "border border-ink/20 text-ink/80 bg-transparent",
 };
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "siteName": "ODIN",
+    "defaultTitle": "ODIN — ฟาร์มและรีสอร์ตใกล้พัทยา",
+    "description": "สัมผัสประสบการณ์ขี่ม้า ผจญภัย พักผ่อน และรับประทานอาหารที่ ODIN ฟาร์มและรีสอร์ตชนบท ห่างจากพัทยาประมาณ 20 กม."
+  },
+  "common": {
+    "logoSuffix": "ฟาร์มและรีสอร์ตใกล้พัทยา",
+    "primaryNavigation": "เมนูหลัก",
+    "languageSwitcherLabel": "ภาษา",
+    "openMenu": "เปิดเมนู",
+    "closeMenu": "ปิดเมนู",
+    "menu": "เมนู",
+    "mobileMenuLabel": "เมนูสำหรับมือถือ"
+  },
+  "nav": {
+    "experiences": "กิจกรรม",
+    "restaurant": "ร้านอาหาร",
+    "packages": "แพ็กเกจ",
+    "gallery": "แกลเลอรี",
+    "location": "ที่ตั้ง",
+    "about": "เกี่ยวกับเรา",
+    "faq": "คำถามที่พบบ่อย",
+    "contact": "ติดต่อเรา",
+    "privacy": "นโยบายความเป็นส่วนตัว",
+    "terms": "ข้อกำหนดการใช้งาน",
+    "bookNow": "จองเลย"
+  },
+  "footer": {
+    "tagline": "ขี่ม้า ผจญภัย พักผ่อน รับประทานอาหาร",
+    "openDaily": "ร้านอาหารเปิดทุกวัน {hours}",
+    "navigationHeading": "สำรวจ",
+    "contactHeading": "ติดต่อ",
+    "languageHeading": "ภาษา",
+    "distanceFromPattaya": "ห่างจากพัทยาประมาณ {distance}",
+    "rightsReserved": "สงวนลิขสิทธิ์"
+  },
+  "home": {
+    "badge": "ตัวอย่างเวอร์ชันเริ่มต้น",
+    "heroTitle": "ODIN — ฟาร์มและรีสอร์ตใกล้พัทยา",
+    "heroSubtitle": "ขี่ม้า ผจญภัย พักผ่อน รับประทานอาหาร",
+    "secondaryCta": "ดูกิจกรรมทั้งหมด",
+    "experiencesHeading": "กิจกรรม",
+    "experiencesIntro": "สี่กิจกรรมให้เลือกสัมผัสตลอดวันที่ ODIN แต่ละกิจกรรมมีจังหวะของตัวเอง"
+  },
+  "experiences": {
+    "horseRiding": {
+      "title": "ขี่ม้า",
+      "shortDescription": "ขี่ม้าแบบมีไกด์นำทางท่ามกลางทุ่งกว้างของฟาร์ม"
+    },
+    "ponyRiding": {
+      "title": "ขี่ม้าโพนี่",
+      "shortDescription": "การขี่ม้าเบาๆ เหมาะสำหรับเด็กและครอบครัว"
+    },
+    "atv": {
+      "title": "รถเอทีวี",
+      "shortDescription": "ลุยเส้นทางออฟโรดรอบฟาร์ม"
+    },
+    "sauna": {
+      "title": "ซาวน่า",
+      "shortDescription": "ผ่อนคลายหลังวันแห่งการขี่ม้าและผจญภัย"
+    }
+  },
+  "notFound": {
+    "title": "ไม่พบหน้านี้",
+    "description": "หน้าที่คุณกำลังค้นหาไม่มีอยู่หรือถูกย้ายไปแล้ว",
+    "backHome": "กลับหน้าแรก"
+  },
+  "error": {
+    "title": "เกิดข้อผิดพลาด",
+    "description": "กรุณาลองใหม่อีกครั้ง หรือติดต่อเราโดยตรงหากปัญหายังคงอยู่",
+    "retry": "ลองอีกครั้ง"
+  }
+}

@@ -5,18 +5,17 @@ export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-[--radius-button] font-medium " +
+  "inline-flex items-center justify-center gap-2 rounded-button font-medium " +
   "transition-colors duration-150 disabled:opacity-50 disabled:pointer-events-none " +
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-moss]";
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss";
 
 const variants: Record<ButtonVariant, string> = {
   // Primary = the CTA color (golden-hour amber) — reserved for the main
   // action on a screen ("Book Your Experience", "Book Now").
-  primary: "bg-[--color-dusk] text-[--color-ink] hover:bg-[--color-dusk-light]",
-  secondary: "bg-[--color-moss] text-[--color-canvas] hover:bg-[--color-moss-dark]",
-  outline:
-    "border border-[--color-moss] text-[--color-moss] bg-transparent hover:bg-[--color-moss]/10",
-  ghost: "text-[--color-moss] bg-transparent hover:bg-[--color-moss]/10",
+  primary: "bg-dusk text-ink hover:bg-dusk-light",
+  secondary: "bg-moss text-canvas hover:bg-moss-dark",
+  outline: "border border-moss text-moss bg-transparent hover:bg-moss/10",
+  ghost: "text-moss bg-transparent hover:bg-moss/10",
 };
 
 const sizes: Record<ButtonSize, string> = {

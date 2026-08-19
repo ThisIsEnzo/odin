@@ -1,79 +1,25 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
-import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
-import { Card, CardBody, CardTitle, CardDescription } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { buttonVariants } from "@/components/ui/Button";
-import { Link } from "@/i18n/navigation";
-import { experiences } from "@/data/odin/experiences";
+import { setRequestLocale } from "next-intl/server";
+import { Hero } from "@/components/homepage/Hero";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
 };
 
 /**
- * PLACEHOLDER homepage — proves the foundation (i18n, data layer, UI
- * primitives) works end to end. This is intentionally not the full
- * 10-section homepage from CLAUDE.md §20 (Hero, Experiences, Why ODIN,
- * Packages, Restaurant, Gallery, Reviews, Location, FAQ, Final CTA) — that
- * build-out is explicitly out of scope for this phase.
+ * Homepage — Phase 3A builds only the Hero (CLAUDE.md §20's remaining nine
+ * sections — Experiences, Why ODIN, Packages, Restaurant, Gallery, Reviews,
+ * Location, FAQ, Final CTA — are separate, later Phase 3 tasks; see
+ * docs/IMPLEMENTATION_PLAN.md). The previous placeholder version of this
+ * file also rendered an ad-hoc experiences preview grid to prove the data
+ * layer worked end to end — that's removed now that the real, properly
+ * scoped Experiences section is a distinct upcoming task, not something to
+ * leave half-built alongside a production-quality Hero.
  */
 export default async function HomePage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: "home" });
-  const tExperiences = await getTranslations({ locale, namespace: "experiences" });
-  const tNav = await getTranslations({ locale, namespace: "nav" });
-
-  return (
-    <>
-      <Section tone="canvas" className="pt-20 sm:pt-28">
-        <Container className="max-w-3xl text-center">
-          <Badge variant="dusk" className="mb-6">
-            {t("badge")}
-          </Badge>
-          <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl">
-            {t("heroTitle")}
-          </h1>
-          <p className="mt-4 text-lg text-ink/75">{t("heroSubtitle")}</p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>
-              {tNav("bookNow")}
-            </Link>
-            <Link href="/experiences" className={buttonVariants({ variant: "outline", size: "lg" })}>
-              {t("secondaryCta")}
-            </Link>
-          </div>
-        </Container>
-      </Section>
-
-      <Section tone="canvas-soft">
-        <Container>
-          <h2 className="font-display text-2xl text-ink sm:text-3xl">
-            {t("experiencesHeading")}
-          </h2>
-          <p className="mt-2 max-w-2xl text-ink/70">{t("experiencesIntro")}</p>
-
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {experiences.map((experience) => (
-              <Card key={experience.id}>
-                <CardBody>
-                  <CardTitle>{tExperiences(`${toCamelCase(experience.id)}.title`)}</CardTitle>
-                  <CardDescription>
-                    {tExperiences(`${toCamelCase(experience.id)}.shortDescription`)}
-                  </CardDescription>
-                  <p className="mt-4 text-sm text-ink/60">
-                    {experience.operatingHours.open}–{experience.operatingHours.close}
-                  </p>
-                </CardBody>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
-    </>
-  );
+  return <Hero />;
 }
 
 function toCamelCase(id: string): string {

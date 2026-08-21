@@ -8,7 +8,7 @@ import type { GalleryItem } from "@/types/domain";
  * real photos land; the shape (id, tags, altTranslationKey) shouldn't need
  * to change.
  */
-export const gallery: GalleryItem[] = [
+export const galleryItems: GalleryItem[] = [
   {
     id: "horse-01",
     src: "/images/gallery/placeholder.svg",

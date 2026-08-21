@@ -1,11 +1,11 @@
 {
   "meta": {
     "siteName": "ODIN",
-    "defaultTitle": "ODIN — 芭提雅附近的农场度假体验",
-    "description": "在 ODIN 骑马、探索、放松和用餐——一个距芭提雅约20公里的乡村农场度假胜地。"
+    "defaultTitle": "ODIN — 芭堤雅附近的农场与度假体验",
+    "description": "在 ODIN 骑马、探索、放松、用餐 — 一处距离泰国芭堤雅约 20 公里的乡村农场与度假胜地。"
   },
   "common": {
-    "logoSuffix": "芭提雅附近的农场度假体验",
+    "logoSuffix": "芭堤雅附近的农场与度假体验",
     "primaryNavigation": "主导航",
     "languageSwitcherLabel": "语言",
     "openMenu": "打开菜单",
@@ -29,102 +29,168 @@
   "footer": {
     "tagline": "骑马。探索。放松。用餐。",
     "openDaily": "餐厅每日营业 {hours}",
-    "navigationHeading": "探索",
+    "navigationHeading": "浏览",
     "contactHeading": "联系方式",
     "languageHeading": "语言",
-    "distanceFromPattaya": "距芭提雅约 {distance}",
+    "distanceFromPattaya": "距芭堤雅约 {distance}",
     "rightsReserved": "版权所有。"
   },
   "home": {
-    "badge": "基础预览版",
-    "heroTitle": "ODIN — 芭提雅附近的农场度假体验",
-    "heroSubtitle": "骑马。探索。放松。用餐。",
-    "primaryCta": "立即预订",
+    "badge": "初版预览",
+    "heroKicker": "骑马 · 探索 · 放松 · 用餐",
+    "heroTitle": "ODIN — 芭堤雅附近的农场与度假体验",
+    "heroSubtitle": "在这片乡村农场与度假胜地度过清晨、午后与傍晚 — 骏马、开阔的小径、木烧桑拿，以及一天结束时为你准备好的餐桌。",
+    "heroNote": "这是一份预订申请 — 我们的团队会直接与您确认可预订时间。",
     "secondaryCta": "查看体验项目",
+    "statDistanceLabel": "距芭堤雅的距离",
+    "statDistance": "距芭堤雅 {distance}",
+    "statExperiencesLabel": "体验项目数量",
+    "statExperiences": "{count} 项特色体验",
     "experiencesHeading": "体验项目",
-    "experiencesIntro": "在 ODIN，四种方式度过您的一天，每种都有自己的节奏。"
+    "experiencesIntro": "在 ODIN 度过一天的四种方式，每一种都有自己的节奏。"
   },
   "experiences": {
     "horseRiding": {
       "title": "骑马",
-      "shortDescription": "在农场开阔的乡村中进行有导游带领的骑行。"
+      "shortDescription": "在农场开阔的乡野中，由向导带领的骑行体验。"
     },
     "ponyRiding": {
       "title": "小马骑乘",
-      "shortDescription": "适合小朋友和家庭的温和骑乘体验。"
+      "shortDescription": "适合小朋友和全家人的温和骑乘体验。"
     },
     "atv": {
-      "title": "越野车（ATV）",
-      "shortDescription": "在农场小径上探索越野路线。"
+      "title": "越野车",
+      "shortDescription": "穿越农场小径的越野探索。"
     },
     "sauna": {
       "title": "桑拿",
-      "shortDescription": "在骑行和探索一天后放松身心。"
+      "shortDescription": "在骑行与探索之后放松身心。"
+    }
+  },
+  "experienceCard": {
+    "hours": "营业时间 {open}–{close}",
+    "maxWeight": "最大承重 {max} 公斤",
+    "priceFrom": "起价 {amount} {currency}"
+  },
+  "whyOdin": {
+    "kicker": "为什么选择 ODIN",
+    "heading": "一座真实运营的农场，而非主题乐园",
+    "lead": "ODIN 将开阔的乡村与舒缓的节奏结合在一起 — 白天骑行探索，傍晚放松身心，最后在同一片土地上的餐桌前收尾，而不是另一个独立附加的项目。",
+    "distanceNote": "距芭堤雅 {distance} — 近到可以当日往返，又足够远，能感受到乡村的氛围。",
+    "pillarRide": {
+      "title": "骑行与探索",
+      "description": "骏马、小马与越野车路线，遍布农场的开阔地带。"
+    },
+    "pillarRest": {
+      "title": "放慢脚步",
+      "description": "木烧桑拿，在户外活动一天后放松身心。"
+    },
+    "pillarTable": {
+      "title": "为你留一张餐桌",
+      "description": "农场直供的餐食，为一天画上句点。"
+    },
+    "experienceCount": "{count} 项特色体验，可单独预订，也可组合成套餐。"
+  },
+  "pricing": {
+    "unit": {
+      "person": "每人",
+      "child": "每名儿童",
+      "vehicle": "每辆车",
+      "family": "每个家庭",
+      "couple": "每对情侣"
     }
   },
   "notFound": {
-    "title": "页面未找到",
+    "title": "未找到页面",
     "description": "您要查找的页面不存在或已被移动。",
     "backHome": "返回首页"
   },
   "error": {
-    "title": "出现了一些问题",
+    "title": "出现错误",
     "description": "请重试，如果问题持续存在，请直接联系我们。",
     "retry": "重试"
   },
   "restaurant": {
     "title": "餐厅",
-    "description": "在骑行和探索一天后享用农场直供餐饮——营业时间和菜系详见餐厅页面。"
+    "description": "在骑行与探索一天之后享用农场直供的餐食 — 详见餐厅页面的营业时间与菜系介绍。",
+    "hoursLabel": "营业时间",
+    "avgSpendLabel": "人均消费",
+    "menuComingSoon": "完整菜单详情即将公布。",
+    "cta": "预订餐位"
   },
   "packages": {
+    "heading": "套餐",
+    "intro": "几种将 ODIN 体验项目组合成一天行程的方式。",
+    "includesRestaurant": "含餐厅用餐",
+    "mockNote": "价格为参考价，需经 ODIN 确认。",
+    "cta": "咨询该套餐",
     "familyDay": {
-      "title": "家庭日套餐",
-      "description": "适合全家的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
+      "title": "家庭日",
+      "description": "适合全家人的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
     },
     "adventureDay": {
-      "title": "探险日套餐",
-      "description": "越野车探索之后，在我们餐厅用餐。"
+      "title": "探险日",
+      "description": "越野车探索之后，在我们餐厅享用美食。"
     },
     "coupleEscape": {
-      "title": "情侣度假套餐",
-      "description": "骑马、桑拿，以及双人晚餐。"
+      "title": "情侣度假",
+      "description": "骑马、桑拿，以及一顿双人晚餐。"
     }
   },
   "gallery": {
+    "heading": "图库",
+    "intro": "一览农场、小径与餐桌的风貌。",
     "items": {
-      "horse01": { "alt": "在ODIN农场牵引马匹穿过牧场" },
-      "pony01": { "alt": "在ODIN农场准备好进行导览骑乘的小马" },
-      "atv01": { "alt": "在ODIN农场土路上行驶的越野车" },
-      "sauna01": { "alt": "ODIN农场的柴火桑拿房" },
-      "restaurant01": { "alt": "ODIN餐厅的用餐区" }
+      "horse01": { "alt": "一匹马被牵引穿过 ODIN 农场的牧场" },
+      "pony01": { "alt": "一匹准备好在 ODIN 农场进行向导骑乘的小马" },
+      "atv01": { "alt": "ODIN 农场泥土小径上的一辆越野车" },
+      "sauna01": { "alt": "ODIN 农场的木烧桑拿房" },
+      "restaurant01": { "alt": "ODIN 餐厅的用餐区" }
     }
   },
+  "reviews": {
+    "heading": "宾客故事",
+    "comingSoonTitle": "宾客故事即将上线",
+    "comingSoonBody": "ODIN 才刚刚开始接待宾客 — 真实的到访故事将在后续陆续呈现。"
+  },
+  "location": {
+    "heading": "位置",
+    "body": "ODIN 位于乡村地区，距芭堤雅 {distance}。路线和地图链接将在开业前提供。",
+    "distanceBadge": "距芭堤雅 {distance}"
+  },
   "faq": {
+    "heading": "常见问题",
     "items": {
       "howToBook": {
         "question": "如何预订体验项目？",
-        "answer": "请通过我们的预订表单提交预订请求，我们的团队会直接与您确认名额——请求并非自动确认的预订。"
+        "answer": "通过我们的预订表单提交预订申请。我们的团队会直接与您确认可预订时间 — 申请并非自动确认的预订。"
       },
       "whatToBring": {
-        "question": "需要准备什么？",
-        "answer": "建议穿着舒适的衣物和包头鞋。各体验项目的具体要求详见其项目页面。"
+        "question": "需要携带什么？",
+        "answer": "建议穿着舒适的衣物和包头鞋。特定体验项目的具体要求会列在该项目的页面上。"
       },
       "gettingThere": {
-        "question": "如何前往ODIN？",
-        "answer": "ODIN距芭提雅约{distance}。请查看位置页面获取路线和地图链接。"
+        "question": "如何前往 ODIN？",
+        "answer": "ODIN 距芭堤雅约 {distance}。请查看位置页面获取路线和地图链接。"
       }
     }
+  },
+  "finalCta": {
+    "heading": "准备好安排您在 ODIN 的一天了吗？",
+    "body": "提交申请，我们的团队会直接与您确认可预订时间。",
+    "primaryCta": "立即预订",
+    "secondaryCta": "查看体验项目"
   },
   "booking": {
     "errors": {
       "invalidExperience": "未找到该体验项目，请从列表中选择。",
       "invalidTimeFormat": "请选择有效的时间。",
-      "outsideOperatingHours": "该项目的可预订时间为 {open} 至 {close}。",
-      "weightRequired": "请填写骑乘者的体重。",
-      "weightExceedsMaximum": "该项目的最大体重限制为 {max} 公斤。",
-      "weightBelowMinimum": "该项目的最小体重限制为 {min} 公斤。",
+      "outsideOperatingHours": "该体验项目可预订时间为 {open} 至 {close}。",
+      "weightRequired": "请填写骑乘者体重。",
+      "weightExceedsMaximum": "该体验项目的最大承重为 {max} 公斤。",
+      "weightBelowMinimum": "该体验项目的最小体重要求为 {min} 公斤。",
       "invalidGuestCount": "请至少填写 1 位客人。",
-      "invalidDate": "请选择有效的未来日期。"
+      "invalidDate": "请选择一个有效的、未来的日期。"
     }
   }
 }

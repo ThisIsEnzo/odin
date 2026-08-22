@@ -6,15 +6,14 @@ import { siteConfig } from "@/data/odin/site";
 import { reviews } from "@/data/odin/reviews";
 
 /**
- * NOTE: `reviews` is imported from src/data/odin/reviews.ts per
- * ARCHITECTURE.md (`reviews.ts # Review[] — likely empty at MVP launch`)
- * and DATA_MODEL.md's Review type. That file wasn't part of the material
- * supplied for this phase; the import name follows the documented
- * architecture and should be verified before merge. Per MOCK_DATA.md §6,
- * no fabricated testimonials are introduced here regardless of the array's
- * actual current contents — real, permissioned reviews render as cards;
- * anything else (empty, or not yet marked `isRealTestimonial`) renders the
- * honest "coming soon" state below.
+ * Verified against docs/odin_phase3_reconcile_reference.md: `reviews` is
+ * the correct named export from src/data/odin/reviews.ts, and it is `[]` in
+ * the real data — so the "coming soon" branch below always renders today,
+ * which is the correct, intentional empty state (MOCK_DATA.md §6), not a
+ * bug. `review.{id,rating,authorName,isRealTestimonial}` match the Review
+ * type in src/types/domain.ts exactly, so real reviews would render
+ * correctly the moment the array is populated with `isRealTestimonial: true`
+ * entries.
  */
 export function ReviewsLocation() {
   const t = useTranslations("reviews");

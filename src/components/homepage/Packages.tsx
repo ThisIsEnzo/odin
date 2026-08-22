@@ -9,12 +9,11 @@ import { packages } from "@/data/odin/packages";
 import type { Package } from "@/types/domain";
 
 /**
- * NOTE: `packages` is imported from the canonical data layer per
- * ARCHITECTURE.md/DATA_MODEL.md §3 (`src/data/odin/packages.ts`, `Package[]`).
- * That file was not part of the material supplied for this phase, so the
- * import name/shape here follows the documented architecture rather than an
- * inspected file — flagged in the final report for verification against the
- * real file before merge.
+ * Verified against docs/odin_phase3_reconcile_reference.md: `packages` is
+ * the correct named export from src/data/odin/packages.ts, and every field
+ * accessed below (id, translationNamespace, includedExperienceIds,
+ * includesRestaurant, price.{amount,currency,unit}, mock.isMock) matches
+ * the real Package/Money/MockFlag shapes in src/types/domain.ts exactly.
  */
 export function Packages() {
   const t = useTranslations("packages");

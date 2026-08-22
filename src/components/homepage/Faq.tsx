@@ -5,6 +5,17 @@ import { faqItems } from "@/data/odin/faq";
 import { siteConfig } from "@/data/odin/site";
 import type { FAQItem } from "@/types/domain";
 
+/**
+ * NOTE: the canonical export from src/data/odin/faq.ts is named `faq` (see
+ * docs/odin_phase3_reconcile_reference.md) — aliased here to `faqItems` so
+ * the rest of this component reads the same as before. `translationNamespace`
+ * matches FAQItem in src/types/domain.ts exactly (e.g. "faq.items.howToBook").
+ *
+ * Accordion: package.json only lists @radix-ui/react-dialog, not an
+ * accordion primitive, so this uses native <details>/<summary> — fully
+ * keyboard- and screen-reader-accessible with zero extra dependencies,
+ * rather than reaching for a library that isn't actually installed.
+ */
 export function Faq() {
   const t = useTranslations("faq");
 

@@ -7,6 +7,8 @@ import type { GalleryItem } from "@/types/domain";
  * than a path that doesn't exist. Replace src/width/height per item once
  * real photos land; the shape (id, tags, altTranslationKey) shouldn't need
  * to change.
+ *
+ * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
 export const galleryItems: GalleryItem[] = [
   {

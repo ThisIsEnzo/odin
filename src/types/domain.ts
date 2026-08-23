@@ -3,6 +3,9 @@
  * (the facts-vs-content split in particular). These types hold business
  * FACTS only — never display strings. Display copy lives in
  * messages/{locale}.json, resolved at render time via translationNamespace.
+ *
+ * Source: copied verbatim from odin_phase3_reconcile_reference.md
+ * ("canonical Phase 2 source-of-truth reference files"). Not modified.
  */
 
 export type Locale = "en" | "th" | "ru" | "zh";

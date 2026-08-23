@@ -7,6 +7,8 @@ import type { FAQItem } from "@/types/domain";
  * text, not fabricated business facts (e.g. we don't invent a cancellation
  * policy here — that's real business information nobody has confirmed).
  * Full FAQ content is out of scope for this phase.
+ *
+ * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
 export const faqItems: FAQItem[] = [
   { id: "how-to-book", translationNamespace: "faq.items.howToBook", category: "booking" },

@@ -4,6 +4,8 @@ import type { RestaurantInfo } from "@/types/domain";
  * operatingHours is CONFIRMED (CLAUDE.md §6/§22). averageSpend is MOCK
  * (§15). Menu content itself is not yet defined at all — not even a mock
  * placeholder was supplied — see /docs/MOCK_DATA.md §5.
+ *
+ * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
 export const restaurant: RestaurantInfo = {
   translationNamespace: "restaurant",

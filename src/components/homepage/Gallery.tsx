@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
-import { galleryItems } from "@/data/odin/gallery";
+import { gallery as galleryItems } from "@/data/odin/gallery";
 
 /**
  * Verified against docs/odin_phase3_reconcile_reference.md: `gallery` is the
@@ -33,11 +33,11 @@ const galleryImageOverrides: string[] = [
 const galleryImageFocus: string[] = ["45% 40%", "center 60%", "center 45%", "center 45%", "35% 55%"];
 
 /**
- * PHASE 3C: mobile gets a horizontal snap-scroll carousel (all items, one
- * scroll axis, no parallax — §6/§9 say reduce motion complexity on mobile).
- * sm+ gets the earlier editorial grid, now with a restrained parallax +
- * hover-scale on just the featured image (one of the page's 2–3 parallax
- * locations per §6).
+ * CINEMATIC MOTION REFINEMENT: each gallery image now reveals individually
+ * (opacity + scale 0.97→1 + a small translateY, via Reveal's
+ * `variant="scale"`) with a modest per-image stagger, instead of the whole
+ * grid fading up as one block — "photographs entering the frame," per this
+ * phase's spec. Mobile snap-scroll is untouched.
  */
 export function Gallery() {
   const t = useTranslations();
@@ -84,10 +84,13 @@ export function Gallery() {
             CSS Grid's default `align-items: stretch` then sizes every cell div to fill its
             row-span area. Without this, the grid previously collapsed toward 0px, since
             nothing here was contributing flow height for the grid to auto-size against. */}
-        <Reveal className="mt-10 hidden sm:block" delayMs={100}>
+        <div className="mt-10 hidden sm:block">
           <div className="grid grid-cols-4 auto-rows-[170px] gap-5 lg:auto-rows-[200px]">
-            <div className="group relative col-span-2 row-span-2 overflow-hidden rounded-card">
-              <Parallax strength={18} className="absolute -inset-6">
+            <Reveal
+              variant="scale"
+              className="group relative col-span-2 row-span-2 overflow-hidden rounded-card"
+            >
+              <Parallax strength={22} className="absolute -inset-6">
                 <Image
                   src={resolveSrc(0)}
                   alt={t(featured.altTranslationKey)}
@@ -97,12 +100,17 @@ export function Gallery() {
                   style={{ objectPosition: resolveFocus(0) }}
                 />
               </Parallax>
-            </div>
+            </Reveal>
 
             {rest.map((item, restIndex) => {
               const index = restIndex + 1;
               return (
-                <div key={item.id} className="group relative overflow-hidden rounded-card">
+                <Reveal
+                  key={item.id}
+                  variant="scale"
+                  delayMs={Math.min((restIndex + 1) * 60, 240)}
+                  className="group relative overflow-hidden rounded-card"
+                >
                   <Image
                     src={resolveSrc(index)}
                     alt={t(item.altTranslationKey)}
@@ -111,11 +119,11 @@ export function Gallery() {
                     className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     style={{ objectPosition: resolveFocus(index) }}
                   />
-                </div>
+                </Reveal>
               );
             })}
           </div>
-        </Reveal>
+        </div>
       </Container>
     </Section>
   );

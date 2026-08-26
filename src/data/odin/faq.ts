@@ -10,7 +10,7 @@ import type { FAQItem } from "@/types/domain";
  *
  * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
-export const faqItems: FAQItem[] = [
+export const faq: FAQItem[] = [
   { id: "how-to-book", translationNamespace: "faq.items.howToBook", category: "booking" },
   { id: "what-to-bring", translationNamespace: "faq.items.whatToBring", category: "experiences" },
   { id: "getting-there", translationNamespace: "faq.items.gettingThere", category: "general" },

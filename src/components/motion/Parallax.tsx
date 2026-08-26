@@ -16,6 +16,10 @@ type ParallaxProps = {
  * listener that only ever writes `transform: translate3d(...)` (never a
  * layout property), per §12. Disabled outright below the `sm` breakpoint
  * and under `prefers-reduced-motion`, per §6/§9.
+ *
+ * PHASE 3E: `will-change: transform` is now only applied while the effect
+ * is actually active (not on mobile/reduced-motion, where the listener
+ * never attaches) — per §11, "only where genuinely useful," not globally.
  */
 export function Parallax({ children, className, strength = 24 }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -27,6 +31,8 @@ export function Parallax({ children, className, strength = 24 }: ParallaxProps) 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isSmallScreen = window.matchMedia("(max-width: 639px)").matches;
     if (reduceMotion || isSmallScreen) return;
+
+    node.style.willChange = "transform";
 
     let ticking = false;
 
@@ -52,11 +58,12 @@ export function Parallax({ children, className, strength = 24 }: ParallaxProps) 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      node.style.willChange = "";
     };
   }, [strength]);
 
   return (
-    <div ref={ref} className={className} style={{ willChange: "transform" }}>
+    <div ref={ref} className={className}>
       {children}
     </div>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
+import { Parallax } from "@/components/motion/Parallax";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/types/domain";
 
@@ -104,20 +105,22 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
               key={experience.id}
               aria-hidden={!isActive}
               className={cn(
-                "absolute inset-0 transition-opacity duration-500 ease-out",
+                "absolute inset-0 transition-opacity duration-[600ms] ease-out",
                 isActive ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
               {image ? (
                 <>
-                  <Image
-                    src={image.src}
-                    alt={title}
-                    fill
-                    sizes="(min-width: 1024px) 60vw, 100vw"
-                    className="object-cover"
-                    style={{ objectPosition: image.focus }}
-                  />
+                  <Parallax strength={20} className="absolute -inset-4">
+                    <Image
+                      src={image.src}
+                      alt={title}
+                      fill
+                      sizes="(min-width: 1024px) 60vw, 100vw"
+                      className="object-cover"
+                      style={{ objectPosition: image.focus }}
+                    />
+                  </Parallax>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent" />
                 </>
               ) : null}

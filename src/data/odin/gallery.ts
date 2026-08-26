@@ -10,7 +10,7 @@ import type { GalleryItem } from "@/types/domain";
  *
  * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
-export const galleryItems: GalleryItem[] = [
+export const gallery: GalleryItem[] = [
   {
     id: "horse-01",
     src: "/images/gallery/placeholder.svg",

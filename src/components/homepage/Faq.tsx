@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { faqItems } from "@/data/odin/faq";
-import { siteConfig } from "@/data/odin/site";
+import { Reveal } from "@/components/motion/Reveal";
+import { faq as faqItems } from "@/data/odin/faq";
 import type { FAQItem } from "@/types/domain";
 
 /**
@@ -15,6 +15,16 @@ import type { FAQItem } from "@/types/domain";
  * accordion primitive, so this uses native <details>/<summary> — fully
  * keyboard- and screen-reader-accessible with zero extra dependencies,
  * rather than reaching for a library that isn't actually installed.
+ *
+ * CINEMATIC MOTION REFINEMENT: opening/closing now animates smoothly
+ * instead of the browser's native instant snap — a `grid-template-rows`
+ * 0fr→1fr transition on a wrapper around the answer (the standard pure-CSS
+ * technique for animating a native `<details>`'s height without JS),
+ * driven by Tailwind's `group-open:` variant against the same `group`
+ * class already used for the "+" rotation below. Still real
+ * `<details>`/`<summary>` throughout — keyboard/screen-reader behavior is
+ * unchanged, and only the toggled row's own answer transitions, never the
+ * rest of the section.
  */
 export function Faq() {
   const t = useTranslations("faq");
@@ -25,15 +35,17 @@ export function Faq() {
 
   return (
     <Section tone="canvas-soft">
-      <Container className="max-w-3xl">
-        <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
+      <Reveal>
+        <Container className="max-w-3xl">
+          <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
 
-        <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
-          {faqItems.map((item) => (
-            <FaqRow key={item.id} item={item} />
-          ))}
-        </div>
-      </Container>
+          <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
+            {faqItems.map((item) => (
+              <FaqRow key={item.id} item={item} />
+            ))}
+          </div>
+        </Container>
+      </Reveal>
     </Section>
   );
 }
@@ -58,9 +70,11 @@ function FaqRow({ item }: { item: FAQItem }) {
           +
         </span>
       </summary>
-      <p className="mt-3 max-w-2xl text-ink/70">
-        {t("answer", { distance: siteConfig.locationDistanceFromPattaya })}
-      </p>
+      <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]">
+        <div className="overflow-hidden">
+          <p className="mt-3 max-w-2xl text-ink/70">{t("answer")}</p>
+        </div>
+      </div>
     </details>
   );
 }

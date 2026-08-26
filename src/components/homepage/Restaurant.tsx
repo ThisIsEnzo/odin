@@ -26,11 +26,11 @@ import { restaurant } from "@/data/odin/restaurant";
  * locations per §6) and a reveal on the content card. Same data, same
  * copy, same CTA route as before.
  *
- * PHASE 3D: odin-restaurant.jpg replaces the gradient placeholder inside
- * the same Reveal/Parallax wrapper — layout, parallax, facts, and CTA are
- * otherwise unchanged. Presentation/concept photography, not real ODIN
- * photography (see PHASE 3D brief) — alt text stays factual (the
- * restaurant's own title), not a claim about the image's authenticity.
+ * CINEMATIC MOTION REFINEMENT: the image now enters from the left and the
+ * content card from the right (opposing motion, ~150ms apart) rather than
+ * both using the same up-fade — an editorial "two halves converging" feel
+ * for this specific section, via Reveal's `variant="left"/"right"`. Layout,
+ * parallax, facts, and CTA are unchanged.
  */
 export function Restaurant() {
   const t = useTranslations(restaurant.translationNamespace);
@@ -40,9 +40,9 @@ export function Restaurant() {
     <Section tone="canvas">
       <Container>
         <div className="lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-          {/* Visual area — gently parallaxing photo. */}
-          <Reveal className="relative h-64 overflow-hidden rounded-card sm:h-80 lg:h-[26rem]">
-            <Parallax strength={16} className="absolute -inset-6">
+          {/* Visual area — gently parallaxing photo, entering from the left. */}
+          <Reveal variant="left" className="relative h-64 overflow-hidden rounded-card sm:h-80 lg:h-[26rem]">
+            <Parallax strength={26} className="absolute -inset-6">
               <Image
                 src="/images/restaurant/odin-restaurant.jpg"
                 alt={t("title")}
@@ -54,9 +54,11 @@ export function Restaurant() {
           </Reveal>
 
           {/* Overlapping content card — pulled up onto the image on mobile,
-              pulled left onto the image on desktop. */}
+              pulled left onto the image on desktop; entering from the right,
+              slightly after the image. */}
           <Reveal
-            delayMs={120}
+            variant="right"
+            delayMs={150}
             className="relative z-10 -mt-10 px-2 sm:-mt-14 sm:px-0 lg:-ml-16 lg:mt-0"
           >
             <div className="rounded-card border border-moss/15 bg-canvas p-6 shadow-sm shadow-ink/5 sm:p-8 lg:p-10">

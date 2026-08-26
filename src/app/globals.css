@@ -83,18 +83,64 @@ body {
  * Pure CSS transition (not @keyframes) so per-instance transition-delay
  * (staggered cards) works with zero extra CSS. The reduced-motion block
  * above already neutralizes this for anyone who prefers no motion.
+ *
+ * CINEMATIC MOTION REFINEMENT: tuned to this phase's explicit spec —
+ * translateY 24px (was 14px), duration 800ms (was 650ms, within the
+ * requested 700–900ms band), trigger at ~15–25% visible (see Reveal.tsx).
+ * Slower and slightly larger than the previous pass, but paired with a
+ * smooth ease-out and a literal (not pre-emptive) trigger point, which is
+ * what this phase asks for — "soft, slow, deliberate" over "quick".
+ *
+ * `.reveal-scale` / `.reveal-left` / `.reveal-right` are the same
+ * mechanism with a different resting transform — Gallery photographs
+ * (scale-in), and opposing-motion compositions like Restaurant/Why ODIN
+ * (slide in from a side) — not a second animation system, just the one
+ * mechanism parameterized (see Reveal.tsx's `variant` prop). Side-entrance
+ * distance is reduced under 640px per §16 ("reduce travel distances" on
+ * mobile) — a phone's viewport is narrow enough that a 30px horizontal
+ * slide reads as a much larger relative movement than on desktop.
  */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(24px);
   transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.reveal-scale {
+  transform: translateY(10px) scale(0.97);
+}
+
+.reveal.reveal-left {
+  transform: translateX(-30px);
+}
+
+.reveal.reveal-right {
+  transform: translateX(30px);
 }
 
 .reveal-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reveal-scale.reveal-visible {
+  transform: translateY(0) scale(1);
+}
+
+.reveal-left.reveal-visible,
+.reveal-right.reveal-visible {
+  transform: translateX(0);
+}
+
+@media (max-width: 639px) {
+  .reveal.reveal-left {
+    transform: translateX(-16px);
+  }
+  .reveal.reveal-right {
+    transform: translateX(16px);
+  }
 }
 
 /* Hides the scrollbar on the mobile snap-scroll carousels (Gallery,
@@ -108,3 +154,35 @@ body {
   display: none;
 }
 
+/*
+ * Hero: a slow, continuous photographic "breathe" (1.00 ⇄ 1.06 over ~10s
+ * each way, alternating) rather than a one-shot zoom — the closest honest
+ * approximation of "cinematic photography" for a single still image (see
+ * the note in page.tsx on why there's no multi-image crossfade yet).
+ * Transform-only, so it's cheap regardless of how long it runs.
+ *
+ * Reduced motion gets an explicit `animation: none` here rather than
+ * relying only on the generic duration-collapse below — an `infinite`
+ * animation collapsed to a ~0ms duration would still nominally be
+ * "running" (imperceptibly), and this phase's spec is explicit: reduced
+ * motion means no slideshow/zoom animation at all, not a faster one.
+ */
+@keyframes hero-photo-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.hero-photo {
+  animation: hero-photo-zoom 10s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo {
+    animation: none;
+    transform: none;
+  }
+}

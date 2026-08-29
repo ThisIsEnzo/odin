@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
@@ -10,6 +8,7 @@ import { experiences } from "@/data/odin/experiences";
 import { siteConfig } from "@/data/odin/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
+import { HeroSlideshow } from "@/components/homepage/HeroSlideshow";
 import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
 import { WhyOdin } from "@/components/homepage/WhyOdin";
 import { Packages } from "@/components/homepage/Packages";
@@ -32,13 +31,12 @@ export default async function HomePage({ params }: PageProps) {
 
   // Array-shaped on purpose so this reads as "the current hero slide set,"
   // not a one-off — but only one approved photo actually exists at
-  // public/images/hero/ right now (verified on disk, not assumed). A real
-  // crossfade slideshow needs 2+ images to cross-fade BETWEEN; with one
-  // photo there's nothing to transition to, so this renders as a single
-  // slide with the slow continuous zoom (`.hero-photo` in globals.css)
-  // standing in for "cinematic photography" until more photos exist. The
-  // carousel progress indicator below only renders once this array has 2+
-  // entries, so no dead/non-functional dots are shown for a single image.
+  // public/images/hero/ right now (verified on disk, not assumed — see
+  // HeroSlideshow.tsx for what happens with exactly one entry: a single
+  // stable slide with its one-directional Ken Burns drift, no crossfade
+  // rotation, since there's nothing to rotate to yet). The carousel
+  // progress indicator below only renders once this array has 2+ entries,
+  // so no dead/non-functional dots are shown for a single image.
   const heroImages = ["/images/hero/odin-hero.jpg"];
 
   return (
@@ -50,21 +48,29 @@ export default async function HomePage({ params }: PageProps) {
           gets one subtle, one-time entrance (opacity + translateY), which
           is what was actually meant by "the beige panel feels like it's
           appearing" — the fix is architectural (split surface from
-          content), not a matter of easing/timing. */}
-      <Section tone="canvas" className="relative isolate overflow-hidden py-0">
+          content), not a matter of easing/timing.
+
+          PHASE 4C — TASK 2 FIX: `py-0` alone does NOT cancel Section's
+          `sm:py-24` — tailwind-merge only resolves conflicts within the
+          same variant (a bare `py-0` and a `sm:`-prefixed utility live in
+          different merge groups), so `sm:py-24`'s rule, appearing later in
+          Tailwind's compiled stylesheet than the unprefixed utilities,
+          quietly won at every viewport ≥640px — exactly the visible
+          beige gap between the header and hero. Fixed by explicitly
+          cancelling every tier Section's own default ("py-16 sm:py-24")
+          actually declares, not with a negative margin. */}
+      <Section tone="canvas" className="relative isolate overflow-hidden py-0 sm:py-0">
         <div className="relative h-[76vh] min-h-[560px] sm:h-[80vh] lg:h-[88vh]">
           <Parallax strength={36} className="absolute inset-0 -z-10">
             {/* Presentation/concept photography — see PHASE 3D brief; not
                 represented anywhere as real ODIN photography. Decorative
-                (alt=""): the panel carries all the actual information. */}
-            <Image
-              src={heroImages[0]}
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="hero-photo object-cover object-[75%_55%] sm:object-[65%_50%]"
-            />
+                (alt=""): the panel carries all the actual information.
+
+                PHASE 4C — TASK 1: swapped the single Ken-Burns <Image> for
+                a genuine crossfade slideshow (see HeroSlideshow.tsx). Still
+                reads from the same `heroImages` array below — nothing here
+                invents a second/third hero photo that doesn't exist. */}
+            <HeroSlideshow images={heroImages} className="absolute inset-0" />
             {/* Stable overlay — a fixed gradient, never itself animated. */}
             <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/5 to-ink/35" />
           </Parallax>

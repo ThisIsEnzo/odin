@@ -25,6 +25,39 @@
   --color-dusk: #c98b4a;
   --color-dusk-light: #e0ab74;
 
+  /* PHASE 4 FINAL — brand accent, sampled directly from the actual supplied
+     ODIN logo file (public/images/brand/odin-logo-original.jpg), not
+     guessed from a text description. --color-terracotta is the logo's
+     mid-tone background (avoiding both its darkest vignette corners and
+     its lightest highlight, for a value that reads consistently as "burnt
+     terracotta" rather than near-black). A deliberate BRAND ACCENT per the
+     brief — NOT a replacement for the moss/canvas/dusk palette above, which
+     remains dominant. Used narrowly: logo badge treatment, small
+     selected/active-state indicators — never large fills or backgrounds. */
+  --color-terracotta: #5d2016;
+  --color-terracotta-light: #815149;
+  --color-terracotta-dark: #4f1b13;
+  --color-cream-brand: #eecba5;
+
+  /*
+   * PHASE 4 FINALIZATION — brand accent, introduced alongside the new
+   * official ODIN logo (deep burnt terracotta / dark reddish-brown mark on
+   * warm cream). FLAGGED: the actual logo image was never uploaded to this
+   * project/session — these hex values are a best-effort interpretation of
+   * the written description only ("deep burnt terracotta / reddish-brown"),
+   * not sampled from the real artwork. Re-check against the actual file
+   * once it's supplied; treat these as provisional.
+   *
+   * Deliberately NOT replacing --color-saddle/--color-dusk (the existing
+   * brown/amber accents) — this is a distinct, additional accent, used
+   * narrowly (see Badge.tsx's new "terracotta" variant), not a site-wide
+   * recolor. --color-canvas already serves as the "warm cream" tone the
+   * logo's artwork sits on, so no separate cream token was added.
+   */
+  --color-terracotta: #8b3a2a;
+  --color-terracotta-dark: #6e2c1f;
+  --color-terracotta-light: #b5624a;
+
   /* Display face for en/ru headings. Th/zh headings fall back to
      font-sans automatically — Lora has no Thai/Chinese glyphs, so the
      browser resolves those characters against the next font in the stack
@@ -155,34 +188,40 @@ body {
 }
 
 /*
- * Hero: a slow, continuous photographic "breathe" (1.00 ⇄ 1.06 over ~10s
- * each way, alternating) rather than a one-shot zoom — the closest honest
- * approximation of "cinematic photography" for a single still image (see
- * the note in page.tsx on why there's no multi-image crossfade yet).
- * Transform-only, so it's cheap regardless of how long it runs.
- *
- * Reduced motion gets an explicit `animation: none` here rather than
- * relying only on the generic duration-collapse below — an `infinite`
- * animation collapsed to a ~0ms duration would still nominally be
- * "running" (imperceptibly), and this phase's spec is explicit: reduced
- * motion means no slideshow/zoom animation at all, not a faster one.
+ * Hero slideshow (PHASE 4C) — see src/components/homepage/HeroSlideshow.tsx.
+ * Each slide is its own absolutely-positioned layer; only `.hero-slide-active`
+ * toggles per slide. Driven by a CSS TRANSITION (base → active), not a
+ * free-running `@keyframes` loop, deliberately: a transition always starts
+ * fresh from the base state (scale 1.02, opacity 0) and climbs once to the
+ * active state (scale 1.08, opacity 1) — it cannot "yo-yo" or reset
+ * mid-cycle while visible the way a continuously-looping keyframe could.
+ * The crossfade (opacity) is intentionally much shorter than the zoom
+ * (transform), so the zoom keeps drifting slowly for the whole ~10s a slide
+ * is shown, while the actual hand-off between two images is a brief,
+ * smooth dissolve — matching "very subtle, almost invisible" rather than a
+ * noticeable zoom-in/zoom-out.
  */
-@keyframes hero-photo-zoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.06);
-  }
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 1.4s ease-in-out,
+    transform 11s ease-out;
 }
 
-.hero-photo {
-  animation: hero-photo-zoom 10s ease-in-out infinite alternate;
+.hero-slide-active {
+  opacity: 1;
+  transform: scale(1.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo {
-    animation: none;
+  .hero-slide {
+    transition: none;
+    transform: none;
+  }
+  .hero-slide-active {
     transform: none;
   }
 }

@@ -141,11 +141,21 @@
     "heading": "图库",
     "intro": "一览农场、小径与餐桌的风貌。",
     "items": {
-      "horse01": { "alt": "一匹马被牵引穿过 ODIN 农场的牧场" },
-      "pony01": { "alt": "一匹准备好在 ODIN 农场进行向导骑乘的小马" },
-      "atv01": { "alt": "ODIN 农场泥土小径上的一辆越野车" },
-      "sauna01": { "alt": "ODIN 农场的木烧桑拿房" },
-      "restaurant01": { "alt": "ODIN 餐厅的用餐区" }
+      "horse01": {
+        "alt": "一匹马被牵引穿过 ODIN 农场的牧场"
+      },
+      "pony01": {
+        "alt": "一匹准备好在 ODIN 农场进行向导骑乘的小马"
+      },
+      "atv01": {
+        "alt": "ODIN 农场泥土小径上的一辆越野车"
+      },
+      "sauna01": {
+        "alt": "ODIN 农场的木烧桑拿房"
+      },
+      "restaurant01": {
+        "alt": "ODIN 餐厅的用餐区"
+      }
     }
   },
   "reviews": {
@@ -156,7 +166,9 @@
   "location": {
     "heading": "位置",
     "body": "ODIN 位于乡村地区，距芭堤雅 {distance}。路线和地图链接将在开业前提供。",
-    "distanceBadge": "距芭堤雅 {distance}"
+    "distanceBadge": "距芭堤雅 {distance}",
+    "mapPlaceholder": "地图预览即将推出",
+    "openInMaps": "在 Google 地图中打开"
   },
   "faq": {
     "heading": "常见问题",
@@ -190,7 +202,62 @@
       "weightExceedsMaximum": "该体验项目的最大承重为 {max} 公斤。",
       "weightBelowMinimum": "该体验项目的最小体重要求为 {min} 公斤。",
       "invalidGuestCount": "请至少填写 1 位客人。",
-      "invalidDate": "请选择一个有效的、未来的日期。"
+      "invalidDate": "请选择一个有效的、未来的日期。",
+      "invalidTimeInterval": "请从可选时间中选择。",
+      "nameRequired": "请填写您的姓名。",
+      "invalidEmail": "请填写有效的电子邮箱地址。",
+      "invalidPhone": "请填写有效的电话号码。",
+      "invalidSubmission": "无法处理此次提交。",
+      "networkFailed": "无法连接到服务器，请检查网络连接后重试。"
+    },
+    "pageTitle": "预订您的体验",
+    "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
+    "packageContext": "此项目属于「{packageName}」套餐——请选择您想优先申请预约的体验项目。",
+    "steps": {
+      "experience": "体验项目",
+      "schedule": "日期与时间",
+      "guests": "人数",
+      "details": "您的信息",
+      "review": "确认信息"
+    },
+    "fields": {
+      "date": "日期",
+      "time": "时间",
+      "timePlaceholder": "请选择时间",
+      "guests": "人数",
+      "weight": "骑乘者体重（公斤）",
+      "weightHelpMax": "{experience}的最大体重限制为{max}公斤。",
+      "weightHelpRange": "{experience}的体重要求为{min}至{max}公斤。",
+      "name": "姓名",
+      "email": "电子邮箱",
+      "phone": "电话号码",
+      "notes": "还有什么需要我们了解的吗？（可选）"
+    },
+    "actions": {
+      "back": "上一步",
+      "next": "继续",
+      "submit": "提交预约请求",
+      "submitting": "正在提交您的请求…",
+      "selected": "已选择"
+    },
+    "review": {
+      "experience": "体验项目",
+      "date": "日期",
+      "time": "时间",
+      "guests": "人数",
+      "weight": "骑乘者体重",
+      "name": "姓名",
+      "contact": "联系方式",
+      "notes": "备注",
+      "disclaimer": "这是一个预约请求，尚未确认——我们的团队会与您联系以确认是否可以预约。"
+    },
+    "success": {
+      "badge": "已收到请求",
+      "title": "已收到您的预约请求",
+      "body": "感谢您的申请。我们已收到您的预约请求，团队将核实是否可以预约，并会与您联系确认。",
+      "reference": "参考编号：{id}",
+      "backHome": "返回首页",
+      "viewExperiences": "探索更多体验项目"
     }
   }
 }

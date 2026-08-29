@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
 import { Parallax } from "@/components/motion/Parallax";
@@ -54,7 +55,13 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   }
 
   return (
-    <div className="grid gap-3 lg:grid-cols-[220px_1fr] lg:items-stretch lg:gap-8">
+    <>
+      {/* PHASE 4C — TASK 3: this desktop layout is now gated to `lg:` and
+          above (`hidden lg:grid`) and otherwise completely unchanged —
+          the mobile-only vertical accordion below is a separate sibling
+          block, not a replacement, so nothing here needed touching beyond
+          the visibility gate. */}
+      <div className="hidden gap-3 lg:grid lg:grid-cols-[220px_1fr] lg:items-stretch lg:gap-8">
       {/* Selector — horizontal snap-scroll row on mobile (touch-friendly,
           no tiny targets), vertical list on desktop. */}
       <div
@@ -164,6 +171,125 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
           );
         })}
       </div>
-    </div>
+      </div>
+
+      {/* PHASE 4C — TASK 3: mobile-only vertical "file-tab" accordion.
+          All four experiences are visible simultaneously (stacked, compact
+          headers) so a visitor never has to guess more exist or swipe
+          sideways to find them — replacing the old horizontal snap-scroll
+          row on small screens. Reads from the exact same `experiences` prop
+          and the exact same translation namespaces/data as the desktop
+          panel above; nothing is hardcoded or duplicated as new content. */}
+      <div className="lg:hidden">
+        <div className="flex flex-col gap-2">
+          {experiences.map((experience, index) => {
+            const isActive = index === activeIndex;
+            const maxWeight = experience.restrictions.maxWeightKg;
+            const image = experienceImages[experience.id];
+            const title = tExperiences(`${toCamelCase(experience.id)}.title`);
+            const headerId = `experience-tab-${experience.id}`;
+            const panelId = `experience-panel-${experience.id}`;
+
+            return (
+              <div
+                key={experience.id}
+                // PHASE 4 FINALIZATION — the new terracotta brand accent
+                // marks this "selected" state (one of the accent's intended
+                // narrow uses); the desktop selector's moss-based active
+                // state above is left as-is, not touched for consistency's
+                // sake alone.
+                className={cn(
+                  "overflow-hidden rounded-card border transition-colors duration-200",
+                  isActive ? "border-terracotta/50 bg-white/60" : "border-ink/10 bg-transparent",
+                )}
+              >
+                <button
+                  id={headerId}
+                  type="button"
+                  aria-expanded={isActive}
+                  aria-controls={panelId}
+                  onClick={() => setActiveIndex(index)}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "font-display text-base",
+                      isActive ? "text-ink" : "text-ink/70",
+                    )}
+                  >
+                    {title}
+                  </span>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className={cn(
+                      "h-4 w-4 shrink-0 text-ink/50 transition-transform duration-300",
+                      isActive && "rotate-180",
+                    )}
+                  />
+                </button>
+
+                {/* Same expand/collapse technique already established by
+                    Faq.tsx (grid-template-rows 0fr → 1fr) — reused here
+                    rather than introducing a second accordion mechanism. */}
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={headerId}
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-300 ease-out",
+                    isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-4 pb-4">
+                      {image ? (
+                        <div className="relative mb-4 aspect-[16/10] w-full overflow-hidden rounded-button">
+                          <Image
+                            src={image.src}
+                            alt={title}
+                            fill
+                            sizes="100vw"
+                            className="object-cover"
+                            style={{ objectPosition: image.focus }}
+                          />
+                        </div>
+                      ) : null}
+
+                      <p className="text-sm text-ink/70">
+                        {tExperiences(`${toCamelCase(experience.id)}.shortDescription`)}
+                      </p>
+
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <Badge variant="outline">
+                          {tExperienceCard("hours", {
+                            open: experience.operatingHours.open,
+                            close: experience.operatingHours.close,
+                          })}
+                        </Badge>
+                        {maxWeight ? (
+                          <Badge variant="saddle">
+                            {tExperienceCard("maxWeight", { max: maxWeight })}
+                          </Badge>
+                        ) : null}
+                        <span className="text-sm text-ink/60">
+                          {tExperienceCard("priceFrom", {
+                            amount: format.number(experience.price.amount),
+                            currency: experience.price.currency,
+                          })}{" "}
+                          {tPricing(`unit.${experience.price.unit}`)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 }

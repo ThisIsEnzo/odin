@@ -1,12 +1,16 @@
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-export type BadgeVariant = "moss" | "saddle" | "dusk" | "outline";
+export type BadgeVariant = "moss" | "saddle" | "dusk" | "terracotta" | "outline";
 
 const variants: Record<BadgeVariant, string> = {
   moss: "bg-moss text-canvas",
   saddle: "bg-saddle text-canvas",
   dusk: "bg-dusk text-ink",
+  // PHASE 4 FINALIZATION — new brand accent (see globals.css). Additive
+  // only: existing variants/usages are unchanged, this is available for a
+  // future "featured"/selected badge use, not applied anywhere by default.
+  terracotta: "bg-terracotta text-canvas",
   outline: "border border-ink/20 text-ink/80 bg-transparent",
 };
 

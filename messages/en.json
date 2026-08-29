@@ -141,11 +141,21 @@
     "heading": "Gallery",
     "intro": "A look at the farm, its trails, and its table.",
     "items": {
-      "horse01": { "alt": "A horse being led across a paddock at ODIN farm" },
-      "pony01": { "alt": "A pony ready for a guided ride at ODIN farm" },
-      "atv01": { "alt": "An ATV on a dirt trail at ODIN farm" },
-      "sauna01": { "alt": "A wood-fired sauna at ODIN farm" },
-      "restaurant01": { "alt": "Dining area at the ODIN restaurant" }
+      "horse01": {
+        "alt": "A horse being led across a paddock at ODIN farm"
+      },
+      "pony01": {
+        "alt": "A pony ready for a guided ride at ODIN farm"
+      },
+      "atv01": {
+        "alt": "An ATV on a dirt trail at ODIN farm"
+      },
+      "sauna01": {
+        "alt": "A wood-fired sauna at ODIN farm"
+      },
+      "restaurant01": {
+        "alt": "Dining area at the ODIN restaurant"
+      }
     }
   },
   "reviews": {
@@ -156,7 +166,9 @@
   "location": {
     "heading": "Location",
     "body": "ODIN is set in the countryside {distance} from Pattaya. Directions and a map link will be available closer to launch.",
-    "distanceBadge": "{distance} from Pattaya"
+    "distanceBadge": "{distance} from Pattaya",
+    "mapPlaceholder": "Map preview coming soon",
+    "openInMaps": "Open in Google Maps"
   },
   "faq": {
     "heading": "Frequently Asked Questions",
@@ -190,7 +202,62 @@
       "weightExceedsMaximum": "The maximum weight for this experience is {max}kg.",
       "weightBelowMinimum": "The minimum weight for this experience is {min}kg.",
       "invalidGuestCount": "Please enter at least 1 guest.",
-      "invalidDate": "Please choose a valid, upcoming date."
+      "invalidDate": "Please choose a valid, upcoming date.",
+      "invalidTimeInterval": "Please choose one of the available times.",
+      "nameRequired": "Please enter your name.",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidPhone": "Please enter a valid phone number.",
+      "invalidSubmission": "We couldn't process that submission.",
+      "networkFailed": "We couldn't reach our server. Check your connection and try again."
+    },
+    "pageTitle": "Book Your Experience",
+    "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
+    "packageContext": "Part of the {packageName} package — choose which experience you'd like to request first.",
+    "steps": {
+      "experience": "Experience",
+      "schedule": "Date & Time",
+      "guests": "Guests",
+      "details": "Your Details",
+      "review": "Review"
+    },
+    "fields": {
+      "date": "Date",
+      "time": "Time",
+      "timePlaceholder": "Choose a time",
+      "guests": "Guests",
+      "weight": "Rider weight (kg)",
+      "weightHelpMax": "Maximum {max}kg for {experience}.",
+      "weightHelpRange": "Between {min}–{max}kg for {experience}.",
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "notes": "Anything we should know? (optional)"
+    },
+    "actions": {
+      "back": "Back",
+      "next": "Continue",
+      "submit": "Send request",
+      "submitting": "Sending your request…",
+      "selected": "Selected"
+    },
+    "review": {
+      "experience": "Experience",
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "weight": "Rider weight",
+      "name": "Name",
+      "contact": "Contact",
+      "notes": "Notes",
+      "disclaimer": "This is a request, not a confirmed booking — our team will follow up to confirm availability."
+    },
+    "success": {
+      "badge": "Received",
+      "title": "Request received",
+      "body": "Thanks — we've received your request. Our team will review availability and follow up to confirm your booking.",
+      "reference": "Reference: {id}",
+      "backHome": "Back to home",
+      "viewExperiences": "Explore more experiences"
     }
   }
 }

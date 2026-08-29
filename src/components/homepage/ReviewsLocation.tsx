@@ -2,6 +2,8 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Badge";
+import { buttonVariants } from "@/components/ui/Button";
+import { Reveal } from "@/components/motion/Reveal";
 import { siteConfig } from "@/data/odin/site";
 import { reviews } from "@/data/odin/reviews";
 
@@ -21,10 +23,20 @@ export function ReviewsLocation() {
 
   const realReviews = (reviews ?? []).filter((review) => review.isRealTestimonial);
 
+  // PHASE 4C — TASK 7: no map/coordinates field exists anywhere in
+  // SiteConfig or DATA_MODEL.md — no API key or SDK is introduced per the
+  // brief; instead a plain Google Maps search URL is built from the
+  // existing address string only (no invented coordinates). This is a
+  // real, working link today and can host a proper embed later without
+  // changing this URL's shape.
+  const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    siteConfig.address.value,
+  )}`;
+
   return (
     <Section tone="canvas">
       <Container className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <div>
+        <Reveal variant="left">
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
 
           {realReviews.length > 0 ? (
@@ -45,9 +57,9 @@ export function ReviewsLocation() {
               <p className="mt-2 text-sm text-ink/70">{t("comingSoonBody")}</p>
             </div>
           )}
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal variant="right" delayMs={80}>
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{tLocation("heading")}</h2>
           <p className="mt-4 max-w-md text-ink/75">
             {tLocation("body", { distance: siteConfig.locationDistanceFromPattaya })}
@@ -55,7 +67,28 @@ export function ReviewsLocation() {
           <Badge variant="outline" className="mt-4">
             {tLocation("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}
           </Badge>
-        </div>
+
+          {/* Location card — ready to host a real embed later; today it's
+              address + distance + a genuine "Open in Google Maps" link
+              built from the existing (MOCK, per MOCK_DATA.md §2) address
+              string, not from invented coordinates. */}
+          <div className="mt-6 overflow-hidden rounded-card border border-moss/15 bg-white/40">
+            <div className="flex items-center justify-center bg-moss/10 py-10 text-sm text-ink/50">
+              {tLocation("mapPlaceholder")}
+            </div>
+            <div className="p-5">
+              <p className="text-sm text-ink/80">{siteConfig.address.value}</p>
+              <a
+                href={mapsSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants({ variant: "outline", size: "sm", className: "mt-4" })}
+              >
+                {tLocation("openInMaps")}
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </Container>
     </Section>
   );

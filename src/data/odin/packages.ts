@@ -3,8 +3,6 @@ import type { Package } from "@/types/domain";
 /**
  * All three packages — contents and prices — are MOCK per CLAUDE.md §17.
  * See /docs/MOCK_DATA.md §3.
- *
- * Source: copied verbatim from odin_phase3_reconcile_reference.md. Not modified.
  */
 export const packages: Package[] = [
   {

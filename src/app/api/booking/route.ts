@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { bookingSchema } from "@/lib/validation/booking.schema";
+import { bookingSchema, collectFieldErrors } from "@/lib/validation/booking.schema";
 import { InMemoryBookingRepository } from "@/lib/booking/repository";
 import { ConsoleNotificationService } from "@/lib/booking/notify";
 import type { BookingRequest } from "@/types/domain";
@@ -34,11 +34,14 @@ export async function POST(req: Request) {
 
   const parsed = bookingSchema.safeParse(body);
   if (!parsed.success) {
-    // Field-level messages are fine to return (they mirror what the future
-    // BookingForm already showed the user via the same schema); no internal
-    // detail (stack traces, persistence errors) is ever included here.
+    // Structured, code-based field errors (e.g. { "weightKg": { key:
+    // "weightExceedsMaximum", params: { max: 90 } } }) so the client can
+    // render them via useTranslations('booking.errors') in the visitor's
+    // own locale. No internal detail (stack traces, persistence errors) is
+    // ever included here — this is still the same schema's own issues,
+    // just reshaped for i18n instead of Zod's raw .flatten() shape.
     return NextResponse.json(
-      { error: "Some details need attention.", issues: parsed.error.flatten() },
+      { error: "validation_failed", fieldErrors: collectFieldErrors(parsed.error.issues) },
       { status: 400 },
     );
   }

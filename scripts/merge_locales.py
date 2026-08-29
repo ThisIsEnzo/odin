@@ -1,0 +1,292 @@
+import json
+import collections
+
+REAL_DIR = "/mnt/project"
+OUT_DIR = "/mnt/user-data/outputs/odin-consolidated/messages"
+
+# ---------------------------------------------------------------------------
+# ONLY the new keys introduced in Phase 4B. Nothing here touches any key
+# that might already exist in the real files' "booking" namespace or any
+# other namespace.
+# ---------------------------------------------------------------------------
+
+NEW_BOOKING_ADDITIONS = {
+    "en": {
+        "pageTitle": "Book Your Experience",
+        "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
+        "packageContext": "Part of the {packageName} package — choose which experience you'd like to request first.",
+        "steps": {
+            "experience": "Experience",
+            "schedule": "Date & Time",
+            "guests": "Guests",
+            "details": "Your Details",
+            "review": "Review",
+        },
+        "fields": {
+            "date": "Date",
+            "time": "Time",
+            "timePlaceholder": "Choose a time",
+            "guests": "Guests",
+            "weight": "Rider weight (kg)",
+            "weightHelpMax": "Maximum {max}kg for {experience}.",
+            "weightHelpRange": "Between {min}\u2013{max}kg for {experience}.",
+            "name": "Full name",
+            "email": "Email",
+            "phone": "Phone",
+            "notes": "Anything we should know? (optional)",
+        },
+        "actions": {
+            "back": "Back",
+            "next": "Continue",
+            "submit": "Send request",
+            "submitting": "Sending your request\u2026",
+            "selected": "Selected",
+        },
+        "review": {
+            "experience": "Experience",
+            "date": "Date",
+            "time": "Time",
+            "guests": "Guests",
+            "weight": "Rider weight",
+            "name": "Name",
+            "contact": "Contact",
+            "notes": "Notes",
+            "disclaimer": "This is a request, not a confirmed booking \u2014 our team will follow up to confirm availability.",
+        },
+        "success": {
+            "badge": "Received",
+            "title": "Request received",
+            "body": "Thanks \u2014 we've received your request. Our team will review availability and follow up to confirm your booking.",
+            "reference": "Reference: {id}",
+            "backHome": "Back to home",
+            "viewExperiences": "Explore more experiences",
+        },
+        "errors": {
+            "invalidTimeInterval": "Please choose one of the available times.",
+            "nameRequired": "Please enter your name.",
+            "invalidEmail": "Please enter a valid email address.",
+            "invalidPhone": "Please enter a valid phone number.",
+            "invalidSubmission": "We couldn't process that submission.",
+            "networkFailed": "We couldn't reach our server. Check your connection and try again.",
+        },
+    },
+    "ru": {
+        "pageTitle": "\u0417\u0430\u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c",
+        "pageIntro": "\u0420\u0430\u0441\u0441\u043a\u0430\u0436\u0438\u0442\u0435, \u0447\u0442\u043e \u0432\u044b \u0445\u043e\u0442\u0438\u0442\u0435 \u043f\u043e\u043f\u0440\u043e\u0431\u043e\u0432\u0430\u0442\u044c \u0438 \u043a\u043e\u0433\u0434\u0430 \u2014 \u043d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0441\u0432\u044f\u0436\u0435\u0442\u0441\u044f \u0441 \u0432\u0430\u043c\u0438 \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u043d\u0430\u043b\u0438\u0447\u0438\u0435 \u043c\u0435\u0441\u0442.",
+        "packageContext": "\u0427\u0430\u0441\u0442\u044c \u043f\u0430\u043a\u0435\u0442\u0430 \u00ab{packageName}\u00bb \u2014 \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435, \u043a\u0430\u043a\u0443\u044e \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c \u0432\u044b \u0445\u043e\u0442\u0438\u0442\u0435 \u0437\u0430\u043f\u0440\u043e\u0441\u0438\u0442\u044c \u0432 \u043f\u0435\u0440\u0432\u0443\u044e \u043e\u0447\u0435\u0440\u0435\u0434\u044c.",
+        "steps": {
+            "experience": "\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c",
+            "schedule": "\u0414\u0430\u0442\u0430 \u0438 \u0432\u0440\u0435\u043c\u044f",
+            "guests": "\u0413\u043e\u0441\u0442\u0438",
+            "details": "\u0412\u0430\u0448\u0438 \u0434\u0430\u043d\u043d\u044b\u0435",
+            "review": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430",
+        },
+        "fields": {
+            "date": "\u0414\u0430\u0442\u0430",
+            "time": "\u0412\u0440\u0435\u043c\u044f",
+            "timePlaceholder": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0435\u043c\u044f",
+            "guests": "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0433\u043e\u0441\u0442\u0435\u0439",
+            "weight": "\u0412\u0435\u0441 \u043d\u0430\u0435\u0437\u0434\u043d\u0438\u043a\u0430 (\u043a\u0433)",
+            "weightHelpMax": "\u041c\u0430\u043a\u0441\u0438\u043c\u0443\u043c {max} \u043a\u0433 \u0434\u043b\u044f \u00ab{experience}\u00bb.",
+            "weightHelpRange": "\u041e\u0442 {min} \u0434\u043e {max} \u043a\u0433 \u0434\u043b\u044f \u00ab{experience}\u00bb.",
+            "name": "\u041f\u043e\u043b\u043d\u043e\u0435 \u0438\u043c\u044f",
+            "email": "\u042d\u043b. \u043f\u043e\u0447\u0442\u0430",
+            "phone": "\u0422\u0435\u043b\u0435\u0444\u043e\u043d",
+            "notes": "\u0427\u0442\u043e \u043d\u0430\u043c \u0441\u0442\u043e\u0438\u0442 \u0437\u043d\u0430\u0442\u044c? (\u043d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e)",
+        },
+        "actions": {
+            "back": "\u041d\u0430\u0437\u0430\u0434",
+            "next": "\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c",
+            "submit": "\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441",
+            "submitting": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c \u0437\u0430\u043f\u0440\u043e\u0441\u2026",
+            "selected": "\u0412\u044b\u0431\u0440\u0430\u043d\u043e",
+        },
+        "review": {
+            "experience": "\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c",
+            "date": "\u0414\u0430\u0442\u0430",
+            "time": "\u0412\u0440\u0435\u043c\u044f",
+            "guests": "\u0413\u043e\u0441\u0442\u0438",
+            "weight": "\u0412\u0435\u0441 \u043d\u0430\u0435\u0437\u0434\u043d\u0438\u043a\u0430",
+            "name": "\u0418\u043c\u044f",
+            "contact": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b",
+            "notes": "\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
+            "disclaimer": "\u042d\u0442\u043e \u0437\u0430\u043f\u0440\u043e\u0441, \u0430 \u043d\u0435 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0451\u043d\u043d\u043e\u0435 \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u2014 \u043d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0441\u0432\u044f\u0436\u0435\u0442\u0441\u044f \u0441 \u0432\u0430\u043c\u0438, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u043d\u0430\u043b\u0438\u0447\u0438\u0435 \u043c\u0435\u0441\u0442.",
+        },
+        "success": {
+            "badge": "\u0417\u0430\u043f\u0440\u043e\u0441 \u043f\u043e\u043b\u0443\u0447\u0435\u043d",
+            "title": "\u0417\u0430\u043f\u0440\u043e\u0441 \u043f\u043e\u043b\u0443\u0447\u0435\u043d",
+            "body": "\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u2014 \u043c\u044b \u043f\u043e\u043b\u0443\u0447\u0438\u043b\u0438 \u0432\u0430\u0448 \u0437\u0430\u043f\u0440\u043e\u0441. \u041d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442 \u043d\u0430\u043b\u0438\u0447\u0438\u0435 \u043c\u0435\u0441\u0442 \u0438 \u0441\u0432\u044f\u0436\u0435\u0442\u0441\u044f \u0441 \u0432\u0430\u043c\u0438, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435.",
+            "reference": "\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u043f\u0440\u043e\u0441\u0430: {id}",
+            "backHome": "\u041d\u0430 \u0433\u043b\u0430\u0432\u043d\u0443\u044e",
+            "viewExperiences": "\u0421\u043c\u043e\u0442\u0440\u0435\u0442\u044c \u0434\u0440\u0443\u0433\u0438\u0435 \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438",
+        },
+        "errors": {
+            "invalidTimeInterval": "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0434\u043d\u043e \u0438\u0437 \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 \u0432\u0440\u0435\u043c\u0435\u043d\u0438.",
+            "nameRequired": "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0443\u043a\u0430\u0436\u0438\u0442\u0435 \u0432\u0430\u0448\u0435 \u0438\u043c\u044f.",
+            "invalidEmail": "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0443\u043a\u0430\u0436\u0438\u0442\u0435 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 \u0430\u0434\u0440\u0435\u0441 \u044d\u043b\u0435\u043a\u0442\u0440\u043e\u043d\u043d\u043e\u0439 \u043f\u043e\u0447\u0442\u044b.",
+            "invalidPhone": "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0443\u043a\u0430\u0436\u0438\u0442\u0435 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 \u043d\u043e\u043c\u0435\u0440 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0430.",
+            "invalidSubmission": "\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u0430\u0442\u044c \u044d\u0442\u043e\u0442 \u0437\u0430\u043f\u0440\u043e\u0441.",
+            "networkFailed": "\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0441\u0432\u044f\u0437\u0430\u0442\u044c\u0441\u044f \u0441 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u043c. \u041f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u0438 \u043f\u043e\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0441\u043d\u043e\u0432\u0430.",
+        },
+    },
+    "th": {
+        "pageTitle": "\u0e08\u0e2d\u0e07\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13",
+        "pageIntro": "\u0e1a\u0e2d\u0e01\u0e40\u0e23\u0e32\u0e27\u0e48\u0e32\u0e04\u0e38\u0e13\u0e2d\u0e22\u0e32\u0e01\u0e17\u0e33\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21\u0e2d\u0e30\u0e44\u0e23\u0e41\u0e25\u0e30\u0e40\u0e21\u0e37\u0e48\u0e2d\u0e44\u0e2b\u0e23\u0e48 \u2014 \u0e17\u0e35\u0e21\u0e07\u0e32\u0e19\u0e02\u0e2d\u0e07\u0e40\u0e23\u0e32\u0e08\u0e30\u0e15\u0e34\u0e14\u0e15\u0e48\u0e2d\u0e01\u0e25\u0e31\u0e1a\u0e42\u0e14\u0e22\u0e15\u0e23\u0e07\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e22\u0e37\u0e19\u0e22\u0e31\u0e19\u0e04\u0e27\u0e32\u0e21\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e43\u0e2b\u0e49\u0e1a\u0e23\u0e34\u0e01\u0e32\u0e23",
+        "packageContext": "\u0e40\u0e1b\u0e47\u0e19\u0e2a\u0e48\u0e27\u0e19\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e02\u0e2d\u0e07\u0e41\u0e1e\u0e47\u0e01\u0e40\u0e01\u0e08 {packageName} \u2014 \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21\u0e17\u0e35\u0e48\u0e04\u0e38\u0e13\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e2a\u0e48\u0e07\u0e04\u0e33\u0e02\u0e2d\u0e01\u0e48\u0e2d\u0e19",
+        "steps": {
+            "experience": "\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21",
+            "schedule": "\u0e27\u0e31\u0e19\u0e41\u0e25\u0e30\u0e40\u0e27\u0e25\u0e32",
+            "guests": "\u0e08\u0e33\u0e19\u0e27\u0e19\u0e1c\u0e39\u0e49\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21",
+            "details": "\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13",
+            "review": "\u0e15\u0e23\u0e27\u0e08\u0e2a\u0e2d\u0e1a",
+        },
+        "fields": {
+            "date": "\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48",
+            "time": "\u0e40\u0e27\u0e25\u0e32",
+            "timePlaceholder": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e25\u0e32",
+            "guests": "\u0e08\u0e33\u0e19\u0e27\u0e19\u0e1c\u0e39\u0e49\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21",
+            "weight": "\u0e19\u0e49\u0e33\u0e2b\u0e19\u0e31\u0e01\u0e1c\u0e39\u0e49\u0e02\u0e35\u0e48 (\u0e01\u0e01.)",
+            "weightHelpMax": "\u0e2a\u0e39\u0e07\u0e2a\u0e38\u0e14 {max} \u0e01\u0e01. \u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a{experience}",
+            "weightHelpRange": "\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07 {min}\u2013{max} \u0e01\u0e01. \u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a{experience}",
+            "name": "\u0e0a\u0e37\u0e48\u0e2d-\u0e19\u0e32\u0e21\u0e2a\u0e01\u0e38\u0e25",
+            "email": "\u0e2d\u0e35\u0e40\u0e21\u0e25",
+            "phone": "\u0e40\u0e1a\u0e2d\u0e23\u0e4c\u0e42\u0e17\u0e23\u0e28\u0e31\u0e1e\u0e17\u0e4c",
+            "notes": "\u0e21\u0e35\u0e2d\u0e30\u0e44\u0e23\u0e17\u0e35\u0e48\u0e40\u0e23\u0e32\u0e04\u0e27\u0e23\u0e17\u0e23\u0e32\u0e1a\u0e44\u0e2b\u0e21 (\u0e44\u0e21\u0e48\u0e1a\u0e31\u0e07\u0e04\u0e31\u0e1a)",
+        },
+        "actions": {
+            "back": "\u0e22\u0e49\u0e2d\u0e19\u0e01\u0e25\u0e31\u0e1a",
+            "next": "\u0e16\u0e31\u0e14\u0e44\u0e1b",
+            "submit": "\u0e2a\u0e48\u0e07\u0e04\u0e33\u0e02\u0e2d",
+            "submitting": "\u0e01\u0e33\u0e25\u0e31\u0e07\u0e2a\u0e48\u0e07\u0e04\u0e33\u0e02\u0e2d\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13\u2026",
+            "selected": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27",
+        },
+        "review": {
+            "experience": "\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21",
+            "date": "\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48",
+            "time": "\u0e40\u0e27\u0e25\u0e32",
+            "guests": "\u0e08\u0e33\u0e19\u0e27\u0e19\u0e1c\u0e39\u0e49\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21",
+            "weight": "\u0e19\u0e49\u0e33\u0e2b\u0e19\u0e31\u0e01\u0e1c\u0e39\u0e49\u0e02\u0e35\u0e48",
+            "name": "\u0e0a\u0e37\u0e48\u0e2d",
+            "contact": "\u0e0a\u0e48\u0e2d\u0e07\u0e17\u0e32\u0e07\u0e15\u0e34\u0e14\u0e15\u0e48\u0e2d",
+            "notes": "\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e2b\u0e15\u0e38",
+            "disclaimer": "\u0e19\u0e35\u0e48\u0e04\u0e37\u0e2d\u0e04\u0e33\u0e02\u0e2d \u0e44\u0e21\u0e48\u0e43\u0e0a\u0e48\u0e01\u0e32\u0e23\u0e08\u0e2d\u0e07\u0e17\u0e35\u0e48\u0e22\u0e37\u0e19\u0e22\u0e31\u0e19\u0e41\u0e25\u0e49\u0e27 \u2014 \u0e17\u0e35\u0e21\u0e07\u0e32\u0e19\u0e02\u0e2d\u0e07\u0e40\u0e23\u0e32\u0e08\u0e30\u0e15\u0e34\u0e14\u0e15\u0e48\u0e2d\u0e01\u0e25\u0e31\u0e1a\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e22\u0e37\u0e19\u0e22\u0e31\u0e19\u0e04\u0e27\u0e32\u0e21\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e43\u0e2b\u0e49\u0e1a\u0e23\u0e34\u0e01\u0e32\u0e23",
+        },
+        "success": {
+            "badge": "\u0e44\u0e14\u0e49\u0e23\u0e31\u0e1a\u0e04\u0e33\u0e02\u0e2d\u0e41\u0e25\u0e49\u0e27",
+            "title": "\u0e44\u0e14\u0e49\u0e23\u0e31\u0e1a\u0e04\u0e33\u0e02\u0e2d\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13\u0e41\u0e25\u0e49\u0e27",
+            "body": "\u0e02\u0e2d\u0e1a\u0e04\u0e38\u0e13\u0e17\u0e35\u0e48\u0e2a\u0e48\u0e07\u0e04\u0e33\u0e02\u0e2d\u0e21\u0e32 \u0e40\u0e23\u0e32\u0e44\u0e14\u0e49\u0e23\u0e31\u0e1a\u0e04\u0e33\u0e02\u0e2d\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13\u0e41\u0e25\u0e49\u0e27 \u0e17\u0e35\u0e21\u0e07\u0e32\u0e19\u0e08\u0e30\u0e15\u0e23\u0e27\u0e08\u0e2a\u0e2d\u0e1a\u0e04\u0e27\u0e32\u0e21\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e43\u0e2b\u0e49\u0e1a\u0e23\u0e34\u0e01\u0e32\u0e23\u0e41\u0e25\u0e30\u0e15\u0e34\u0e14\u0e15\u0e48\u0e2d\u0e01\u0e25\u0e31\u0e1a\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e22\u0e37\u0e19\u0e22\u0e31\u0e19\u0e01\u0e32\u0e23\u0e08\u0e2d\u0e07",
+            "reference": "\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e25\u0e02\u0e2d\u0e49\u0e32\u0e07\u0e2d\u0e34\u0e07: {id}",
+            "backHome": "\u0e01\u0e25\u0e31\u0e1a\u0e2b\u0e19\u0e49\u0e32\u0e41\u0e23\u0e01",
+            "viewExperiences": "\u0e14\u0e39\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21\u0e2d\u0e37\u0e48\u0e19\u0e46",
+        },
+        "errors": {
+            "invalidTimeInterval": "\u0e01\u0e23\u0e38\u0e13\u0e32\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e25\u0e32\u0e08\u0e32\u0e01\u0e15\u0e31\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e17\u0e35\u0e48\u0e21\u0e35\u0e43\u0e2b\u0e49",
+            "nameRequired": "\u0e01\u0e23\u0e38\u0e13\u0e32\u0e23\u0e30\u0e1a\u0e38\u0e0a\u0e37\u0e48\u0e2d\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13",
+            "invalidEmail": "\u0e01\u0e23\u0e38\u0e13\u0e32\u0e23\u0e30\u0e1a\u0e38\u0e2d\u0e35\u0e40\u0e21\u0e25\u0e17\u0e35\u0e48\u0e16\u0e39\u0e01\u0e15\u0e49\u0e2d\u0e07",
+            "invalidPhone": "\u0e01\u0e23\u0e38\u0e13\u0e32\u0e23\u0e30\u0e1a\u0e38\u0e40\u0e1a\u0e2d\u0e23\u0e4c\u0e42\u0e17\u0e23\u0e28\u0e31\u0e1e\u0e17\u0e4c\u0e17\u0e35\u0e48\u0e16\u0e39\u0e01\u0e15\u0e49\u0e2d\u0e07",
+            "invalidSubmission": "\u0e44\u0e21\u0e48\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e14\u0e33\u0e40\u0e19\u0e34\u0e19\u0e01\u0e32\u0e23\u0e04\u0e33\u0e02\u0e2d\u0e19\u0e35\u0e49\u0e44\u0e14\u0e49",
+            "networkFailed": "\u0e44\u0e21\u0e48\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e40\u0e0a\u0e37\u0e48\u0e2d\u0e21\u0e15\u0e48\u0e2d\u0e01\u0e31\u0e1a\u0e40\u0e0b\u0e34\u0e23\u0e4c\u0e1f\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e44\u0e14\u0e49 \u0e01\u0e23\u0e38\u0e13\u0e32\u0e15\u0e23\u0e27\u0e08\u0e2a\u0e2d\u0e1a\u0e01\u0e32\u0e23\u0e40\u0e0a\u0e37\u0e48\u0e2d\u0e21\u0e15\u0e48\u0e2d\u0e41\u0e25\u0e49\u0e27\u0e25\u0e2d\u0e07\u0e43\u0e2b\u0e21\u0e48\u0e2d\u0e35\u0e01\u0e04\u0e23\u0e31\u0e49\u0e07",
+        },
+    },
+    "zh": {
+        "pageTitle": "\u9884\u8ba2\u60a8\u7684\u4f53\u9a8c",
+        "pageIntro": "\u544a\u8bc9\u6211\u4eec\u60a8\u60f3\u53c2\u52a0\u7684\u6d3b\u52a8\u4ee5\u53ca\u65f6\u95f4\u2014\u2014\u6211\u4eec\u7684\u56e2\u961f\u4f1a\u76f4\u63a5\u4e0e\u60a8\u8054\u7cfb\uff0c\u786e\u8ba4\u662f\u5426\u53ef\u4ee5\u9884\u7ea6\u3002",
+        "packageContext": "\u6b64\u9879\u76ee\u5c5e\u4e8e\u300c{packageName}\u300d\u5957\u9910\u2014\u2014\u8bf7\u9009\u62e9\u60a8\u60f3\u4f18\u5148\u7533\u8bf7\u9884\u7ea6\u7684\u4f53\u9a8c\u9879\u76ee\u3002",
+        "steps": {
+            "experience": "\u4f53\u9a8c\u9879\u76ee",
+            "schedule": "\u65e5\u671f\u4e0e\u65f6\u95f4",
+            "guests": "\u4eba\u6570",
+            "details": "\u60a8\u7684\u4fe1\u606f",
+            "review": "\u786e\u8ba4\u4fe1\u606f",
+        },
+        "fields": {
+            "date": "\u65e5\u671f",
+            "time": "\u65f6\u95f4",
+            "timePlaceholder": "\u8bf7\u9009\u62e9\u65f6\u95f4",
+            "guests": "\u4eba\u6570",
+            "weight": "\u9a91\u4e58\u8005\u4f53\u91cd\uff08\u516c\u65a4\uff09",
+            "weightHelpMax": "{experience}\u7684\u6700\u5927\u4f53\u91cd\u9650\u5236\u4e3a{max}\u516c\u65a4\u3002",
+            "weightHelpRange": "{experience}\u7684\u4f53\u91cd\u8981\u6c42\u4e3a{min}\u81f3{max}\u516c\u65a4\u3002",
+            "name": "\u59d3\u540d",
+            "email": "\u7535\u5b50\u90ae\u7bb1",
+            "phone": "\u7535\u8bdd\u53f7\u7801",
+            "notes": "\u8fd8\u6709\u4ec0\u4e48\u9700\u8981\u6211\u4eec\u4e86\u89e3\u7684\u5417\uff1f\uff08\u53ef\u9009\uff09",
+        },
+        "actions": {
+            "back": "\u4e0a\u4e00\u6b65",
+            "next": "\u7ee7\u7eed",
+            "submit": "\u63d0\u4ea4\u9884\u7ea6\u8bf7\u6c42",
+            "submitting": "\u6b63\u5728\u63d0\u4ea4\u60a8\u7684\u8bf7\u6c42\u2026",
+            "selected": "\u5df2\u9009\u62e9",
+        },
+        "review": {
+            "experience": "\u4f53\u9a8c\u9879\u76ee",
+            "date": "\u65e5\u671f",
+            "time": "\u65f6\u95f4",
+            "guests": "\u4eba\u6570",
+            "weight": "\u9a91\u4e58\u8005\u4f53\u91cd",
+            "name": "\u59d3\u540d",
+            "contact": "\u8054\u7cfb\u65b9\u5f0f",
+            "notes": "\u5907\u6ce8",
+            "disclaimer": "\u8fd9\u662f\u4e00\u4e2a\u9884\u7ea6\u8bf7\u6c42\uff0c\u5c1a\u672a\u786e\u8ba4\u2014\u2014\u6211\u4eec\u7684\u56e2\u961f\u4f1a\u4e0e\u60a8\u8054\u7cfb\u4ee5\u786e\u8ba4\u662f\u5426\u53ef\u4ee5\u9884\u7ea6\u3002",
+        },
+        "success": {
+            "badge": "\u5df2\u6536\u5230\u8bf7\u6c42",
+            "title": "\u5df2\u6536\u5230\u60a8\u7684\u9884\u7ea6\u8bf7\u6c42",
+            "body": "\u611f\u8c22\u60a8\u7684\u7533\u8bf7\u3002\u6211\u4eec\u5df2\u6536\u5230\u60a8\u7684\u9884\u7ea6\u8bf7\u6c42\uff0c\u56e2\u961f\u5c06\u6838\u5b9e\u662f\u5426\u53ef\u4ee5\u9884\u7ea6\uff0c\u5e76\u4f1a\u4e0e\u60a8\u8054\u7cfb\u786e\u8ba4\u3002",
+            "reference": "\u53c2\u8003\u7f16\u53f7\uff1a{id}",
+            "backHome": "\u8fd4\u56de\u9996\u9875",
+            "viewExperiences": "\u63a2\u7d22\u66f4\u591a\u4f53\u9a8c\u9879\u76ee",
+        },
+        "errors": {
+            "invalidTimeInterval": "\u8bf7\u4ece\u53ef\u9009\u65f6\u95f4\u4e2d\u9009\u62e9\u3002",
+            "nameRequired": "\u8bf7\u586b\u5199\u60a8\u7684\u59d3\u540d\u3002",
+            "invalidEmail": "\u8bf7\u586b\u5199\u6709\u6548\u7684\u7535\u5b50\u90ae\u7bb1\u5730\u5740\u3002",
+            "invalidPhone": "\u8bf7\u586b\u5199\u6709\u6548\u7684\u7535\u8bdd\u53f7\u7801\u3002",
+            "invalidSubmission": "\u65e0\u6cd5\u5904\u7406\u6b64\u6b21\u63d0\u4ea4\u3002",
+            "networkFailed": "\u65e0\u6cd5\u8fde\u63a5\u5230\u670d\u52a1\u5668\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u540e\u91cd\u8bd5\u3002",
+        },
+    },
+}
+
+
+def deep_merge_add_only(existing: dict, additions: dict, path=""):
+    """Adds keys from `additions` into `existing` ONLY where the key does not
+    already exist. Never overwrites an existing value. Returns a list of
+    (path, action) tuples for reporting."""
+    log = []
+    for key, val in additions.items():
+        p = f"{path}.{key}" if path else key
+        if key not in existing:
+            existing[key] = val
+            log.append((p, "ADDED"))
+        elif isinstance(val, dict) and isinstance(existing[key], dict):
+            log.extend(deep_merge_add_only(existing[key], val, p))
+        else:
+            log.append((p, "PRESERVED (already existed)"))
+    return log
+
+
+report = {}
+for locale in ["en", "ru", "th", "zh"]:
+    with open(f"{REAL_DIR}/{locale}.json", encoding="utf-8") as f:
+        real = json.load(f, object_pairs_hook=collections.OrderedDict)
+
+    if "booking" not in real:
+        real["booking"] = {}
+
+    log = deep_merge_add_only(real["booking"], NEW_BOOKING_ADDITIONS[locale], "booking")
+    report[locale] = log
+
+    with open(f"{OUT_DIR}/{locale}.json", "w", encoding="utf-8") as f:
+        json.dump(real, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+for locale, log in report.items():
+    added = [p for p, a in log if a == "ADDED"]
+    preserved = [p for p, a in log if "PRESERVED" in a]
+    print(f"--- {locale} ---")
+    print(f"  keys added: {len(added)}")
+    print(f"  keys already present (left untouched): {preserved}")
+
+print("\nDone. Every non-booking namespace was copied through unmodified from the real file.")

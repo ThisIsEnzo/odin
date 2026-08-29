@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
@@ -15,6 +16,17 @@ export function Footer() {
     <footer className="border-t border-canvas/10 bg-moss text-canvas">
       <Container className="grid gap-10 py-12 sm:py-16 md:grid-cols-4">
         <div>
+          {/* PHASE 4 FINAL — real logo asset (public/images/brand/odin-logo-full.jpg),
+              a lossless crop of the full supplied lockup — modest, fixed
+              size, not a full-width banner. businessName text stays alongside
+              it rather than being replaced. */}
+          <Image
+            src="/images/brand/odin-logo-full.jpg"
+            alt={siteConfig.businessName}
+            width={64}
+            height={70}
+            className="mb-3 rounded-md shadow-sm shadow-ink/20"
+          />
           <p className="font-display text-xl">{siteConfig.businessName}</p>
           <p className="mt-2 max-w-xs text-sm text-canvas/75">{tFooter("tagline")}</p>
           <p className="mt-4 text-sm text-canvas/75">

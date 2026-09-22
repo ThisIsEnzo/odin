@@ -47,7 +47,10 @@
     "statExperiencesLabel": "Количество активностей",
     "statExperiences": "{count} фирменных активности",
     "experiencesHeading": "Активности",
-    "experiencesIntro": "Четыре способа провести день в ODIN — у каждого свой ритм."
+    "experiencesIntro": "Четыре способа провести день в ODIN — у каждого свой ритм.",
+    "heroPrevSlide": "Предыдущий слайд",
+    "heroNextSlide": "Следующий слайд",
+    "heroGoToSlide": "Перейти к слайду {number}"
   },
   "experiences": {
     "horseRiding": {
@@ -70,7 +73,8 @@
   "experienceCard": {
     "hours": "Открыто {open}–{close}",
     "maxWeight": "Макс. вес {max} кг",
-    "priceFrom": "От {amount} {currency}"
+    "priceFrom": "От {amount} {currency}",
+    "bookCta": "Забронировать эту активность"
   },
   "whyOdin": {
     "kicker": "Почему ODIN",
@@ -156,6 +160,12 @@
       "restaurant01": {
         "alt": "Зал ресторана ODIN"
       }
+    },
+    "lightbox": {
+      "close": "Закрыть",
+      "previous": "Предыдущее изображение",
+      "next": "Следующее изображение",
+      "counter": "{current} из {total}"
     }
   },
   "reviews": {

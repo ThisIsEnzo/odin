@@ -47,7 +47,10 @@
     "statExperiencesLabel": "จำนวนกิจกรรม",
     "statExperiences": "กิจกรรมเด่น {count} รายการ",
     "experiencesHeading": "กิจกรรม",
-    "experiencesIntro": "สี่กิจกรรมให้เลือกสัมผัสตลอดวันที่ ODIN แต่ละกิจกรรมมีจังหวะของตัวเอง"
+    "experiencesIntro": "สี่กิจกรรมให้เลือกสัมผัสตลอดวันที่ ODIN แต่ละกิจกรรมมีจังหวะของตัวเอง",
+    "heroPrevSlide": "ภาพก่อนหน้า",
+    "heroNextSlide": "ภาพถัดไป",
+    "heroGoToSlide": "ไปที่ภาพที่ {number}"
   },
   "experiences": {
     "horseRiding": {
@@ -70,7 +73,8 @@
   "experienceCard": {
     "hours": "เปิด {open}–{close}",
     "maxWeight": "น้ำหนักสูงสุด {max} กก.",
-    "priceFrom": "เริ่มต้น {amount} {currency}"
+    "priceFrom": "เริ่มต้น {amount} {currency}",
+    "bookCta": "จองกิจกรรมนี้"
   },
   "whyOdin": {
     "kicker": "ทำไมต้อง ODIN",
@@ -156,6 +160,12 @@
       "restaurant01": {
         "alt": "พื้นที่รับประทานอาหารที่ร้านอาหาร ODIN"
       }
+    },
+    "lightbox": {
+      "close": "ปิด",
+      "previous": "ภาพก่อนหน้า",
+      "next": "ภาพถัดไป",
+      "counter": "{current} จาก {total}"
     }
   },
   "reviews": {

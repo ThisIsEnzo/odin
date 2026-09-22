@@ -34,7 +34,7 @@ export function Faq() {
   }
 
   return (
-    <Section tone="canvas-soft">
+    <Section id="faq" tone="canvas-soft">
       <Reveal>
         <Container className="max-w-3xl">
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>

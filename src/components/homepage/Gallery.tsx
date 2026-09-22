@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
@@ -5,6 +8,7 @@ import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
 import { gallery as galleryItems } from "@/data/odin/gallery";
+import { GalleryLightbox } from "./GalleryLightbox";
 
 /**
  * Verified against docs/odin_phase3_reconcile_reference.md: `gallery` is the
@@ -41,6 +45,7 @@ const galleryImageFocus: string[] = ["45% 40%", "center 60%", "center 45%", "cen
  */
 export function Gallery() {
   const t = useTranslations();
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (!galleryItems || galleryItems.length === 0) {
     return null;
@@ -51,20 +56,37 @@ export function Gallery() {
 
   const [featured, ...rest] = galleryItems;
 
+  const lightboxItems = galleryItems.map((item, index) => ({
+    key: item.id,
+    // resolveSrc(index) types as `string | undefined` under this project's
+    // noUncheckedIndexedAccess setting (it indexes the overrides array,
+    // which may run shorter than galleryItems). Falling back to the item's
+    // own src (GalleryItem.src is a required string, never optional) keeps
+    // this genuinely always-a-string rather than just silencing the type
+    // error, and matches what the grid/strip already do implicitly.
+    src: resolveSrc(index) ?? item.src,
+    alt: t(item.altTranslationKey),
+    focus: resolveFocus(index),
+  }));
+
   return (
-    <Section tone="canvas-soft">
+    <Section id="gallery" tone="canvas-soft">
       <Container>
         <Reveal className="max-w-2xl">
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("gallery.heading")}</h2>
           <p className="mt-2 text-ink/70">{t("gallery.intro")}</p>
         </Reveal>
 
-        {/* Mobile: swipeable snap-scroll strip — one row, touch-friendly, no overflow. */}
+        {/* Mobile: swipeable snap-scroll strip — one row, touch-friendly, no overflow.
+            Each image is now a real button that opens the lightbox at that index. */}
         <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-hide sm:hidden">
           {galleryItems.map((item, index) => (
-            <div
+            <button
               key={item.id}
-              className="relative h-56 w-[78%] shrink-0 snap-center overflow-hidden rounded-card"
+              type="button"
+              onClick={() => setOpenIndex(index)}
+              aria-label={t(item.altTranslationKey)}
+              className="relative h-56 w-[78%] shrink-0 snap-center overflow-hidden rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
             >
               <Image
                 src={resolveSrc(index)}
@@ -74,7 +96,7 @@ export function Gallery() {
                 className="object-cover"
                 style={{ objectPosition: resolveFocus(index) }}
               />
-            </div>
+            </button>
           ))}
         </div>
 
@@ -90,16 +112,23 @@ export function Gallery() {
               variant="scale"
               className="group relative col-span-2 row-span-2 overflow-hidden rounded-card"
             >
-              <Parallax strength={22} className="absolute -inset-6">
-                <Image
-                  src={resolveSrc(0)}
-                  alt={t(featured.altTranslationKey)}
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                  style={{ objectPosition: resolveFocus(0) }}
-                />
-              </Parallax>
+              <button
+                type="button"
+                onClick={() => setOpenIndex(0)}
+                aria-label={t(featured.altTranslationKey)}
+                className="absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+              >
+                <Parallax strength={22} className="absolute -inset-6">
+                  <Image
+                    src={resolveSrc(0)}
+                    alt={t(featured.altTranslationKey)}
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    style={{ objectPosition: resolveFocus(0) }}
+                  />
+                </Parallax>
+              </button>
             </Reveal>
 
             {rest.map((item, restIndex) => {
@@ -111,19 +140,28 @@ export function Gallery() {
                   delayMs={Math.min((restIndex + 1) * 60, 240)}
                   className="group relative overflow-hidden rounded-card"
                 >
-                  <Image
-                    src={resolveSrc(index)}
-                    alt={t(item.altTranslationKey)}
-                    fill
-                    sizes="(min-width: 640px) 25vw, 100vw"
-                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    style={{ objectPosition: resolveFocus(index) }}
-                  />
+                  <button
+                    type="button"
+                    onClick={() => setOpenIndex(index)}
+                    aria-label={t(item.altTranslationKey)}
+                    className="absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                  >
+                    <Image
+                      src={resolveSrc(index)}
+                      alt={t(item.altTranslationKey)}
+                      fill
+                      sizes="(min-width: 640px) 25vw, 100vw"
+                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      style={{ objectPosition: resolveFocus(index) }}
+                    />
+                  </button>
                 </Reveal>
               );
             })}
           </div>
         </div>
+
+        <GalleryLightbox items={lightboxItems} openIndex={openIndex} onOpenIndexChange={setOpenIndex} />
       </Container>
     </Section>
   );

@@ -47,7 +47,10 @@
     "statExperiencesLabel": "Number of experiences",
     "statExperiences": "{count} signature experiences",
     "experiencesHeading": "Experiences",
-    "experiencesIntro": "Four ways to spend your day at ODIN, each with its own pace."
+    "experiencesIntro": "Four ways to spend your day at ODIN, each with its own pace.",
+    "heroPrevSlide": "Previous slide",
+    "heroNextSlide": "Next slide",
+    "heroGoToSlide": "Go to slide {number}"
   },
   "experiences": {
     "horseRiding": {
@@ -70,7 +73,8 @@
   "experienceCard": {
     "hours": "Open {open}–{close}",
     "maxWeight": "Max weight {max} kg",
-    "priceFrom": "From {amount} {currency}"
+    "priceFrom": "From {amount} {currency}",
+    "bookCta": "Book this experience"
   },
   "whyOdin": {
     "kicker": "Why ODIN",
@@ -156,6 +160,12 @@
       "restaurant01": {
         "alt": "Dining area at the ODIN restaurant"
       }
+    },
+    "lightbox": {
+      "close": "Close",
+      "previous": "Previous image",
+      "next": "Next image",
+      "counter": "{current} of {total}"
     }
   },
   "reviews": {

@@ -37,7 +37,7 @@ export function Restaurant() {
   const tRestaurant = useTranslations("restaurant");
 
   return (
-    <Section tone="canvas">
+    <Section id="restaurant" tone="canvas">
       <Container>
         <div className="lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
           {/* Visual area — gently parallaxing photo, entering from the left. */}

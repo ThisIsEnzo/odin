@@ -31,7 +31,7 @@ export function Packages() {
   }
 
   return (
-    <Section tone="canvas-soft">
+    <Section id="packages" tone="canvas-soft">
       <Container>
         <Reveal>
           <div className="max-w-2xl">
@@ -92,8 +92,16 @@ function PackageCard({ pkg }: { pkg: Package }) {
           {pkg.mock.isMock ? (
             <p className="text-xs text-ink/50">{tPackages("mockNote")}</p>
           ) : null}
+          {/* PHASE 5A FIX: this previously linked to plain "/book" with no
+              query param, so /book/page.tsx's own `?package=` preselection
+              logic (see its doc comment, and ARCHITECTURE.md §4) was never
+              actually reachable from here — a visitor who tapped "Request
+              this package" landed on a blank booking flow with no context
+              banner and no experience preselected. Fixed by passing the
+              package's slug through, matching the contract /book/page.tsx
+              already implements and expects. */}
           <Link
-            href="/book"
+            href={`/book?package=${pkg.slug}`}
             className={buttonVariants({ variant: "secondary", size: "sm", className: "mt-2" })}
           >
             {tPackages("cta")}

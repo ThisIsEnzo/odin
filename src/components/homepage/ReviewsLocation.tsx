@@ -25,16 +25,22 @@ export function ReviewsLocation() {
 
   // PHASE 4C — TASK 7: no map/coordinates field exists anywhere in
   // SiteConfig or DATA_MODEL.md — no API key or SDK is introduced per the
-  // brief; instead a plain Google Maps search URL is built from the
-  // existing address string only (no invented coordinates). This is a
-  // real, working link today and can host a proper embed later without
-  // changing this URL's shape.
-  const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  // brief; instead a Google Maps URL is built from the existing address
+  // string only (no invented coordinates).
+  //
+  // PHASE 5A: switched from the plain "search" endpoint to Maps' documented
+  // "directions" deep link (`maps/dir/?api=1&destination=...`) so the CTA
+  // does what its label says — a visitor tapping "Open in Google Maps" from
+  // the Location section is asking for directions there, not just a pin to
+  // look at. Still built from `siteConfig.address.value` only; no
+  // coordinates are introduced, and this remains a real, working link today
+  // that can host a proper embed later without changing its shape.
+  const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
     siteConfig.address.value,
   )}`;
 
   return (
-    <Section tone="canvas">
+    <Section id="location" tone="canvas">
       <Container className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <Reveal variant="left">
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
@@ -79,7 +85,7 @@ export function ReviewsLocation() {
             <div className="p-5">
               <p className="text-sm text-ink/80">{siteConfig.address.value}</p>
               <a
-                href={mapsSearchUrl}
+                href={mapsDirectionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={buttonVariants({ variant: "outline", size: "sm", className: "mt-4" })}

@@ -30,13 +30,15 @@ export default async function HomePage({ params }: PageProps) {
   const tNav = await getTranslations("nav");
 
   // Array-shaped on purpose so this reads as "the current hero slide set,"
-  // not a one-off — but only one approved photo actually exists at
-  // public/images/hero/ right now (verified on disk, not assumed — see
-  // HeroSlideshow.tsx for what happens with exactly one entry: a single
-  // stable slide with its one-directional Ken Burns drift, no crossfade
-  // rotation, since there's nothing to rotate to yet). The carousel
-  // progress indicator below only renders once this array has 2+ entries,
-  // so no dead/non-functional dots are shown for a single image.
+  // not a one-off — but only one approved photo (odin-hero.jpg) is
+  // confirmed to exist; this project's sandbox has no way to verify
+  // additional files under public/images/hero/, so none are invented here.
+  // HeroSlideshow.tsx (PHASE 5A) fully supports N images — crossfade
+  // rotation, Ken Burns, prev/next arrows, and dot navigation all activate
+  // automatically the moment more real photo paths are added below. With
+  // exactly one entry it renders a single stable slide with its
+  // one-directional Ken Burns drift and no controls, since there's nothing
+  // to navigate to yet.
   const heroImages = ["/images/hero/odin-hero.jpg"];
 
   return (
@@ -124,23 +126,13 @@ export default async function HomePage({ params }: PageProps) {
             </div>
           </div>
 
-          {heroImages.length > 1 ? (
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-3 text-xs tracking-wide text-canvas/85"
-            >
-              {/* Carousel progress — intentionally not rendered: only one
-                  approved hero photo currently exists (see heroImages
-                  above), so there is nothing to page between yet. */}
-            </div>
-          ) : null}
         </div>
       </Section>
 
       {/* EXPERIENCES — PHASE 3C §2: one dominant, selectable content area
           instead of a static grid. Still reads only from
           src/data/odin/experiences.ts, passed as a prop below. */}
-      <Section tone="canvas-soft">
+      <Section id="experiences" tone="canvas-soft">
         <Container>
           <Reveal className="max-w-2xl">
             <h2 className="font-display text-2xl text-ink sm:text-3xl">

@@ -47,7 +47,10 @@
     "statExperiencesLabel": "体验项目数量",
     "statExperiences": "{count} 项特色体验",
     "experiencesHeading": "体验项目",
-    "experiencesIntro": "在 ODIN 度过一天的四种方式，每一种都有自己的节奏。"
+    "experiencesIntro": "在 ODIN 度过一天的四种方式，每一种都有自己的节奏。",
+    "heroPrevSlide": "上一张",
+    "heroNextSlide": "下一张",
+    "heroGoToSlide": "跳转到第 {number} 张"
   },
   "experiences": {
     "horseRiding": {
@@ -70,7 +73,8 @@
   "experienceCard": {
     "hours": "营业时间 {open}–{close}",
     "maxWeight": "最大承重 {max} 公斤",
-    "priceFrom": "起价 {amount} {currency}"
+    "priceFrom": "起价 {amount} {currency}",
+    "bookCta": "预订此体验项目"
   },
   "whyOdin": {
     "kicker": "为什么选择 ODIN",
@@ -156,6 +160,12 @@
       "restaurant01": {
         "alt": "ODIN 餐厅的用餐区"
       }
+    },
+    "lightbox": {
+      "close": "关闭",
+      "previous": "上一张图片",
+      "next": "下一张图片",
+      "counter": "第 {current} / {total} 张"
     }
   },
   "reviews": {

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
+import { buttonVariants } from "@/components/ui/Button";
+import { Link } from "@/i18n/navigation";
 import { Parallax } from "@/components/motion/Parallax";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/types/domain";
@@ -166,6 +168,17 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                     {tPricing(`unit.${experience.price.unit}`)}
                   </span>
                 </div>
+
+                <Link
+                  href={`/book?experience=${experience.id}`}
+                  className={buttonVariants({
+                    variant: "primary",
+                    size: "sm",
+                    className: "mt-5 self-start",
+                  })}
+                >
+                  {tExperienceCard("bookCta")}
+                </Link>
               </div>
             </div>
           );
@@ -282,6 +295,17 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                           {tPricing(`unit.${experience.price.unit}`)}
                         </span>
                       </div>
+
+                      <Link
+                        href={`/book?experience=${experience.id}`}
+                        className={buttonVariants({
+                          variant: "primary",
+                          size: "sm",
+                          className: "mt-4 w-full",
+                        })}
+                      >
+                        {tExperienceCard("bookCta")}
+                      </Link>
                     </div>
                   </div>
                 </div>

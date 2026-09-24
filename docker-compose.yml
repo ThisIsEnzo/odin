@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: odin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local development password}
+      POSTGRES_DB: odin
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - odin_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odin -d odin"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  odin_postgres:

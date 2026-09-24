@@ -1,6 +1,6 @@
 # ODIN — Data Model
 
-Current: Phase 5B, Booking V2. Canonical TypeScript definitions: `src/types/domain.ts`.
+Current: Phase 5C infrastructure, canonical Booking V2. Canonical TypeScript definitions: `src/types/domain.ts`.
 
 ## Facts and content
 
@@ -20,6 +20,7 @@ BookingDraft {
 }
 BookingRequest extends BookingDraft {
   id: string;
+  reference?: string; // populated on every new persisted request
   status: 'received' | 'confirmed' | 'declined' | 'cancelled';
   createdAt: string;
 }
@@ -57,6 +58,21 @@ Current canonical MOCK packages:
 
 `BookingOption` defines ID, translation namespace, type, applicable experience/package IDs, quantity constraints and optional pricing metadata. Selections store only `optionId` and `quantity`. `src/data/odin/booking-options.ts` is intentionally empty. Both UI and validation use this catalog, so unknown or inapplicable selections fail. Quantity controls appear only when real definitions are added. Scheduling an extra activity uses an activity item rather than an opaque option. Changing participant count uses the participant array.
 
-## Persistence boundary
+## PostgreSQL persistence
 
-`BookingRepository.create(BookingDraft)` and `getById` transport the whole versioned aggregate. The development adapter copies inputs and outputs to prevent caller mutation. No UI/API consumer depends on its Map implementation. In-memory data is volatile and instance-local; durable transactional storage is Phase 5C.
+`BookingRepository.create(BookingDraft, {idempotencyKey})` retains the original boundary while adding submission metadata outside the business draft. PostgreSQL requires a valid key; in-memory tests may omit it. Both adapters generate a public reference and initial received status. Optional reference typing permits old Phase 5B fixtures; new DB rows require it.
+
+| Table | Purpose |
+| --- | --- |
+| bookings | Internal UUID, unique public reference, received/status, V2 version, locale, one customer/contact, notes, timestamps, unique idempotency key and canonical request hash |
+| booking_items | Internal row UUID + stable domain ID, booking FK, same-booking parent FK, explicit type/activity/package IDs, date/time, position |
+| booking_participants | Item FK, stable participant ID, position, optional weight; no names |
+| booking_item_options | Item FK, stable option ID, position, quantity; no invented catalog data |
+| notification_outbox | One booking.received event per booking, immutable canonical payload snapshot, aggregate status and completion timestamp |
+| notification_deliveries | Event FK, provider/recipient/part, frozen credential-free envelope, retry UUID, status, attempts, next attempt, sanitized error, acceptance ID/time |
+
+Root and component positions are persisted separately with unique indexes. Duplicate frontend IDs in different bookings do not conflict. Participant counts remain derived, and decimals are preserved as PostgreSQL float8 for JavaScript-number round trips. Activity dates/times remain canonical local strings for Asia/Bangkok scheduling, not silently converted UTC instants. Creation/update/processing timestamps are timestamptz.
+
+Operational booking data is normalized; only immutable notification snapshots/envelopes use JSONB. This is intentional: retries must not reinterpret historical requests against a changed business catalog, template or destination. Stored snapshots/envelopes contain PII and require the same retention/access protection as bookings. No credentials are stored in them.
+
+The whole request, event and delivery plans commit atomically. Separate recipient/part state preserves partial success. PostgresBookingRepository reconstructs the existing aggregate without introducing a second incompatible domain model. SQL shape/FK/uniqueness constraints supplement API validation; semantic catalog/rider rules remain in the shared application layer. Memory mode remains explicitly non-production and volatile.

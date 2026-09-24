@@ -1,6 +1,6 @@
 # ODIN — Architecture
 
-Current implementation: Phase 5B on the supplied Phase 5A.1 project. Earlier greenfield proposals are superseded by the actual modules described here.
+Current implementation: Phase 5C infrastructure on the supplied Phase 5B Booking V2 project. Earlier greenfield proposals are superseded by the actual modules described here.
 
 ## Application
 
@@ -18,35 +18,41 @@ Next.js App Router, React/TypeScript, Tailwind and next-intl. Locale prefixes EN
 | ActivityEditor.tsx | Per-activity schedule and per-participant inputs |
 | BookingOptions.tsx | Catalog-driven future option controls; currently hidden |
 | api/booking/route.ts | Server validation, bounded request, dependency wiring |
-| booking/submit.ts | Persist first; isolate subsequent notification failure |
-| booking/repository.ts | Persistence contract and volatile development implementation |
+| booking/api.ts + runtime.ts | V2 validation, idempotent repository creation and immediate outbox attempt |
+| booking/repository.ts + postgres-repository.ts | Repository contract, explicit dev memory and transactional PostgreSQL |
 | booking/notify.ts | One complete operational payload, fanout and delivery outcomes |
 | booking/providers/* | Official provider transport only |
 
 Review groups activities by date and retains package context. Each activity can be edited without clearing others. Only one top-level item's editor is open at once; package components are configured explicitly. Contact is collected once. Error summaries identify activity and rider. No guest names, invented prices, durations, add-ons or total charges are introduced.
 
-## Notifications
+## Production persistence and submission
 
-`buildBookingNotificationPayload` makes a complete snapshot and operational text from the persisted request, including all components, participants/weights, options, contact, notes and received status. IDs are used instead of storing presentation labels. Staff text uses stable operational English; customer-facing UI is localized.
+`src/lib/db/schema.ts` defines six normalized PostgreSQL tables with Drizzle ORM. `PostgresBookingRepository` retains the BookingRepository abstraction and reconstructs the canonical Booking V2 aggregate. Internal UUIDs, public references and frontend item IDs are separate. The public reference is ODIN plus 128 random bits with a unique DB constraint.
 
-`FanoutNotificationService` calls configured adapters independently. Outcomes mean API accepted or failed, not confirmed end-user delivery. Routine logs contain reference/channel, not access tokens, provider responses or customer PII. Console is the local default and does not transmit messages.
+The API validates V2 and the Idempotency-Key UUID header. The repository hashes a canonical representation of the validated draft and inserts under a unique key inside a transaction. An identical replay returns the original result; changed content returns 409. Concurrent submissions rely on the PostgreSQL unique constraint, not a process-local check. Client retries retain their key while submitted content is unchanged; editing changes the key. A remount/new form begins a new intent.
 
-LINE uses Official Account Messaging API `POST https://api.line.me/v2/bot/message/push`, bearer token and configured staff user/group ID. Long text is chunked with reference/part markers and at most five messages per call. Retry keys are generated per attempt; durable reuse of those keys and replay handling must be implemented with an outbox before adding retries.
+The transaction writes booking, ordered items/components, ordered participants/options, one canonical outbox event and frozen provider/recipient/part deliveries. Any failure rolls everything back. The response is received only after commit; one immediate delivery part is attempted best-effort, with a scheduled processor completing remaining work. Notification or processing failures cannot turn committed acceptance into a booking error. Missing production configuration returns a safe 503, never a memory success.
 
-WhatsApp uses Business Platform Cloud API `POST https://graph.facebook.com/{configured-version}/{phone-number-id}/messages`. It requires a configured approved template with three body parameters: reference, part, details. It does not assume the recipient has an open 24-hour service window. Long operational text is normalized for template parameters and divided into parts without dropping details. Template approval, exact template shape, recipient opt-in, account configuration and real delivery remain unverified. No API version or IDs are fabricated as production defaults.
+`runtime.ts` selects PostgreSQL by default and rejects memory/console in production. Explicit development memory remains for frontend work and isolated tests. `backend:check` is the documented pre-start validation gate; build-time module loading does not open the DB. There is no hosting-provider SDK, automatic migration on startup, inventory lock or new status transition.
 
-Both transports use environment configuration and 10-second per-request timeouts. `.env.example` contains empty credentials. Staff transport configuration is independent of the mock public website contact data. No customer message is sent by this phase.
+## Notification layers
 
-Official references consulted:
-- https://developers.line.biz/en/reference/messaging-api/
-- https://developers.line.biz/en/docs/messaging-api/retrying-api-request/
-- https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/overview
-- https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/send-messages
+- Canonical interpretation: `booking/notify.ts`, reused from Phase 5B. Full snapshot plus operational text, no outgoing internal IDs.
+- Planning: `outbox/plan.ts`, immutable per-recipient/per-part transport envelopes; no credentials in persisted plans.
+- Transport: `outbox/transport.ts` and shared `providers/http.ts`, official endpoints, current server-only tokens, bounded timeout and sanitized failure categories.
+- Processing: `outbox/processor.ts`, durable state, DB locking, retries and per-part acceptance IDs.
+- Phase 5B direct provider classes / fanout / submit helper remain compatible for tests, but are not the production submission path.
 
-## Phase 5C boundary
+The scheduler uses authenticated POST `/api/internal/notifications/process`. A strong server-only bearer secret is compared through fixed-length hashes and timingSafeEqual. Processing claims an event using FOR UPDATE SKIP LOCKED and holds its transaction over exactly one bounded provider call. Different events can progress concurrently; two workers do not send the same event concurrently. No lease expiry can overtake an in-flight call. Pool and idle-transaction timeouts must exceed the HTTP timeout as documented.
 
-Replace in-memory storage behind BookingRepository with transactional durable storage. Add an atomic notification outbox, provider-specific delivery records, retry scheduling and reusable LINE retry keys, WhatsApp delivery webhooks, idempotent submissions, distributed abuse controls, retention/access controls and monitoring. Coordinate configuration validation and real staff-channel delivery trials. Production database deployment, CRM, admin panels, payments and inventory locking are not part of Phase 5B.
+Each part has its own attempts, next-attempt time, last sanitized error, sent timestamp and provider ID. Successful parts remain sent; event status aggregates to pending/sent/partial/dead. Six attempts with exponential backoff bound committed failures. Transport errors, 408, 429 and 5xx retry; other 4xx become dead. The endpoint caps each run at five parts, checking a 45-second deadline between attempts.
 
-## Verification
+LINE: official push API, persisted retry UUID reused with frozen body/destination, accepted 409 detection, conservative 23h event age cutoff. WhatsApp: official Cloud API with configured API version and approved BODY template, explicit recipient opt-in, no assumed customer-service window and no unofficial automation. API acceptance is not end-user delivery. WhatsApp ambiguous sends/crashes may duplicate; this is not exactly-once transport. A transaction rollback after a crash also rolls back the current attempt counter. Operator monitoring/recovery is required.
 
-See PHASE_5B_STATUS.md for commands actually completed and environment limitations. No lint/type suppression or build-check bypass is introduced. Dependency manifests retain the supplied baseline; use npm install locally while the pre-existing lockfile mismatch remains unresolved. Tests use mocked provider HTTP transports and do not demonstrate live messaging delivery.
+No webhook is necessary for outgoing LINE; this phase exposes none. WhatsApp delivery receipts and automatic opt-out ingestion are not implemented. See NOTIFICATION_SETUP.md for official references, approval constraints and setup; see PRODUCTION_BACKEND_SETUP.md for scheduler, TLS, migration locking, DB roles, backup and retention guidance.
+
+## Verification and remaining boundaries
+
+See PHASE_5C_STATUS.md for actual results. Real PostgreSQL integration tests are provided and fail closed without a dedicated test DB. Unit tests use mocked transports. No live provider success is claimed without credentials and recipient confirmation. New Drizzle/pg/tsx dependencies require an updated lockfile; npm ci dry-run validates it. The inherited ESLint configuration remains out of scope. Homepage/layout/business data and locale content remain unchanged.
+
+No CRM, admin, customer authentication, payments, availability engine or instant confirmation. Before launch complete real DB/migration/concurrency/restart verification, account setup and live provider tests, existing browser QA, scheduler operations, upstream rate limiting and data-retention policy.

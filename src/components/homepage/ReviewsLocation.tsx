@@ -7,16 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { siteConfig } from "@/data/odin/site";
 import { reviews } from "@/data/odin/reviews";
 
-/**
- * Verified against docs/odin_phase3_reconcile_reference.md: `reviews` is
- * the correct named export from src/data/odin/reviews.ts, and it is `[]` in
- * the real data — so the "coming soon" branch below always renders today,
- * which is the correct, intentional empty state (MOCK_DATA.md §6), not a
- * bug. `review.{id,rating,authorName,isRealTestimonial}` match the Review
- * type in src/types/domain.ts exactly, so real reviews would render
- * correctly the moment the array is populated with `isRealTestimonial: true`
- * entries.
- */
+
 export function ReviewsLocation() {
   const t = useTranslations("reviews");
   const tLocation = useTranslations("location");
@@ -58,7 +49,7 @@ export function ReviewsLocation() {
               ))}
             </ul>
           ) : (
-            <div className="mt-6 rounded-card border border-moss/15 bg-white/40 p-6">
+            <div className="mt-8 border-t border-ink/20 py-8">
               <p className="font-display text-lg text-ink">{t("comingSoonTitle")}</p>
               <p className="mt-2 text-sm text-ink/70">{t("comingSoonBody")}</p>
             </div>
@@ -74,15 +65,10 @@ export function ReviewsLocation() {
             {tLocation("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}
           </Badge>
 
-          {/* Location card — ready to host a real embed later; today it's
-              address + distance + a genuine "Open in Google Maps" link
-              built from the existing (MOCK, per MOCK_DATA.md §2) address
-              string, not from invented coordinates. */}
-          <div className="mt-6 overflow-hidden rounded-card border border-moss/15 bg-white/40">
-            <div className="flex items-center justify-center bg-moss/10 py-10 text-sm text-ink/50">
-              {tLocation("mapPlaceholder")}
-            </div>
-            <div className="p-5">
+          
+          <div className="mt-8 border-y border-ink/20">
+            
+            <div className="py-8">
               <p className="text-sm text-ink/80">{siteConfig.address.value}</p>
               <a
                 href={mapsDirectionsUrl}

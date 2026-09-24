@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -8,44 +10,42 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileNav } from "./MobileNav";
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 24);
+    update(); window.addEventListener("scroll", update, {passive:true});
+    return () => window.removeEventListener("scroll", update);
+  }, []);
   const t = useTranslations("nav");
   const tCommon = useTranslations("common");
 
   return (
-    <header className="sticky top-0 z-30 border-b border-ink/10 bg-canvas/95 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between sm:h-20">
-        {/* PHASE 4 FINAL — real logo asset (public/images/brand/odin-logo-icon.jpg),
-            a lossless crop of the supplied artwork's horse/rider mark — not
-            redrawn in CSS. Sized as a compact badge, not the full rectangular
-            lockup, so it reads as an emblem rather than a slab of color; the
-            text wordmark stays real, legible text (same element as before,
-            just paired with the mark) rather than being replaced by an image. */}
+    <header className={`sticky top-0 z-30 border-b border-ink/10 bg-canvas/95 backdrop-blur ${scrolled ? "shadow-sm" : ""}`}>
+      <Container className={`flex items-center justify-between gap-4 transition-[min-height] duration-300 ${scrolled ? "min-h-20" : "min-h-24 lg:min-h-[104px]"}`}>
+        
         <Link
           href="/"
           className="flex items-center gap-2.5 font-display text-2xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
         >
           <Image
-            src="/images/brand/odin-logo-icon.jpg"
+            src="/images/brand/odin-logo.jpg"
             alt=""
-            width={57}
-            height={40}
-            className="rounded-md shadow-sm shadow-ink/10 ring-1 ring-terracotta/25"
+            width={1387}
+            height={1536}
+            className="brand-lockup"
           />
-          <span>
-            ODIN
-            <span className="sr-only"> — {tCommon("logoSuffix")}</span>
-          </span>
+          <span className="sr-only">ODIN — {tCommon("logoSuffix")}</span>
         </Link>
 
         <nav
           aria-label={tCommon("primaryNavigation")}
-          className="hidden items-center gap-1 md:flex"
+          className="hidden items-center gap-1 xl:flex"
         >
           {primaryNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-button px-3 py-2 text-sm font-medium text-ink/80 hover:bg-moss/10 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+              className="border-b border-transparent px-3 py-3 text-sm font-medium text-ink/80 hover:border-terracotta hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
             >
               {t(item.translationKey)}
             </Link>
@@ -53,10 +53,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden md:inline-flex" />
+          <LanguageSwitcher className="hidden xl:inline-flex" />
           <Link
             href={bookNowItem.href}
-            className={buttonVariants({ variant: "primary", size: "sm", className: "hidden md:inline-flex" })}
+            className={buttonVariants({ variant: "primary", size: "sm" })}
           >
             {t(bookNowItem.translationKey)}
           </Link>

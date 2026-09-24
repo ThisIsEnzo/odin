@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type HeroSlideshowProps = {
@@ -19,41 +19,14 @@ type HeroSlideshowProps = {
 // since it was already tuned against the CSS transition durations below.
 const SLIDE_DURATION_MS = 10_000;
 
-/**
- * PHASE 4C established the crossfade/Ken-Burns mechanism this still uses
- * unchanged: every image mounts from first render (never conditionally
- * mounted/unmounted), sits in its own absolutely-positioned layer, and only
- * `opacity`/`transform` toggle via the `.hero-slide-active` class - driven
- * by a CSS transition, not a free-running `@keyframes` loop, so the zoom
- * always restarts from 1.02 and climbs to 1.08 monotonically each time a
- * slide becomes active.
- *
- * PHASE 5A adds the manual controls this component didn't have before:
- * previous/next arrows and dot navigation, rendered only when there's more
- * than one image to move between (this replaces the Phase 4C placeholder in
- * page.tsx that reserved space for progress dots but never actually
- * rendered any). Autoplay and manual navigation share one `activeIndex`
- * state and one timer, coordinated through `startTimer()`: any manual
- * interaction restarts the auto-advance clock, so a visitor who just
- * clicked "next" isn't immediately auto-advanced past the slide they chose
- * to look at.
- *
- * IMPORTANT / FLAGGED (carried over from Phase 4C, still true): only ONE
- * real hero photo (`odin-hero.jpg`) is confirmed to exist in this project -
- * this environment has no access to `public/images/hero/` to verify
- * anything beyond that, and no second/third hero filename is invented here.
- * With a single-entry array this renders that one image with its slow
- * one-directional Ken Burns move, no controls, and never starts the
- * rotation timer. True crossfade rotation and the manual controls below
- * activate automatically, with no further code changes, the moment more
- * real photo paths are supplied to the `images` array this component
- * receives from page.tsx.
- */
+
 export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
   const t = useTranslations("home");
   const [activeIndex, setActiveIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reducedMotionRef = useRef(false);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current !== null) {
@@ -68,21 +41,24 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
     // one stable frame - in both cases, never (re)start the automatic
     // timer. Manual controls still work in both cases; only the automatic
     // advance is gated on these two conditions.
-    if (images.length <= 1 || reducedMotionRef.current) return;
+    if (images.length <= 1 || reducedMotionRef.current || pausedRef.current) return;
     timerRef.current = setInterval(() => {
       setActiveIndex((current) => (current + 1) % images.length);
     }, SLIDE_DURATION_MS);
   }, [clearTimer, images.length]);
 
   useEffect(() => {
-    reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => { reducedMotionRef.current = media.matches; startTimer(); };
+    sync(); media.addEventListener("change", sync);
+    return () => { clearTimer(); media.removeEventListener("change", sync); };
+  }, [startTimer, clearTimer]);
+
+  function togglePause() {
+    pausedRef.current = !pausedRef.current;
+    setPaused(pausedRef.current);
     startTimer();
-    return clearTimer;
-    // Re-run only when the image count actually changes - startTimer/
-    // clearTimer are stable across renders (useCallback) except when
-    // images.length changes, which is already the dependency that matters.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images.length]);
+  }
 
   const goTo = useCallback(
     (index: number) => {
@@ -105,9 +81,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
         const isActive = index === activeIndex;
         return (
           <div key={src} aria-hidden={!isActive} className={cn("hero-slide", isActive && "hero-slide-active")}>
-            {/* Decorative - the frosted content panel carries all the real
-                information, same convention as the previous single-image
-                version. */}
+            
             <Image
               src={src}
               alt=""
@@ -120,10 +94,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
         );
       })}
 
-      {/* Manual controls - only meaningful, and only rendered, with 2+
-          images. Positioned relative to this component's own root, which is
-          itself `absolute inset-0` (via the className page.tsx passes in),
-          so no extra positioning wrapper is needed. */}
+      
       {hasMultiple && (
         <>
           <button
@@ -131,7 +102,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             onClick={goPrev}
             aria-label={t("heroPrevSlide")}
             className={cn(
-              "absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full p-2 sm:left-5 sm:p-2.5",
+              "absolute bottom-5 right-[108px] z-20 flex h-11 w-11 items-center justify-center border border-white/40",
               "bg-ink/30 text-canvas backdrop-blur-sm transition-colors hover:bg-ink/50",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas",
             )}
@@ -144,7 +115,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             onClick={goNext}
             aria-label={t("heroNextSlide")}
             className={cn(
-              "absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full p-2 sm:right-5 sm:p-2.5",
+              "absolute bottom-5 right-4 z-20 flex h-11 w-11 items-center justify-center border border-white/40",
               "bg-ink/30 text-canvas backdrop-blur-sm transition-colors hover:bg-ink/50",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas",
             )}
@@ -152,7 +123,8 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             <ChevronRight aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
-          <div className="absolute inset-x-0 bottom-6 z-10 flex items-center justify-center gap-2.5">
+          <button type="button" onClick={togglePause} aria-label={t(paused ? "heroPlay" : "heroPause")} className="absolute bottom-5 right-[62px] z-20 flex h-11 w-11 items-center justify-center border border-white/40 bg-ink/30 text-white hover:bg-ink/50">{paused ? <Play size={16} aria-hidden="true"/> : <Pause size={16} aria-hidden="true"/>}</button>
+          <div className="absolute left-4 bottom-5 z-20 flex items-center gap-1 sm:left-8">
             {images.map((src, index) => (
               <button
                 key={src}
@@ -161,10 +133,10 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
                 aria-label={t("heroGoToSlide", { number: index + 1 })}
                 aria-current={index === activeIndex}
                 className={cn(
-                  "h-2.5 rounded-full transition-all",
-                  index === activeIndex ? "w-6 bg-canvas" : "w-2.5 bg-canvas/50 hover:bg-canvas/75",
+                  "flex h-11 w-10 items-center justify-center border-b-2 text-xs transition-colors",
+                  index === activeIndex ? "border-white text-white" : "border-white/25 text-white/70 hover:text-white",
                 )}
-              />
+              >{String(index + 1).padStart(2, "0")}</button>
             ))}
           </div>
         </>

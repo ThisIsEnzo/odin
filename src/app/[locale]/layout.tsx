@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
-import { Inter, Lora, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
+import { Inter, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -13,7 +13,6 @@ import "../globals.css";
 // (globals.css) so th/zh render correctly without any per-locale branching
 // in components — see the comment there for how that works.
 const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter", display: "swap" });
-const lora = Lora({ subsets: ["latin", "cyrillic"], variable: "--font-lora", display: "swap" });
 const notoSansThai = Noto_Sans_Thai({
   subsets: ["thai"],
   weight: ["400", "500", "600", "700"],
@@ -68,7 +67,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${lora.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
+      className={`${inter.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
     >
       <body className="flex min-h-screen flex-col antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>

@@ -1,13 +1,11 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { experiences } from "@/data/odin/experiences";
 import { siteConfig } from "@/data/odin/site";
 import { Reveal } from "@/components/motion/Reveal";
-import { Parallax } from "@/components/motion/Parallax";
 import { HeroSlideshow } from "@/components/homepage/HeroSlideshow";
 import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
 import { WhyOdin } from "@/components/homepage/WhyOdin";
@@ -18,144 +16,41 @@ import { ReviewsLocation } from "@/components/homepage/ReviewsLocation";
 import { Faq } from "@/components/homepage/Faq";
 import { FinalCta } from "@/components/homepage/FinalCta";
 
-type PageProps = {
-  params: Promise<{ locale: string }>;
-};
-
-export default async function HomePage({ params }: PageProps) {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-
   const t = await getTranslations("home");
-  const tNav = await getTranslations("nav");
-
-  // Array-shaped on purpose so this reads as "the current hero slide set,"
-  // not a one-off — but only one approved photo (odin-hero.jpg) is
-  // confirmed to exist; this project's sandbox has no way to verify
-  // additional files under public/images/hero/, so none are invented here.
-  // HeroSlideshow.tsx (PHASE 5A) fully supports N images — crossfade
-  // rotation, Ken Burns, prev/next arrows, and dot navigation all activate
-  // automatically the moment more real photo paths are added below. With
-  // exactly one entry it renders a single stable slide with its
-  // one-directional Ken Burns drift and no controls, since there's nothing
-  // to navigate to yet.
-  const heroImages = ["/images/hero/odin-hero.jpg"];
-
-  return (
-    <>
-      {/* HERO — CINEMATIC MOTION REFINEMENT: the content panel is now a
-          STABLE surface (bg/border/blur/shadow) rendered at full opacity
-          from the first frame — it never fades in as a block. Only the
-          content INSIDE it (badge → headline → copy → CTAs → trust line)
-          gets one subtle, one-time entrance (opacity + translateY), which
-          is what was actually meant by "the beige panel feels like it's
-          appearing" — the fix is architectural (split surface from
-          content), not a matter of easing/timing.
-
-          PHASE 4C — TASK 2 FIX: `py-0` alone does NOT cancel Section's
-          `sm:py-24` — tailwind-merge only resolves conflicts within the
-          same variant (a bare `py-0` and a `sm:`-prefixed utility live in
-          different merge groups), so `sm:py-24`'s rule, appearing later in
-          Tailwind's compiled stylesheet than the unprefixed utilities,
-          quietly won at every viewport ≥640px — exactly the visible
-          beige gap between the header and hero. Fixed by explicitly
-          cancelling every tier Section's own default ("py-16 sm:py-24")
-          actually declares, not with a negative margin. */}
-      <Section tone="canvas" className="relative isolate overflow-hidden py-0 sm:py-0">
-        <div className="relative h-[76vh] min-h-[560px] sm:h-[80vh] lg:h-[88vh]">
-          <Parallax strength={36} className="absolute inset-0 -z-10">
-            {/* Presentation/concept photography — see PHASE 3D brief; not
-                represented anywhere as real ODIN photography. Decorative
-                (alt=""): the panel carries all the actual information.
-
-                PHASE 4C — TASK 1: swapped the single Ken-Burns <Image> for
-                a genuine crossfade slideshow (see HeroSlideshow.tsx). Still
-                reads from the same `heroImages` array below — nothing here
-                invents a second/third hero photo that doesn't exist. */}
-            <HeroSlideshow images={heroImages} className="absolute inset-0" />
-            {/* Stable overlay — a fixed gradient, never itself animated. */}
-            <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/5 to-ink/35" />
-          </Parallax>
-
-          <div className="absolute inset-0 flex items-center justify-center px-4">
-            {/* The surface: present at full opacity immediately, no fade. */}
-            <div className="mx-auto max-w-2xl rounded-card border border-white/25 bg-canvas/80 px-6 py-8 text-center shadow-xl shadow-ink/15 backdrop-blur-lg sm:px-10 sm:py-10">
-              {/* Only the content fades/lifts in — once, on first view. */}
-              <Reveal>
-                <Badge variant="dusk" className="mb-5">
-                  {t("heroKicker")}
-                </Badge>
-
-                <h1 className="text-balance font-display text-4xl leading-[1.05] text-ink sm:text-6xl lg:text-7xl">
-                  {t("heroTitle")}
-                </h1>
-
-                <p className="mx-auto mt-5 max-w-lg text-base text-ink/75 sm:text-xl">
-                  {t("heroSubtitle")}
-                </p>
-
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                  <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>
-                    {tNav("bookNow")}
-                  </Link>
-                  <Link
-                    href="/experiences"
-                    className={buttonVariants({ variant: "outline", size: "lg" })}
-                  >
-                    {t("secondaryCta")}
-                  </Link>
-                </div>
-
-                <p className="mt-5 text-sm text-ink/60">{t("heroNote")}</p>
-
-                <dl className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-ink/10 pt-5 text-sm">
-                  <div>
-                    <dt className="sr-only">{t("statDistanceLabel")}</dt>
-                    <dd className="font-medium text-ink/80">
-                      {t("statDistance", { distance: siteConfig.locationDistanceFromPattaya })}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="sr-only">{t("statExperiencesLabel")}</dt>
-                    <dd className="font-medium text-ink/80">
-                      {t("statExperiences", { count: experiences.length })}
-                    </dd>
-                  </div>
-                </dl>
-              </Reveal>
-            </div>
-          </div>
-
+  const nav = await getTranslations("nav");
+  return <div className="homepage">
+    <section className="relative isolate bg-moss text-white">
+      <HeroSlideshow images={["/images/hero/odin-hero.jpg", "/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg"]} className="absolute inset-0 overflow-hidden" />
+      <div className="hero-shade pointer-events-none absolute inset-0" />
+      <Container className="hero-content relative flex min-h-[min(850px,90svh)] flex-col justify-center py-24 sm:min-h-[780px] lg:min-h-[calc(100svh-104px)]">
+        <p className="eyebrow mb-6 text-white/85">{t("heroKicker")}</p>
+        <h1 className="hero-title">{t("heroTitle")}</h1>
+        <p className="mt-6 max-w-md text-base text-white/85 sm:text-lg">{t("heroSubtitle")}</p>
+        <div className="mt-8 flex flex-wrap items-center gap-6">
+          <Link href="/book" className={buttonVariants({size:"lg"})}>{nav("bookNow")} <span aria-hidden="true">↗</span></Link>
+          <Link href="/#experiences" className="border-b border-white/50 py-3 text-sm hover:border-white">{t("secondaryCta")}</Link>
         </div>
-      </Section>
-
-      {/* EXPERIENCES — PHASE 3C §2: one dominant, selectable content area
-          instead of a static grid. Still reads only from
-          src/data/odin/experiences.ts, passed as a prop below. */}
-      <Section id="experiences" tone="canvas-soft">
-        <Container>
-          <Reveal className="max-w-2xl">
-            <h2 className="font-display text-2xl text-ink sm:text-3xl">
-              {t("experiencesHeading")}
-            </h2>
-            <p className="mt-2 text-ink/70">{t("experiencesIntro")}</p>
-          </Reveal>
-
-          <Reveal className="mt-10" delayMs={60}>
-            <ExperienceShowcase experiences={experiences} />
-          </Reveal>
-        </Container>
-      </Section>
-
-      {/* PHASE 3B/3C — sections below compose homepage/* components, each
-          reading its own data-layer import. */}
-      <WhyOdin />
-      <Packages />
-      <Restaurant />
-      <Gallery />
-      <ReviewsLocation />
-      <Faq />
-      <FinalCta />
-    </>
-  );
+        <p className="mt-6 max-w-md text-xs text-white/75">{t("heroNote")}</p>
+      </Container>
+    </section>
+    <div className="border-b border-ink/15 bg-canvas">
+      <Container className="flex flex-wrap justify-between gap-4 py-6 text-sm text-ink/70">
+        <span>{t("statDistance", {distance:siteConfig.locationDistanceFromPattaya})}</span>
+        <span>{t("statExperiences", {count:experiences.length})}</span>
+      </Container>
+    </div>
+    <Section id="experiences" className="lg:py-32">
+      <Container>
+        <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <h2>{t("experiencesHeading")}</h2>
+          <p className="max-w-md text-ink/70 lg:justify-self-end">{t("experiencesIntro")}</p>
+        </Reveal>
+        <ExperienceShowcase experiences={experiences}/>
+      </Container>
+    </Section>
+    <WhyOdin/><Packages/><Restaurant/><Gallery/><ReviewsLocation/><Faq/><FinalCta/>
+  </div>;
 }

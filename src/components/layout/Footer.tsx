@@ -13,19 +13,16 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-canvas/10 bg-moss text-canvas">
-      <Container className="grid gap-10 py-12 sm:py-16 md:grid-cols-4">
+    <footer className="border-t border-canvas/10 bg-moss-dark text-canvas">
+      <Container className="grid gap-10 py-12 break-words sm:py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          {/* PHASE 4 FINAL — real logo asset (public/images/brand/odin-logo-full.jpg),
-              a lossless crop of the full supplied lockup — modest, fixed
-              size, not a full-width banner. businessName text stays alongside
-              it rather than being replaced. */}
+          
           <Image
-            src="/images/brand/odin-logo-full.jpg"
+            src="/images/brand/odin-logo.jpg"
             alt={siteConfig.businessName}
-            width={64}
-            height={70}
-            className="mb-3 rounded-md shadow-sm shadow-ink/20"
+            width={1387}
+            height={1536}
+            className="mb-5 h-auto w-28"
           />
           <p className="font-display text-xl">{siteConfig.businessName}</p>
           <p className="mt-2 max-w-xs text-sm text-canvas/75">{tFooter("tagline")}</p>
@@ -89,9 +86,9 @@ export function Footer() {
             <p className="text-sm font-semibold uppercase tracking-wide text-canvas/60">
               {tFooter("languageHeading")}
             </p>
-            <LanguageSwitcher className="mt-3 [color-scheme:dark]" />
+            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-canvas [&_select]:border-canvas/40 [&_select:focus-visible]:outline-canvas [&_option]:bg-moss-dark" />
           </div>
-          <ul className="flex gap-4 text-sm text-canvas/75">
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-canvas/75">
             {legalNavItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-canvas">

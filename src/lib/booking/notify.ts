@@ -1,42 +1,54 @@
 import type { BookingRequest } from "@/types/domain";
+import { packages } from "@/data/odin/packages";
 
-/**
- * BOOKING_RULES.md §7 — abstracted so the real transactional email provider
- * (Resend/Postmark per ARCHITECTURE.md §15) is an infrastructure choice
- * made later, not something route/validation code needs to know about.
- *
- * notifyCustomer is an acknowledgement only — it must never say a booking
- * is "confirmed" (BOOKING_RULES.md §1): status is and stays "received"
- * until ODIN staff act, out of band.
- */
-export interface NotificationService {
-  notifyBusiness(request: BookingRequest): Promise<void>;
-  notifyCustomer(request: BookingRequest): Promise<void>;
+export interface BookingNotificationPayload {
+  reference: string;
+  event: "booking.received";
+  booking: BookingRequest;
+  text: string;
 }
-
-/**
- * Development adapter — logs instead of sending real email/LINE/WhatsApp.
- * ARCHITECTURE.md §15 flags that ODIN's real day-to-day channels are
- * phone/LINE/WhatsApp, not email; that integration decision is explicitly
- * deferred and not made here. This adapter exists only so M4 development
- * isn't blocked on it.
- */
-export class ConsoleNotificationService implements NotificationService {
-  async notifyBusiness(request: BookingRequest): Promise<void> {
-    console.log("[notify:business] new booking request received", {
-      id: request.id,
-      type: request.type,
-      experienceOrPackageId: request.experienceOrPackageId,
-      date: request.date,
-      time: request.time,
-      guests: request.guests,
-    });
+/** One operational representation; providers only handle transport. */
+export function buildBookingNotificationPayload(booking: BookingRequest): BookingNotificationPayload {
+  const lines = ["NEW BOOKING REQUEST", `Reference: ${booking.id}`, "Status: RECEIVED — availability not confirmed", `Locale: ${booking.locale}`,
+    `Customer: ${booking.customer.name}`, `Phone: ${booking.customer.phone}`, `Email: ${booking.customer.email}`];
+  if (booking.customer.preferredChannel) lines.push(`Preferred contact: ${booking.customer.preferredChannel}`, `Identity: ${booking.customer.channelIdentity ?? "see contact above"}`);
+  const activity = (a: import("@/types/domain").ActivityBookingItem) => {
+    lines.push(`Activity: ${a.experienceId}`, `${a.date} ${a.time} Asia/Bangkok`, `Participants: ${a.participants.length}`);
+    a.participants.forEach((p,i) => { if (p.weightKg !== undefined) lines.push(`Guest ${i+1}: ${p.weightKg} kg`); });
+    a.options.forEach(o => lines.push(`Option: ${o.optionId} x ${o.quantity}`));
+  };
+  booking.items.forEach((item,i) => {
+    lines.push(`\n${i+1}. Item ${item.id}`);
+    if (item.type === "activity") activity(item);
+    else {
+      const pack = packages.find(p => p.id === item.packageId);
+      lines.push(`Package: ${item.packageId}`);
+      if(pack?.mock.isMock) lines.push("MOCK package contents/pricing — staff must verify");
+      item.components.forEach(activity);
+      if(pack?.includesRestaurant) lines.push("Restaurant included — arrangements to be agreed with staff");
+      item.options.forEach(o => lines.push(`Package option: ${o.optionId} x ${o.quantity}`));
+    }
+  });
+  if (booking.notes) lines.push(`\nNotes: ${booking.notes}`);
+  return {reference:booking.id,event:"booking.received",booking:structuredClone(booking),text:lines.join("\n")};
+}
+export interface NotificationProvider { name:string; send(payload:BookingNotificationPayload):Promise<void> }
+export interface NotificationDelivery { channel:string; status:"accepted"|"failed" }
+export interface NotificationService { notifyBookingReceived(booking:BookingRequest):Promise<NotificationDelivery[]> }
+export class FanoutNotificationService implements NotificationService {
+  constructor(private readonly providers:NotificationProvider[]) {}
+  async notifyBookingReceived(booking:BookingRequest):Promise<NotificationDelivery[]> {
+    const payload=buildBookingNotificationPayload(booking);
+    return Promise.all(this.providers.map(async provider => {
+      try { await provider.send(payload); return {channel:provider.name,status:"accepted" as const}; }
+      catch { console.error("[booking:notification] failed", {reference:booking.id,channel:provider.name}); return {channel:provider.name,status:"failed" as const}; }
+    }));
   }
-
-  async notifyCustomer(request: BookingRequest): Promise<void> {
-    console.log("[notify:customer] acknowledgement queued (request received, not confirmed)", {
-      id: request.id,
-      locale: request.locale,
-    });
+}
+export class ConsoleNotificationProvider implements NotificationProvider {
+  name="console";
+  async send(payload:BookingNotificationPayload) {
+    // No customer contact or weights in routine logs.
+    console.info("[booking:received]", {reference:payload.reference,items:payload.booking.items.length,status:"received"});
   }
 }

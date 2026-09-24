@@ -52,6 +52,8 @@ export interface Experience {
   bookingIntervalMinutes: number;
   /** Drives the conditional weight field in the booking flow (Phase 4). */
   requiresWeight: boolean;
+  /** Only set after business confirmation; never inferred from slot interval. */
+  durationMinutes?: number;
   gallerySlugs: string[];
   mock: {
     price: MockFlag;
@@ -106,23 +108,53 @@ export interface Review {
   isRealTestimonial: boolean;
 }
 
-export interface BookingRequest {
+/** A participant belongs to one activity. IDs survive editing; names are not required. */
+export interface BookingParticipant { id: string; weightKg?: number }
+export interface BookingOptionSelection { optionId: string; quantity: number }
+export interface BookingOption {
   id: string;
-  type: "experience" | "package";
-  experienceOrPackageId: string;
-  /** ISO date, "YYYY-MM-DD" */
+  translationNamespace: string;
+  type: "meal" | "transport" | "private-session" | "extended-duration" | "other";
+  applicableTo: { experienceIds?: ExperienceId[]; packageIds?: string[] };
+  constraints: { minQuantity: number; maxQuantity: number };
+  price?: Money;
+}
+export interface ActivityBookingItem {
+  id: string;
+  type: "activity";
+  experienceId: ExperienceId;
   date: string;
-  /** "HH:mm", validated against the item's OperatingHours */
   time: string;
-  guests: number;
-  weightKg?: number;
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-    notes?: string;
-  };
+  /** Count is derived from this array, never duplicated in the persisted model. */
+  participants: BookingParticipant[];
+  options: BookingOptionSelection[];
+}
+export interface PackageBookingItem {
+  id: string;
+  type: "package";
+  packageId: string;
+  components: ActivityBookingItem[];
+  options: BookingOptionSelection[];
+}
+export type BookingItem = ActivityBookingItem | PackageBookingItem;
+export type ContactChannel = "phone" | "email" | "line" | "whatsapp";
+export interface BookingCustomer {
+  name: string;
+  email: string;
+  phone: string;
+  preferredChannel?: ContactChannel;
+  /** Explicit handle/number; never inferred from phone. */
+  channelIdentity?: string;
+}
+export interface BookingDraft {
+  schemaVersion: 2;
+  customer: BookingCustomer;
+  items: BookingItem[];
+  notes?: string;
   locale: Locale;
+}
+export interface BookingRequest extends BookingDraft {
+  id: string;
   status: "received" | "confirmed" | "declined" | "cancelled";
   createdAt: string;
 }

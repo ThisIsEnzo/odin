@@ -1,237 +1,62 @@
 # ODIN — Data Model
 
-Status: Phase 0 draft. Related: `ARCHITECTURE.md` §5 explains *why* the model is split this way;
-this document is the *what*.
+Current: Phase 5B, Booking V2. Canonical TypeScript definitions: `src/types/domain.ts`.
 
-## 1. Design Principles
+## Facts and content
 
-1. **Facts vs. content.** Types here hold business facts (numbers, enums, references) — never
-   display strings. Display copy lives in `messages/{locale}.json`, keyed by each entity's
-   `translationNamespace`. See `ARCHITECTURE.md` §5 for the full reasoning.
-2. **One source of truth for business rules.** `maxWeightKg`, operating hours, and prices exist in
-   exactly one TypeScript file per entity type. Validation (client and server), display, and any
-   future CRM all read the same object.
-3. **Mock-ness is data, not a comment.** Every value that §14–17 of the brief marks MOCK carries an
-   explicit flag in the object, not a `// TODO` a future editor can miss. This makes "what's still
-   placeholder" a query, not an archaeology exercise — see `MOCK_DATA.md` for the full audit this
-   enables.
+`src/data/odin` holds canonical IDs, operating hours, restrictions, mock flags and pricing facts. Names and UI copy remain in four locale files and are resolved by `translationNamespace`. Existing business data and Phase 5A.1 assets have not been changed.
 
-## 2. Shared Primitive Types
+## Booking V1 → V2
+
+V1 stored one experience, one date/time and a shared guest count/weight. V2 stores a versioned visit:
 
 ```ts
-export type Locale = 'en' | 'th' | 'ru' | 'zh';
-
-export type OperatingHours = {
-  open: string;   // 24h "HH:mm"
-  close: string;  // 24h "HH:mm"
-};
-
-export type ExperienceRestrictions = {
-  minAge?: number;
-  maxAge?: number;
-  minWeightKg?: number;
-  maxWeightKg?: number;
-  notes?: string[];       // translation KEYS, e.g. 'experiences.horseRiding.restrictions.helmet'
-                           // — never raw strings, to stay consistent with the facts/content split
-};
-
-export type Currency = 'THB';
-
-export type PricingUnit = 'person' | 'child' | 'vehicle' | 'family' | 'couple';
-
-export type Money = {
-  amount: number;
-  currency: Currency;
-  unit: PricingUnit;
-};
-
-// Mock-data provenance, attached per-field so partial confirmation is representable
-// (e.g. an experience's hours are confirmed while its age restriction is still MOCK).
-export type MockFlag = {
-  isMock: boolean;
-  note?: string;   // short reason, e.g. "MOCK — awaiting business confirmation"
-};
-```
-
-## 3. Domain Entities
-
-```ts
-export type ExperienceId = 'horse-riding' | 'pony-riding' | 'atv' | 'sauna';
-
-export interface Experience {
-  id: ExperienceId;
-  slug: string;                          // matches the [slug] route segment
-  translationNamespace: string;          // e.g. 'experiences.horseRiding'
-  operatingHours: OperatingHours;        // CONFIRMED for all four — see MOCK_DATA.md
-  restrictions: ExperienceRestrictions;
-  price: Money;
-  bookingIntervalMinutes: number;        // configurable — never hardcode an interval in UI
-  requiresWeight: boolean;               // drives the conditional booking field, §11 of the brief
-  gallerySlugs: string[];                // references into GalleryItem[]
-  mock: {
-    price: MockFlag;                     // all prices are MOCK per §15
-    ageRestriction: MockFlag;            // age is MOCK per §16; weight is explicitly NOT
-  };
-}
-
-export interface Package {
-  id: string;
-  slug: string;
-  translationNamespace: string;
-  includedExperienceIds: ExperienceId[];
-  includesRestaurant: boolean;
-  price: Money;
-  mock: MockFlag;                        // entire package (contents + price) is MOCK per §17
-}
-
-export interface RestaurantInfo {
-  translationNamespace: string;
-  operatingHours: OperatingHours;        // CONFIRMED — 07:00–23:00
-  averageSpend: { min: number; max: number; currency: Currency; unit: 'person' };
-  cuisineTags: string[];
-  menu: {
-    isMock: true;                        // menu content itself is not yet defined — see MOCK_DATA.md §6
-  };
-}
-
-export interface GalleryItem {
-  id: string;
-  src: string;                            // local placeholder path — never an external hotlink, §23
-  altTranslationKey: string;
-  tags: ExperienceId[] | 'restaurant'[] | string[];
-  width: number;
-  height: number;
-}
-
-export interface FAQItem {
-  id: string;
-  translationNamespace: string;           // resolves to { question, answer }
-  category?: 'general' | 'booking' | 'experiences' | 'restaurant';
-}
-
-export interface Review {
-  id: string;
-  authorName: string;
-  rating: 1 | 2 | 3 | 4 | 5;
-  translationNamespace?: string;          // present only if the review text itself is localized
-  source: 'google' | 'facebook' | 'direct';
-  isRealTestimonial: boolean;             // see MOCK_DATA.md §6 — must be true before this ships
-}
-
-export interface BookingRequest {
-  id: string;
-  type: 'experience' | 'package';
-  experienceOrPackageId: string;
-  date: string;                           // ISO date, "YYYY-MM-DD"
-  time: string;                           // "HH:mm", validated against the item's OperatingHours
-  guests: number;
-  weightKg?: number;                      // present only when requiresWeight is true
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-    notes?: string;
-  };
+BookingDraft {
+  schemaVersion: 2;
+  customer: BookingCustomer;
+  items: BookingItem[];
+  notes?: string;
   locale: Locale;
-  status: 'received' | 'confirmed' | 'declined' | 'cancelled';  // never auto-set to 'confirmed'
-  createdAt: string;                      // ISO datetime
 }
-
-export interface SiteConfig {
-  businessName: string;                          // "ODIN" — real, not mock
-  address: { value: string } & MockFlag;
-  phone: { value: string } & MockFlag;
-  email: { value: string } & MockFlag;
-  line: { value: string } & MockFlag;
-  whatsapp: { value: string } & MockFlag;
-  locationDistanceFromPattaya: string;           // "20 km" — approximate by design, no GPS
-  defaultLocale: 'en';
-  supportedLocales: Locale[];                    // ['en', 'th', 'ru', 'zh']
-  closedWeekdays?: number[];                     // 0=Sunday..6=Saturday; empty = open every day (current assumption)
-  blackoutDates?: string[];                      // ISO dates; empty at MVP, exists so it doesn't require a schema change later
+BookingRequest extends BookingDraft {
+  id: string;
+  status: 'received' | 'confirmed' | 'declined' | 'cancelled';
+  createdAt: string;
 }
 ```
 
-## 4. Worked Example — the two non-negotiable numbers
+A request starts only as `received`. ID, status and creation timestamp are server-owned. Customer information is collected once: name, email, phone. Notes moved from customer to request. Optional `preferredChannel` and explicit `channelIdentity` support future verified contact channels. All current contact data is mock, so no preferred-channel selector is exposed. LINE/WhatsApp identity is never inferred from phone.
 
-The brief singles out horse and pony weight limits as confirmed, not mock. Here's how that reads
-end to end, facts file → validation → UI, with nothing duplicated:
+V1 POST payloads are deliberately rejected: a shared riding weight cannot safely be converted into multiple riders. Existing homepage query links still initialize the new flow. There is no durable V1 database to migrate; any externally retained V1 records need an explicit migration, especially per-rider weights.
 
-```ts
-// src/data/odin/experiences.ts
-export const experiences: Experience[] = [
-  {
-    id: 'horse-riding',
-    slug: 'horse-riding',
-    translationNamespace: 'experiences.horseRiding',
-    operatingHours: { open: '07:00', close: '18:00' },
-    restrictions: { minAge: 12, maxWeightKg: 90 },     // 90kg — CONFIRMED, not mock
-    price: { amount: 1200, currency: 'THB', unit: 'person' },
-    bookingIntervalMinutes: 60,
-    requiresWeight: true,
-    gallerySlugs: ['horse-01', 'horse-02'],
-    mock: { price: { isMock: true }, ageRestriction: { isMock: true } },
-  },
-  {
-    id: 'pony-riding',
-    slug: 'pony-riding',
-    translationNamespace: 'experiences.ponyRiding',
-    operatingHours: { open: '07:00', close: '18:00' },
-    restrictions: { minAge: 3, maxAge: 12, maxWeightKg: 60 },   // 60kg — CONFIRMED, not mock
-    price: { amount: 500, currency: 'THB', unit: 'child' },
-    bookingIntervalMinutes: 60,
-    requiresWeight: true,
-    gallerySlugs: ['pony-01'],
-    mock: { price: { isMock: true }, ageRestriction: { isMock: true } },
-  },
-  {
-    id: 'atv',
-    slug: 'atv',
-    translationNamespace: 'experiences.atv',
-    operatingHours: { open: '07:00', close: '20:00' },
-    restrictions: { minAge: 16 },
-    price: { amount: 1500, currency: 'THB', unit: 'vehicle' },
-    bookingIntervalMinutes: 30,
-    requiresWeight: false,
-    gallerySlugs: ['atv-01'],
-    mock: { price: { isMock: true }, ageRestriction: { isMock: true } },
-  },
-  {
-    id: 'sauna',
-    slug: 'sauna',
-    translationNamespace: 'experiences.sauna',
-    operatingHours: { open: '08:00', close: '21:00' },
-    restrictions: {},
-    price: { amount: 800, currency: 'THB', unit: 'person' },
-    bookingIntervalMinutes: 30,
-    requiresWeight: false,
-    gallerySlugs: ['sauna-01'],
-    mock: { price: { isMock: true }, ageRestriction: { isMock: false } },
-  },
-];
-```
+## Items and participants
 
-| Experience | Hours (confirmed) | Weight limit (confirmed) | Age (MOCK) | Price (MOCK) |
-|---|---|---|---|---|
-| Horse Riding | 07:00–18:00 | 90 kg | 12+ | 1,200 THB / person |
-| Pony Riding | 07:00–18:00 | 60 kg | 3–12 | 500 THB / child |
-| ATV | 07:00–20:00 | — | 16+ | 1,500 THB / vehicle |
-| Sauna | 08:00–21:00 | — | — | 800 THB / person |
-| Restaurant | 07:00–23:00 | — | — | 500–800 THB / person (avg.) |
+`BookingItem = ActivityBookingItem | PackageBookingItem` is a discriminated union.
 
-`BookingForm` reads `experience.requiresWeight` to decide whether to render the weight field at
-all (§11); `booking.schema.ts` reads `experience.restrictions.maxWeightKg` to decide what to reject.
-Neither hardcodes `90` or `60` — see `BOOKING_RULES.md` §4 for the schema itself.
+An activity has stable `id`, `type: 'activity'`, canonical `experienceId`, its own `date` (`YYYY-MM-DD`), `time` (`HH:mm`, Asia/Bangkok), `participants[]` and `options[]`.
 
-## 5. Extensibility
+Each participant has a stable ID and optional weight. Names are not collected. Participant count is derived from `participants.length`, preventing contradictory count/array data. Participants are local to each activity: no assumption that Guest 1 in two activities is the same person. Edits retain IDs; duplicates receive fresh item, component and participant IDs. Removing an item cannot modify another.
 
-- **New experience** (e.g. a future "Farm Tour"): add one object to `experiences.ts` + one message
-  namespace. No new route file if it fits the existing template; no new booking logic unless it
-  needs a genuinely new conditional field.
-- **New conditional booking requirement** (e.g. a future "swimming ability" flag): add an optional
-  field to `ExperienceRestrictions`/`Experience`, extend `BookingRequest`, extend the schema's
-  conditional branch. `BookingForm` stays generic if it renders conditional fields by iterating a
-  `requiresFields` list rather than hardcoding "weight" as a special case — worth building it that
-  way now even though weight is the only one at MVP, since it's the same amount of code either way.
-- **New locale:** add to `SiteConfig.supportedLocales`, add a `messages/{locale}.json`, add to
-  `i18n/routing.ts`. No changes to `src/data/odin/*` — facts are locale-agnostic by construction.
+`Experience.durationMinutes?` is a future confirmed-duration field. No actual durations are populated and slot intervals are not interpreted as durations. Conflict detection is deferred until duration and cross-activity participant identity are defined; simultaneous activities for different people may be valid.
+
+## Packages
+
+A package item has stable `id`, `type: 'package'`, canonical `packageId`, explicit `components: ActivityBookingItem[]`, and `options[]`. Server rules require exactly the configured experience multiset. Every component has independent scheduling/participants. Additional standalone items are siblings in the same request.
+
+Current canonical MOCK packages:
+
+| Package | Activity components | Other inclusion |
+| --- | --- | --- |
+| family-day | pony-riding | Restaurant |
+| adventure-day | atv | Restaurant |
+| couple-escape | horse-riding, sauna | Restaurant |
+
+`includesRestaurant` is derived from the package catalog and carried into review/notification text. Restaurant arrangements remain staff-coordinated; no invented start time, duration, table capacity or meal option is stored. Marketing text does not create additional bookable components. Existing mock prices are not used to calculate invented totals.
+
+## Options
+
+`BookingOption` defines ID, translation namespace, type, applicable experience/package IDs, quantity constraints and optional pricing metadata. Selections store only `optionId` and `quantity`. `src/data/odin/booking-options.ts` is intentionally empty. Both UI and validation use this catalog, so unknown or inapplicable selections fail. Quantity controls appear only when real definitions are added. Scheduling an extra activity uses an activity item rather than an opaque option. Changing participant count uses the participant array.
+
+## Persistence boundary
+
+`BookingRepository.create(BookingDraft)` and `getById` transport the whole versioned aggregate. The development adapter copies inputs and outputs to prevent caller mutation. No UI/API consumer depends on its Map implementation. In-memory data is volatile and instance-local; durable transactional storage is Phase 5C.

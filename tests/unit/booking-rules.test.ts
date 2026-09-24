@@ -52,8 +52,8 @@ describe("validateExperienceRestrictions — weight", () => {
   it("horse-riding: 91kg is invalid (exceeds maximum)", () => {
     const issues = validateExperienceRestrictions(91, horse);
     expect(issues).toHaveLength(1);
-    expect(issues[0].code).toBe("WEIGHT_EXCEEDS_MAXIMUM");
-    expect(issues[0].meta).toEqual({ max: 90 });
+    expect(issues[0]!.code).toBe("WEIGHT_EXCEEDS_MAXIMUM");
+    expect(issues[0]!.meta).toEqual({ max: 90 });
   });
 
   it("pony-riding: 60kg is valid (at the maximum, inclusive)", () => {
@@ -63,14 +63,14 @@ describe("validateExperienceRestrictions — weight", () => {
   it("pony-riding: 61kg is invalid (exceeds maximum)", () => {
     const issues = validateExperienceRestrictions(61, pony);
     expect(issues).toHaveLength(1);
-    expect(issues[0].code).toBe("WEIGHT_EXCEEDS_MAXIMUM");
-    expect(issues[0].meta).toEqual({ max: 60 });
+    expect(issues[0]!.code).toBe("WEIGHT_EXCEEDS_MAXIMUM");
+    expect(issues[0]!.meta).toEqual({ max: 60 });
   });
 
   it("horse-riding: missing weight is invalid — weight is required for this experience", () => {
     const issues = validateExperienceRestrictions(undefined, horse);
     expect(issues).toHaveLength(1);
-    expect(issues[0].code).toBe("WEIGHT_REQUIRED");
+    expect(issues[0]!.code).toBe("WEIGHT_REQUIRED");
   });
 
   it("atv: weight is not required, so an absent value is not flagged", () => {
@@ -141,7 +141,7 @@ describe("validateBookingRequest — end to end", () => {
       experiences,
     );
     expect(result.valid).toBe(false);
-    if (!result.valid) expect(result.issues[0].code).toBe("INVALID_EXPERIENCE");
+    if (!result.valid) expect(result.issues[0]!.code).toBe("INVALID_EXPERIENCE");
   });
 
   it("over-limit weight is rejected even in an otherwise-valid request", () => {

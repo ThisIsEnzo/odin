@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { bookingSchema } from "@/lib/validation/booking.schema";
+import { bookingSchema as v2Schema } from "@/lib/validation/booking.schema";
 import { InMemoryBookingRepository } from "@/lib/booking/repository";
 
 const validCustomer = {
@@ -14,6 +14,11 @@ function futureDate(daysFromNow: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+// Existing behavioral cases expressed in V2 structure. Test-only fixture adapter.
+const bookingSchema={safeParse(input:{experienceId:string;date:string;time:string;guests:number;weightKg?:number;customer:typeof validCustomer;locale:string;company?:string}) {
+ const {experienceId,date,time,guests,weightKg,customer,locale,company}=input;
+ return v2Schema.safeParse({schemaVersion:2,items:[{id:"item-1",type:"activity",experienceId,date,time,participants:Array.from({length:guests},(_,i)=>({id:`guest-${i}`,weightKg})),options:[]}],customer,locale,company});
+}};
 describe("bookingSchema", () => {
   it("accepts a valid horse-riding booking", () => {
     const result = bookingSchema.safeParse({
@@ -40,7 +45,7 @@ describe("bookingSchema", () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues.some((i) => i.path.join(".") === "weightKg")).toBe(true);
+      expect(result.error.issues.some((i) => i.path.join(".") === "items.0.participants.0.weightKg")).toBe(true);
     }
   });
 
@@ -68,7 +73,7 @@ describe("bookingSchema", () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues.some((i) => i.path.join(".") === "weightKg")).toBe(true);
+      expect(result.error.issues.some((i) => i.path.join(".") === "items.0.participants.0.weightKg")).toBe(true);
     }
   });
 
@@ -199,11 +204,8 @@ describe("InMemoryBookingRepository", () => {
   it("creates a request with status 'received', an id, and a createdAt", async () => {
     const repo = new InMemoryBookingRepository();
     const created = await repo.create({
-      type: "experience",
-      experienceOrPackageId: "atv",
-      date: futureDate(5),
-      time: "09:00",
-      guests: 1,
+      schemaVersion: 2,
+      items: [{id:"item-1",type:"activity",experienceId:"atv",date:futureDate(5),time:"09:00",participants:[{id:"guest-1"}],options:[]}],
       customer: validCustomer,
       locale: "en",
     });

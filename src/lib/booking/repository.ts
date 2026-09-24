@@ -34,16 +34,16 @@ export class InMemoryBookingRepository implements BookingRepository {
     input: Omit<BookingRequest, "id" | "createdAt" | "status">,
   ): Promise<BookingRequest> {
     const request: BookingRequest = {
-      ...input,
+      ...structuredClone(input),
       id: crypto.randomUUID(),
       status: "received", // BOOKING_RULES.md §8 — never anything else on creation
       createdAt: new Date().toISOString(),
     };
     this.store.set(request.id, request);
-    return request;
+    return structuredClone(request);
   }
 
   async getById(id: string): Promise<BookingRequest | null> {
-    return this.store.get(id) ?? null;
+    return structuredClone(this.store.get(id) ?? null);
   }
 }

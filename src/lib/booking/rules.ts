@@ -12,7 +12,7 @@
  * trust a client-submitted time/weight/hours combination at face value.
  */
 
-import type { Experience, OperatingHours } from "@/types/domain";
+import type { Experience, OperatingHours, BookingItem, Package, BookingOption, BookingOptionSelection, BookingCustomer, SiteConfig } from "@/types/domain";
 
 // ---------------------------------------------------------------------------
 // Result types
@@ -229,4 +229,86 @@ export function validateBookingRequest(
   issues.push(...validateExperienceRestrictions(input.weightKg, experience));
 
   return issues.length === 0 ? { valid: true } : { valid: false, issues };
+}
+
+
+// Booking V2 is the active validation entry point. V1 above remains a pure
+// compatibility helper for existing primitive rule consumers/tests.
+export const MAX_BOOKING_WINDOW_DAYS = 90; // Existing engineering default, not a capacity claim.
+export function thailandToday(now = new Date()): string {
+  return new Date(now.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+export function maxBookingDate(now = new Date()): string {
+  return new Date(Date.parse(thailandToday(now)) + MAX_BOOKING_WINDOW_DAYS * 86400000).toISOString().slice(0, 10);
+}
+export function availableTimeSlots(experience: Experience): string[] {
+  const minutes = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3));
+  const interval = experience.bookingIntervalMinutes;
+  if (!Number.isFinite(interval) || interval <= 0) return [];
+  const slots: string[] = [];
+  for (let m = minutes(experience.operatingHours.open); m < minutes(experience.operatingHours.close); m += interval) {
+    slots.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
+  }
+  return slots;
+}
+export interface VisitIssue { path: (string | number)[]; key: string; params?: Record<string, string | number> }
+export function availableContactChannels(site: SiteConfig) {
+  return (["phone", "email", "line", "whatsapp"] as const).filter(key => !site[key].isMock && !!site[key].value);
+}
+export function validateContactPreference(customer: BookingCustomer, site: SiteConfig): VisitIssue[] {
+  if (!customer.preferredChannel) return [];
+  if (!availableContactChannels(site).includes(customer.preferredChannel)) return [{path:["customer", "preferredChannel"], key:"invalidContactChannel"}];
+  if (["line", "whatsapp"].includes(customer.preferredChannel) && !customer.channelIdentity?.trim()) return [{path:["customer", "channelIdentity"], key:"contactIdentityRequired"}];
+  return [];
+}
+export function validateVisit(items: BookingItem[], catalog: Experience[], packageCatalog: Package[], options: BookingOption[] = [], now = new Date()): VisitIssue[] {
+  const issues: VisitIssue[] = [];
+  const add = (path: (string|number)[], key: string, params?: Record<string,string|number>) => issues.push({path,key,params});
+  if (!items.length) add(["items"], "emptyVisit");
+  const ids = new Set<string>();
+  function checkId(id: string, path: (string|number)[]) {
+    if (ids.has(id)) add([...path,"id"], "duplicateId");
+    ids.add(id);
+  }
+  function checkOptions(selections: BookingOptionSelection[], target: {experienceId?: string; packageId?: string}, path: (string|number)[]) {
+    const seen = new Set<string>();
+    selections.forEach((selected, i) => {
+      const option = options.find(o => o.id === selected.optionId);
+      const applies = option && (target.experienceId ? option.applicableTo.experienceIds?.some(id => id === target.experienceId) : option.applicableTo.packageIds?.includes(target.packageId!));
+      if (!applies || seen.has(selected.optionId) || !Number.isInteger(selected.quantity) || selected.quantity < option!.constraints.minQuantity || selected.quantity > option!.constraints.maxQuantity) add([...path,i], "invalidOption");
+      seen.add(selected.optionId);
+    });
+  }
+  function activity(a: import("@/types/domain").ActivityBookingItem, path: (string|number)[]) {
+    checkId(a.id,path);
+    const exp = catalog.find(e => e.id === a.experienceId);
+    if (!exp) { add([...path,"experienceId"], "invalidExperience"); return; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(a.date) || !Number.isFinite(Date.parse(a.date)) || new Date(a.date).toISOString().slice(0,10) !== a.date || a.date < thailandToday(now) || a.date > maxBookingDate(now)) add([...path,"date"], "invalidDate");
+    if (!isValidTimeFormat(a.time)) add([...path,"time"], "invalidTimeFormat");
+    else if (!isTimeWithinOperatingHours(a.time, exp.operatingHours)) add([...path,"time"], "outsideOperatingHours", exp.operatingHours);
+    else if (!availableTimeSlots(exp).includes(a.time)) add([...path,"time"], "invalidTimeInterval");
+    if (!a.participants.length) add([...path,"participants"], "invalidGuestCount");
+    a.participants.forEach((p,i) => {
+      checkId(p.id,[...path,"participants",i]);
+      if (!exp.requiresWeight && p.weightKg !== undefined) add([...path,"participants",i,"weightKg"], "unexpectedWeight");
+      if (exp.requiresWeight) {
+        if (p.weightKg !== undefined && (!Number.isFinite(p.weightKg) || p.weightKg <= 0)) add([...path,"participants",i,"weightKg"], "weightRequired");
+        else for (const issue of validateExperienceRestrictions(p.weightKg,exp)) add([...path,"participants",i,"weightKg"],issue.messageKey.replace("booking.errors.",""),issue.meta);
+      }
+    });
+    checkOptions(a.options, {experienceId:a.experienceId}, [...path,"options"]);
+  }
+  items.forEach((item,i) => {
+    const path = ["items",i];
+    if (item.type === "activity") activity(item,path);
+    else {
+      checkId(item.id,path);
+      const pack = packageCatalog.find(p => p.id === item.packageId);
+      if (!pack) add([...path,"packageId"],"invalidPackage");
+      else if (item.components.length !== pack.includedExperienceIds.length || [...item.components.map(c => c.experienceId)].sort().join() !== [...pack.includedExperienceIds].sort().join()) add([...path,"components"],"invalidPackageComponents");
+      item.components.forEach((a,j) => activity(a,[...path,"components",j]));
+      checkOptions(item.options,{packageId:item.packageId},[...path,"options"]);
+    }
+  });
+  return issues;
 }

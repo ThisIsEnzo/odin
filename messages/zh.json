@@ -220,7 +220,17 @@
       "invalidEmail": "请填写有效的电子邮箱地址。",
       "invalidPhone": "请填写有效的电话号码。",
       "invalidSubmission": "无法处理此次提交。",
-      "networkFailed": "无法连接到服务器，请检查网络连接后重试。"
+      "networkFailed": "无法连接到服务器，请检查网络连接后重试。",
+      "emptyVisit": "请至少添加一项活动或套餐。",
+      "invalidPackage": "该套餐不可用。",
+      "invalidPackageComponents": "活动内容与所选套餐不符。",
+      "invalidOption": "此选项不可用或数量无效。",
+      "duplicateId": "活动或参与者编号重复。",
+      "unexpectedWeight": "此活动无需填写体重。",
+      "invalidContactChannel": "此联系方式尚未配置。",
+      "contactIdentityRequired": "请输入您的 LINE ID 或 WhatsApp 号码。",
+      "requestTooLarge": "申请超出表单技术大小限制，请分成较小的申请。",
+      "notesTooLong": "备注不得超过500个字符。"
     },
     "pageTitle": "预订您的体验",
     "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
@@ -270,6 +280,43 @@
       "reference": "参考编号：{id}",
       "backHome": "返回首页",
       "viewExperiences": "探索更多体验项目"
+    },
+    "v2": {
+      "title": "您的行程",
+      "intro": "为同行者安排行程：添加活动，为每项活动选择时间，然后统一提交申请。",
+      "choose": "选择",
+      "configure": "安排行程",
+      "progress": "申请步骤",
+      "hours": "可开始时间：{open}–{close}（不含结束时间）",
+      "chooseTime": "选择时间",
+      "weightHelp": "每位骑乘者的体重 · 上限 {max} 公斤",
+      "guestWeight": "参与者 {number} — 体重（公斤）",
+      "guest": "参与者 {number}",
+      "guestCount": "{count} 位参与者",
+      "datePending": "选择日期",
+      "timePending": "选择时间",
+      "options": "附加选项",
+      "selected": "已选项目",
+      "packages": "套餐",
+      "packageNotice": "套餐内容和价格仅为示例，ODIN 将与您核实详情。",
+      "restaurant": "餐厅",
+      "restaurantNotice": "已包含餐厅。时间和具体安排将由 ODIN 与您协商。",
+      "edit": "编辑",
+      "duplicate": "复制",
+      "remove": "移除",
+      "done": "保存详情",
+      "addActivity": "+ 添加活动或套餐",
+      "fixErrors": "请检查以下信息",
+      "contactPreference": "首选联系方式",
+      "noPreference": "无偏好",
+      "contactIdentity": "LINE ID 或 WhatsApp 号码",
+      "reviewNotice": "这是一份申请，ODIN 将联系您确认是否可安排。",
+      "channels": {
+        "phone": "电话",
+        "email": "电子邮箱",
+        "line": "LINE",
+        "whatsapp": "WhatsApp"
+      }
     }
   }
 }

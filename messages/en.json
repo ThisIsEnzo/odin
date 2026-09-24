@@ -220,7 +220,17 @@
       "invalidEmail": "Please enter a valid email address.",
       "invalidPhone": "Please enter a valid phone number.",
       "invalidSubmission": "We couldn't process that submission.",
-      "networkFailed": "We couldn't reach our server. Check your connection and try again."
+      "networkFailed": "We couldn't reach our server. Check your connection and try again.",
+      "emptyVisit": "Add at least one activity or package.",
+      "invalidPackage": "The package is not available.",
+      "invalidPackageComponents": "Package activities do not match the selected package.",
+      "invalidOption": "This option is not available or its quantity is invalid.",
+      "duplicateId": "An item or participant ID is duplicated.",
+      "unexpectedWeight": "Weight is not needed for this activity.",
+      "invalidContactChannel": "This contact channel is not configured.",
+      "contactIdentityRequired": "Enter your LINE ID or WhatsApp number.",
+      "requestTooLarge": "This request exceeds the form size limit. Please split it into smaller requests.",
+      "notesTooLong": "Notes must be 500 characters or fewer."
     },
     "pageTitle": "Book Your Experience",
     "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
@@ -270,6 +280,43 @@
       "reference": "Reference: {id}",
       "backHome": "Back to home",
       "viewExperiences": "Explore more experiences"
+    },
+    "v2": {
+      "title": "Your visit",
+      "intro": "Build a visit around your group. Add activities, choose a time for each, and send one request.",
+      "choose": "Choose",
+      "configure": "Plan your visit",
+      "progress": "Booking progress",
+      "hours": "Available starts: {open}–{close} (closing time excluded)",
+      "chooseTime": "Choose a time",
+      "weightHelp": "Weight for each rider · maximum {max} kg",
+      "guestWeight": "Guest {number} — weight (kg)",
+      "guest": "Guest {number}",
+      "guestCount": "{count} guests",
+      "datePending": "Date to choose",
+      "timePending": "Time to choose",
+      "options": "Options",
+      "selected": "Your selections",
+      "packages": "Packages",
+      "packageNotice": "Package contents and prices are illustrative. ODIN will verify the details with you.",
+      "restaurant": "Restaurant",
+      "restaurantNotice": "Restaurant included. Timing and arrangements will be agreed with ODIN.",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "remove": "Remove",
+      "done": "Save details",
+      "addActivity": "+ Add another activity or package",
+      "fixErrors": "Please check the following details",
+      "contactPreference": "Preferred contact channel",
+      "noPreference": "No preference",
+      "contactIdentity": "LINE ID or WhatsApp number",
+      "reviewNotice": "This is a request. ODIN will contact you to confirm availability.",
+      "channels": {
+        "phone": "Phone",
+        "email": "Email",
+        "line": "LINE",
+        "whatsapp": "WhatsApp"
+      }
     }
   }
 }

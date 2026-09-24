@@ -20,22 +20,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: t("pageTitle") };
 }
 
-/**
- * ARCHITECTURE.md §4 documents package cards linking into `/book` with the
- * package preselected via a query param (e.g. `?package=family-day`). This
- * page preserves that pattern rather than inventing a new one, and also
- * accepts `?experience=<id>` as a direct-selection equivalent using the same
- * mechanism.
- *
- * IMPORTANT, flagged explicitly: the Phase 4A booking API/schema validates
- * `type: "experience"` bookings only — neither BOOKING_RULES.md nor
- * DATA_MODEL.md define validation rules for a `type: "package"` request.
- * So a `?package=` link pre-selects the FIRST experience included in that
- * package (still a genuine, fully-validated experience booking) and shows
- * the package only as orientation context in the Experience step — it does
- * not silently pretend to submit a whole-package booking the API can't
- * actually validate.
- */
 export default async function BookPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -51,11 +35,11 @@ export default async function BookPage({ params, searchParams }: PageProps) {
     : null;
 
   const initialExperienceId: ExperienceId | null =
-    requestedExperienceId ?? (requestedPackage?.includedExperienceIds[0] ?? null);
+    requestedExperienceId;
 
   return (
     <Section tone="canvas" className="pt-16 sm:pt-20">
-      <Container className="max-w-3xl">
+      <Container className="max-w-4xl">
         <BookingFlow
           locale={locale as Locale}
           initialExperienceId={initialExperienceId}

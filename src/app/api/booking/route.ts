@@ -1,73 +1,21 @@
 import { NextResponse } from "next/server";
 import { bookingSchema, collectFieldErrors } from "@/lib/validation/booking.schema";
 import { InMemoryBookingRepository } from "@/lib/booking/repository";
-import { ConsoleNotificationService } from "@/lib/booking/notify";
-import type { BookingRequest } from "@/types/domain";
-
-/**
- * POST /api/booking — ARCHITECTURE.md §8, BOOKING_RULES.md §1/§4.
- *
- * This is the real security boundary: the same bookingSchema import used
- * for client-side zodResolver feedback is parsed again here against the
- * raw request body. Hours, price, and restrictions are never accepted from
- * the client — only the client's *selections* — and are re-derived from
- * src/data/odin/experiences.ts on every request.
- *
- * Module-level singletons are fine for a single-process in-memory adapter;
- * a real persistence/notification provider (ARCHITECTURE.md §15, still an
- * open decision) will replace this wiring, not extend it.
- */
-const repository = new InMemoryBookingRepository();
-const notifications = new ConsoleNotificationService();
-
-// Generic, non-revealing client-facing error text per ARCHITECTURE.md §12 —
-// full detail is logged server-side only.
-const GENERIC_ERROR = "Something went wrong — please try again or contact us directly.";
-
-export async function POST(req: Request) {
-  let body: unknown;
+import { createNotificationService } from "@/lib/booking/notification-config";
+import { submitBooking } from "@/lib/booking/submit";
+export const runtime="nodejs";
+const repository=new InMemoryBookingRepository();
+const notifications=createNotificationService();
+export async function POST(req:Request) {
+  let body:unknown;
+  try { const raw=await req.text(); if(raw.length>256000) return NextResponse.json({error:"request_too_large"},{status:413}); body=JSON.parse(raw); }
+  catch {return NextResponse.json({error:"invalid_body"},{status:400});}
+  const parsed=bookingSchema.safeParse(body);
+  if(!parsed.success) return NextResponse.json({error:"validation_failed",fieldErrors:collectFieldErrors(parsed.error.issues)},{status:400});
+  const {company,...draft}=parsed.data;
+  void company;
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
-  }
-
-  const parsed = bookingSchema.safeParse(body);
-  if (!parsed.success) {
-    // Structured, code-based field errors (e.g. { "weightKg": { key:
-    // "weightExceedsMaximum", params: { max: 90 } } }) so the client can
-    // render them via useTranslations('booking.errors') in the visitor's
-    // own locale. No internal detail (stack traces, persistence errors) is
-    // ever included here — this is still the same schema's own issues,
-    // just reshaped for i18n instead of Zod's raw .flatten() shape.
-    return NextResponse.json(
-      { error: "validation_failed", fieldErrors: collectFieldErrors(parsed.error.issues) },
-      { status: 400 },
-    );
-  }
-
-  const { company: _honeypot, ...validated } = parsed.data;
-
-  try {
-    const created: BookingRequest = await repository.create({
-      type: "experience",
-      experienceOrPackageId: validated.experienceId,
-      date: validated.date,
-      time: validated.time,
-      guests: validated.guests,
-      weightKg: validated.weightKg,
-      customer: validated.customer,
-      locale: validated.locale,
-    });
-
-    await notifications.notifyBusiness(created);
-    await notifications.notifyCustomer(created);
-
-    // Never "confirmed" — BOOKING_RULES.md §1/§8. Only ODIN staff move this
-    // out of "received", manually, out of band.
-    return NextResponse.json({ status: "received", id: created.id }, { status: 201 });
-  } catch (err) {
-    console.error("[api/booking] failed", err);
-    return NextResponse.json({ error: GENERIC_ERROR }, { status: 500 });
-  }
+    const created=await submitBooking(draft,repository,notifications);
+    return NextResponse.json({status:"received",id:created.id},{status:201});
+  } catch { console.error("[booking:persistence] failed"); return NextResponse.json({error:"submission_failed"},{status:500}); }
 }

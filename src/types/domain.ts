@@ -154,6 +154,8 @@ export interface BookingDraft {
   locale: Locale;
 }
 export interface BookingRequest extends BookingDraft {
+  /** Server-generated public reference; optional only for legacy fixtures. */
+  reference?: string;
   id: string;
   status: "received" | "confirmed" | "declined" | "cancelled";
   createdAt: string;

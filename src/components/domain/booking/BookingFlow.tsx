@@ -48,13 +48,16 @@ export function BookingFlow({locale,initialExperienceId,contextPackageId}:Bookin
     else if(step===2){const r=customerSchema.safeParse(customer);if(!r.success){setErrors(collectFieldErrors(r.error.issues.map(i=>({...i,path:["customer",...i.path]}))));focusErrors();return;}go(3);}
   }
   function routeErrors(e:Record<string,FieldErrorEntry>){const first=Object.keys(e)[0]??"";if(first.startsWith("items")){setStep(1);setEditing(items[Number(first.split(".")[1])]?.id??null);}else setStep(2);setErrors(e);focusErrors();}
+  const attempt=useRef<{body:string;key:string}|null>(null);
   async function submit(){
     if(submitting.current)return;
     const parsed=bookingSchema.safeParse({schemaVersion:2,items,customer,notes,locale,company});
     if(!parsed.success){routeErrors(collectFieldErrors(parsed.error.issues));return;}
     submitting.current=true;setBusy(true);setFailure("");
-    try{const res=await fetch("/api/booking",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(parsed.data)});const body=await res.json();
-      if(res.status===201&&body.status==="received"&&typeof body.id==="string")setReceived(body.id);
+    const requestBody=JSON.stringify(parsed.data);
+    if(attempt.current?.body!==requestBody)attempt.current={body:requestBody,key:crypto.randomUUID()};
+    try{const res=await fetch("/api/booking",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":attempt.current!.key},body:requestBody});const body=await res.json();
+      if(res.status===201&&body.status==="received"&&typeof body.id==="string")setReceived(typeof body.reference==="string"?body.reference:body.id);
       else if(res.status===400&&body.fieldErrors)routeErrors(body.fieldErrors);
       else setFailure(te("networkFailed"));
     }catch{setFailure(te("networkFailed"));}finally{submitting.current=false;setBusy(false);}

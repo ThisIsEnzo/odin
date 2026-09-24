@@ -1,3 +1,4 @@
+import {bookingReference,fingerprint,IdempotencyConflict} from "./idempotency";
 import type { BookingRequest } from "@/types/domain";
 
 /**
@@ -8,8 +9,9 @@ import type { BookingRequest } from "@/types/domain";
  * open per IMPLEMENTATION_PLAN.md's dependency table — this phase does not
  * make it.
  */
+export interface CreateBookingOptions { idempotencyKey?: string }
 export interface BookingRepository {
-  create(request: Omit<BookingRequest, "id" | "createdAt" | "status">): Promise<BookingRequest>;
+  create(request: Omit<BookingRequest, "id" | "createdAt" | "status">, options?:CreateBookingOptions): Promise<BookingRequest>;
   getById(id: string): Promise<BookingRequest | null>;
 }
 
@@ -28,18 +30,25 @@ export interface BookingRepository {
  * file and its wiring in app/api/booking/route.ts, nothing else.
  */
 export class InMemoryBookingRepository implements BookingRepository {
+  private readonly keys=new Map<string,{hash:string;id:string}>();
   private readonly store = new Map<string, BookingRequest>();
 
   async create(
     input: Omit<BookingRequest, "id" | "createdAt" | "status">,
+    options?:CreateBookingOptions,
   ): Promise<BookingRequest> {
+    const key=options?.idempotencyKey,hash=fingerprint(input);
+    const existing=key?this.keys.get(key):undefined;
+    if(existing){if(existing.hash!==hash)throw new IdempotencyConflict();return (await this.getById(existing.id))!;}
     const request: BookingRequest = {
       ...structuredClone(input),
       id: crypto.randomUUID(),
+      reference:bookingReference(),
       status: "received", // BOOKING_RULES.md §8 — never anything else on creation
       createdAt: new Date().toISOString(),
     };
     this.store.set(request.id, request);
+    if(key)this.keys.set(key,{hash,id:request.id});
     return structuredClone(request);
   }
 

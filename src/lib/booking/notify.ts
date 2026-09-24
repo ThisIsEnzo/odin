@@ -9,7 +9,7 @@ export interface BookingNotificationPayload {
 }
 /** One operational representation; providers only handle transport. */
 export function buildBookingNotificationPayload(booking: BookingRequest): BookingNotificationPayload {
-  const lines = ["NEW BOOKING REQUEST", `Reference: ${booking.id}`, "Status: RECEIVED — availability not confirmed", `Locale: ${booking.locale}`,
+  const lines = ["NEW BOOKING REQUEST", `Reference: ${booking.reference??booking.id}`, "Status: RECEIVED — availability not confirmed", `Locale: ${booking.locale}`,
     `Customer: ${booking.customer.name}`, `Phone: ${booking.customer.phone}`, `Email: ${booking.customer.email}`];
   if (booking.customer.preferredChannel) lines.push(`Preferred contact: ${booking.customer.preferredChannel}`, `Identity: ${booking.customer.channelIdentity ?? "see contact above"}`);
   const activity = (a: import("@/types/domain").ActivityBookingItem) => {
@@ -18,7 +18,7 @@ export function buildBookingNotificationPayload(booking: BookingRequest): Bookin
     a.options.forEach(o => lines.push(`Option: ${o.optionId} x ${o.quantity}`));
   };
   booking.items.forEach((item,i) => {
-    lines.push(`\n${i+1}. Item ${item.id}`);
+    lines.push(`\n${i+1}. Item`);
     if (item.type === "activity") activity(item);
     else {
       const pack = packages.find(p => p.id === item.packageId);
@@ -30,7 +30,7 @@ export function buildBookingNotificationPayload(booking: BookingRequest): Bookin
     }
   });
   if (booking.notes) lines.push(`\nNotes: ${booking.notes}`);
-  return {reference:booking.id,event:"booking.received",booking:structuredClone(booking),text:lines.join("\n")};
+  return {reference:booking.reference??booking.id,event:"booking.received",booking:structuredClone(booking),text:lines.join("\n")};
 }
 export interface NotificationProvider { name:string; send(payload:BookingNotificationPayload):Promise<void> }
 export interface NotificationDelivery { channel:string; status:"accepted"|"failed" }

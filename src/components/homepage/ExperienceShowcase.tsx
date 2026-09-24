@@ -19,16 +19,7 @@ function toCamelCase(id: string): string {
   return id.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
 }
 
-/**
- * PHASE 3D: presentation-only image mapping keyed by the existing
- * `Experience.id` from src/data/odin/experiences.ts. This lives here in the
- * component, not in the data layer or translation files — it's a rendering
- * concern (which asset to show), not a business fact, so it doesn't
- * duplicate or modify anything in src/data/odin/*. `focus` is a CSS
- * object-position tuned per photo so the rider/animal stays in frame across
- * the panel's aspect ratio. An id with no entry here simply renders no
- * image (falls back to the plain surface) rather than guessing a path.
- */
+
 const experienceImages: Partial<Record<string, { src: string; focus: string }>> = {
   "horse-riding": { src: "/images/experiences/odin-horse.jpg", focus: "50% 35%" },
   "pony-riding": { src: "/images/experiences/odin-pony.jpg", focus: "50% 40%" },
@@ -36,15 +27,7 @@ const experienceImages: Partial<Record<string, { src: string; focus: string }>> 
   sauna: { src: "/images/experiences/odin-sauna.jpg", focus: "55% 55%" },
 };
 
-/**
- * PHASE 3C §2: one dominant content area + four selectable items, crossfading
- * on selection, instead of four identical static cards. `experiences` is
- * passed in as a prop by the server component page.tsx — this file never
- * imports from src/data/odin itself, so there is exactly one place the list
- * is read from, and no business data (hours, weight, price) is duplicated
- * or invented here. The crossfade is a plain CSS opacity transition between
- * stacked panels — no animation dependency.
- */
+
 export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const tExperiences = useTranslations("experiences");
@@ -58,16 +41,11 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
 
   return (
     <>
-      {/* PHASE 4C — TASK 3: this desktop layout is now gated to `lg:` and
-          above (`hidden lg:grid`) and otherwise completely unchanged —
-          the mobile-only vertical accordion below is a separate sibling
-          block, not a replacement, so nothing here needed touching beyond
-          the visibility gate. */}
-      <div className="hidden gap-3 lg:grid lg:grid-cols-[220px_1fr] lg:items-stretch lg:gap-8">
-      {/* Selector — horizontal snap-scroll row on mobile (touch-friendly,
-          no tiny targets), vertical list on desktop. */}
+      
+      <div className="hidden gap-3 lg:grid lg:grid-cols-[280px_1fr] lg:items-stretch lg:gap-8">
+      
       <div
-        role="tablist"
+        aria-label={tExperienceCard("bookCta")}
         className={cn(
           "flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide",
           "lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0 lg:snap-none",
@@ -79,30 +57,26 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
             <button
               key={experience.id}
               type="button"
-              role="tab"
-              aria-selected={isActive}
+              aria-controls={`desktop-experience-${experience.id}`}
+              aria-pressed={isActive}
               onClick={() => setActiveIndex(index)}
               className={cn(
-                "shrink-0 snap-start rounded-button border px-4 py-3.5 text-left text-sm font-medium",
+                "flex items-center gap-4 shrink-0 border-b px-0 py-6 text-left text-xl font-medium",
                 "transition-colors duration-200",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
                 isActive
-                  ? "border-moss bg-moss text-canvas"
-                  : "border-ink/15 bg-transparent text-ink/70 hover:border-moss/40 hover:text-ink",
+                  ? "border-terracotta text-terracotta"
+                  : "border-ink/15 text-ink/60 hover:text-ink",
               )}
             >
-              {tExperiences(`${toCamelCase(experience.id)}.title`)}
+              <span aria-hidden="true" className="text-xs opacity-60">0{index + 1}</span>{tExperiences(`${toCamelCase(experience.id)}.title`)}
             </button>
           );
         })}
       </div>
 
-      {/* Content panel — stacked absolutely, crossfading via opacity only.
-          Each slide is now a full-bleed photo with a bottom scrim and the
-          text/badges sitting in light (canvas) type over it, rather than a
-          plain surface — a deliberately different treatment from the
-          Hero's frosted card, for visual rhythm across the page. */}
-      <div className="relative min-h-[360px] overflow-hidden rounded-card border border-moss/15 bg-white/50 sm:min-h-[300px]">
+      
+      <div className="relative min-h-[640px] overflow-hidden bg-moss">
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
           const maxWeight = experience.restrictions.maxWeightKg;
@@ -112,7 +86,8 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
           return (
             <div
               key={experience.id}
-              aria-hidden={!isActive}
+              id={`desktop-experience-${experience.id}`}
+              aria-hidden={!isActive} inert={!isActive}
               className={cn(
                 "absolute inset-0 transition-opacity duration-[600ms] ease-out",
                 isActive ? "opacity-100" : "pointer-events-none opacity-0",
@@ -186,13 +161,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       </div>
       </div>
 
-      {/* PHASE 4C — TASK 3: mobile-only vertical "file-tab" accordion.
-          All four experiences are visible simultaneously (stacked, compact
-          headers) so a visitor never has to guess more exist or swipe
-          sideways to find them — replacing the old horizontal snap-scroll
-          row on small screens. Reads from the exact same `experiences` prop
-          and the exact same translation namespaces/data as the desktop
-          panel above; nothing is hardcoded or duplicated as new content. */}
+      
       <div className="lg:hidden">
         <div className="flex flex-col gap-2">
           {experiences.map((experience, index) => {
@@ -212,8 +181,8 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                 // state above is left as-is, not touched for consistency's
                 // sake alone.
                 className={cn(
-                  "overflow-hidden rounded-card border transition-colors duration-200",
-                  isActive ? "border-terracotta/50 bg-white/60" : "border-ink/10 bg-transparent",
+                  "overflow-hidden border-t transition-colors duration-200",
+                  isActive ? "border-terracotta bg-canvas-soft" : "border-ink/10 bg-transparent",
                 )}
               >
                 <button
@@ -229,11 +198,11 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                 >
                   <span
                     className={cn(
-                      "font-display text-base",
+                      "font-display text-xl",
                       isActive ? "text-ink" : "text-ink/70",
                     )}
                   >
-                    {title}
+                    <span aria-hidden="true" className="mr-4 text-xs opacity-50">0{index + 1}</span>{title}
                   </span>
                   <ChevronDown
                     aria-hidden="true"
@@ -244,12 +213,11 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   />
                 </button>
 
-                {/* Same expand/collapse technique already established by
-                    Faq.tsx (grid-template-rows 0fr → 1fr) — reused here
-                    rather than introducing a second accordion mechanism. */}
+                
                 <div
                   id={panelId}
                   role="region"
+                  inert={!isActive} aria-hidden={!isActive}
                   aria-labelledby={headerId}
                   className={cn(
                     "grid transition-[grid-template-rows] duration-300 ease-out",
@@ -259,7 +227,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   <div className="overflow-hidden">
                     <div className="px-4 pb-4">
                       {image ? (
-                        <div className="relative mb-4 aspect-[16/10] w-full overflow-hidden rounded-button">
+                        <div className="relative mb-4 aspect-[4/5] w-full overflow-hidden rounded-button">
                           <Image
                             src={image.src}
                             alt={title}

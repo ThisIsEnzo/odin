@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
@@ -20,20 +21,21 @@ export function MobileNav() {
         <button
           type="button"
           aria-label={tCommon("openMenu")}
-          className="inline-flex items-center justify-center rounded-button p-2 text-ink hover:bg-moss/10 md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+          className="inline-flex items-center justify-center rounded-button p-2 text-ink hover:bg-moss/10 xl:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
         >
           <Menu aria-hidden="true" className="h-6 w-6" />
         </button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 md:hidden" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 xl:hidden" />
         <Dialog.Content
-          aria-label={tCommon("mobileMenuLabel")}
-          className="fixed inset-y-0 right-0 z-50 flex w-[85%] max-w-sm flex-col gap-6 bg-canvas p-6 shadow-xl md:hidden"
+          aria-label={tCommon("mobileMenuLabel")} aria-describedby={undefined}
+          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 xl:hidden"
         >
           <div className="flex items-center justify-between">
-            <Dialog.Title className="font-display text-lg text-ink">
+            <Image src="/images/brand/odin-logo.jpg" alt="ODIN" width={1387} height={1536} className="brand-lockup" />
+            <Dialog.Title className="sr-only">
               {tCommon("menu")}
             </Dialog.Title>
             <Dialog.Close asChild>
@@ -53,14 +55,14 @@ export function MobileNav() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-button px-3 py-3 text-base text-ink hover:bg-moss/10"
+                className="border-b border-ink/15 py-4 text-2xl font-medium tracking-tight text-ink hover:text-terracotta"
               >
                 {t(item.translationKey)}
               </Link>
             ))}
           </nav>
 
-          {/* Prominent, reachable Book Now CTA — CLAUDE.md §19/§29 */}
+          
           <Link
             href={bookNowItem.href}
             onClick={() => setOpen(false)}

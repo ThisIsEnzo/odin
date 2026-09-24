@@ -38,8 +38,8 @@
   "home": {
     "badge": "Foundation preview",
     "heroKicker": "Ride · Explore · Relax · Eat",
-    "heroTitle": "ODIN — Farm & Resort Experience near Pattaya",
-    "heroSubtitle": "A countryside farm and resort morning, afternoon, and evening — horses, open trails, a wood-fired sauna, and a table waiting at the end of it.",
+    "heroTitle": "A slower kind of day.",
+    "heroSubtitle": "Ride the trails. Unwind in the sauna. Stay for the table.",
     "heroNote": "This is a request to book — our team confirms availability with you directly.",
     "secondaryCta": "See experiences",
     "statDistanceLabel": "Distance from Pattaya",
@@ -50,7 +50,9 @@
     "experiencesIntro": "Four ways to spend your day at ODIN, each with its own pace.",
     "heroPrevSlide": "Previous slide",
     "heroNextSlide": "Next slide",
-    "heroGoToSlide": "Go to slide {number}"
+    "heroGoToSlide": "Go to slide {number}",
+    "heroPause": "Pause slideshow",
+    "heroPlay": "Play slideshow"
   },
   "experiences": {
     "horseRiding": {
@@ -146,19 +148,19 @@
     "intro": "A look at the farm, its trails, and its table.",
     "items": {
       "horse01": {
-        "alt": "A horse being led across a paddock at ODIN farm"
+        "alt": "Countryside paths and paddocks in the morning mist"
       },
       "pony01": {
-        "alt": "A pony ready for a guided ride at ODIN farm"
+        "alt": "Horses grazing beside a timber fence"
       },
       "atv01": {
-        "alt": "An ATV on a dirt trail at ODIN farm"
+        "alt": "A leather saddle resting on a fence"
       },
       "sauna01": {
-        "alt": "A wood-fired sauna at ODIN farm"
+        "alt": "Green countryside in warm evening light"
       },
       "restaurant01": {
-        "alt": "Dining area at the ODIN restaurant"
+        "alt": "Visitors gathered beside a paddock"
       }
     },
     "lightbox": {

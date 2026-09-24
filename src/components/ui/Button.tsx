@@ -10,18 +10,18 @@ const base =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss";
 
 const variants: Record<ButtonVariant, string> = {
-  // Primary = the CTA color (golden-hour amber) — reserved for the main
+  // Primary = the terracotta brand accent, reserved for the main
   // action on a screen ("Book Your Experience", "Book Now").
-  primary: "bg-dusk text-ink hover:bg-dusk-light",
+  primary: "bg-terracotta text-white hover:bg-terracotta-dark",
   secondary: "bg-moss text-canvas hover:bg-moss-dark",
   outline: "border border-moss text-moss bg-transparent hover:bg-moss/10",
   ghost: "text-moss bg-transparent hover:bg-moss/10",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-11 px-5 text-base",
-  lg: "h-13 px-7 text-lg",
+  sm: "min-h-11 px-4 py-2 text-sm",
+  md: "min-h-12 px-5 py-3 text-sm",
+  lg: "min-h-14 px-7 py-3 text-base",
 };
 
 /** Shared with any element that should look like a button (e.g. the i18n Link) but isn't one. */

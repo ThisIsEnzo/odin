@@ -38,8 +38,8 @@
   "home": {
     "badge": "初版预览",
     "heroKicker": "骑马 · 探索 · 放松 · 用餐",
-    "heroTitle": "ODIN — 芭堤雅附近的农场与度假体验",
-    "heroSubtitle": "在这片乡村农场与度假胜地度过清晨、午后与傍晚 — 骏马、开阔的小径、木烧桑拿，以及一天结束时为你准备好的餐桌。",
+    "heroTitle": "让时光慢下来",
+    "heroSubtitle": "骑马漫游，桑拿放松，再享一顿美食。",
     "heroNote": "这是一份预订申请 — 我们的团队会直接与您确认可预订时间。",
     "secondaryCta": "查看体验项目",
     "statDistanceLabel": "距芭堤雅的距离",
@@ -50,7 +50,9 @@
     "experiencesIntro": "在 ODIN 度过一天的四种方式，每一种都有自己的节奏。",
     "heroPrevSlide": "上一张",
     "heroNextSlide": "下一张",
-    "heroGoToSlide": "跳转到第 {number} 张"
+    "heroGoToSlide": "跳转到第 {number} 张",
+    "heroPause": "暂停幻灯片",
+    "heroPlay": "播放幻灯片"
   },
   "experiences": {
     "horseRiding": {
@@ -146,19 +148,19 @@
     "intro": "一览农场、小径与餐桌的风貌。",
     "items": {
       "horse01": {
-        "alt": "一匹马被牵引穿过 ODIN 农场的牧场"
+        "alt": "晨雾中的乡间小路和围场"
       },
       "pony01": {
-        "alt": "一匹准备好在 ODIN 农场进行向导骑乘的小马"
+        "alt": "木栅栏旁吃草的马"
       },
       "atv01": {
-        "alt": "ODIN 农场泥土小径上的一辆越野车"
+        "alt": "放在栅栏上的皮革马鞍"
       },
       "sauna01": {
-        "alt": "ODIN 农场的木烧桑拿房"
+        "alt": "温暖夕阳下的绿色乡野"
       },
       "restaurant01": {
-        "alt": "ODIN 餐厅的用餐区"
+        "alt": "围场旁相聚的游客"
       }
     },
     "lightbox": {

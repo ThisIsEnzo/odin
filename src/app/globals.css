@@ -1,76 +1,23 @@
 @import "tailwindcss";
 
-/*
- * Design tokens — see /docs/ARCHITECTURE.md §14.
- * Grounded in the actual subject (Thai countryside farmland, teak and
- * saddle leather, golden-hour light) rather than a generic "rustic
- * premium" template. Tailwind v4 is CSS-first: any key under a recognized
- * namespace (--color-*, --font-*, --radius-*, --breakpoint-*, ...) declared
- * here is BOTH a CSS custom property AND a first-class Tailwind utility —
- * --color-moss below gives you bg-moss / text-moss / border-moss for free.
- * Components in this project should use those direct utilities (bg-moss,
- * font-display, rounded-card, ...) rather than an arbitrary-value form —
- * square brackets around a bare variable name don't wrap it in var()
- * automatically (the shorthand for that is parentheses, e.g.
- * bg-(--color-moss)), and neither is needed here now that these are
- * real, named utilities.
- */
+
 @theme {
-  --color-ink: #20241f;
-  --color-canvas: #f1ede1;
-  --color-canvas-soft: #e8e2d2;
-  --color-moss: #3f4b3a;
-  --color-moss-dark: #2c352a;
-  --color-saddle: #7a4b32;
-  --color-dusk: #c98b4a;
-  --color-dusk-light: #e0ab74;
-
-  /* PHASE 4 FINAL — brand accent, sampled directly from the actual supplied
-     ODIN logo file (public/images/brand/odin-logo-original.jpg), not
-     guessed from a text description. --color-terracotta is the logo's
-     mid-tone background (avoiding both its darkest vignette corners and
-     its lightest highlight, for a value that reads consistently as "burnt
-     terracotta" rather than near-black). A deliberate BRAND ACCENT per the
-     brief — NOT a replacement for the moss/canvas/dusk palette above, which
-     remains dominant. Used narrowly: logo badge treatment, small
-     selected/active-state indicators — never large fills or backgrounds. */
-  --color-terracotta: #5d2016;
-  --color-terracotta-light: #815149;
-  --color-terracotta-dark: #4f1b13;
+  --color-ink: #202c27;
+  --color-canvas: #faf8f2;
+  --color-canvas-soft: #efece3;
+  --color-moss: #253d32;
+  --color-moss-dark: #192e25;
+  --color-saddle: #77513d;
+  --color-dusk: #cfab79;
+  --color-dusk-light: #e5cda9;
+  --color-terracotta: #783522;
+  --color-terracotta-dark: #592619;
+  --color-terracotta-light: #984d36;
   --color-cream-brand: #eecba5;
-
-  /*
-   * PHASE 4 FINALIZATION — brand accent, introduced alongside the new
-   * official ODIN logo (deep burnt terracotta / dark reddish-brown mark on
-   * warm cream). FLAGGED: the actual logo image was never uploaded to this
-   * project/session — these hex values are a best-effort interpretation of
-   * the written description only ("deep burnt terracotta / reddish-brown"),
-   * not sampled from the real artwork. Re-check against the actual file
-   * once it's supplied; treat these as provisional.
-   *
-   * Deliberately NOT replacing --color-saddle/--color-dusk (the existing
-   * brown/amber accents) — this is a distinct, additional accent, used
-   * narrowly (see Badge.tsx's new "terracotta" variant), not a site-wide
-   * recolor. --color-canvas already serves as the "warm cream" tone the
-   * logo's artwork sits on, so no separate cream token was added.
-   */
-  --color-terracotta: #8b3a2a;
-  --color-terracotta-dark: #6e2c1f;
-  --color-terracotta-light: #b5624a;
-
-  /* Display face for en/ru headings. Th/zh headings fall back to
-     font-sans automatically — Lora has no Thai/Chinese glyphs, so the
-     browser resolves those characters against the next font in the stack
-     without any per-locale branching in components. Values reference the
-     CSS variables next/font/google generates (set on <html> in
-     app/[locale]/layout.tsx) — not literal font names — since these are
-     self-hosted, optimized files, not a system/Google-CDN font. */
-  --font-display: var(--font-lora), var(--font-noto-thai), var(--font-noto-sc), Georgia, serif;
+  --font-display: var(--font-inter), var(--font-noto-thai), var(--font-noto-sc), system-ui, sans-serif;
   --font-sans: var(--font-inter), var(--font-noto-thai), var(--font-noto-sc), system-ui, sans-serif;
-
-  --radius-card: 1rem;
-  --radius-button: 0.625rem;
-
+  --radius-card: 0.25rem;
+  --radius-button: 0.125rem;
   --breakpoint-xs: 480px;
 }
 
@@ -88,13 +35,13 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Never suppress the focus ring — CLAUDE.md §27, ARCHITECTURE.md §11. */
+
 :focus-visible {
   outline: 2px solid var(--color-moss);
   outline-offset: 2px;
 }
 
-/* Respect reduced-motion preferences everywhere, not just in one component. */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -109,30 +56,7 @@ body {
   }
 }
 
-/*
- * PHASE 3C — one shared scroll-reveal language (ARCHITECTURE.md-style: a
- * single mechanism reused everywhere, not one animation per section).
- * Toggled by src/components/motion/Reveal.tsx via IntersectionObserver.
- * Pure CSS transition (not @keyframes) so per-instance transition-delay
- * (staggered cards) works with zero extra CSS. The reduced-motion block
- * above already neutralizes this for anyone who prefers no motion.
- *
- * CINEMATIC MOTION REFINEMENT: tuned to this phase's explicit spec —
- * translateY 24px (was 14px), duration 800ms (was 650ms, within the
- * requested 700–900ms band), trigger at ~15–25% visible (see Reveal.tsx).
- * Slower and slightly larger than the previous pass, but paired with a
- * smooth ease-out and a literal (not pre-emptive) trigger point, which is
- * what this phase asks for — "soft, slow, deliberate" over "quick".
- *
- * `.reveal-scale` / `.reveal-left` / `.reveal-right` are the same
- * mechanism with a different resting transform — Gallery photographs
- * (scale-in), and opposing-motion compositions like Restaurant/Why ODIN
- * (slide in from a side) — not a second animation system, just the one
- * mechanism parameterized (see Reveal.tsx's `variant` prop). Side-entrance
- * distance is reduced under 640px per §16 ("reduce travel distances" on
- * mobile) — a phone's viewport is narrow enough that a 30px horizontal
- * slide reads as a much larger relative movement than on desktop.
- */
+
 .reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -176,9 +100,7 @@ body {
   }
 }
 
-/* Hides the scrollbar on the mobile snap-scroll carousels (Gallery,
-   Experience selector) while keeping them fully touch/keyboard scrollable —
-   no dependency, just the standard cross-browser hide pattern. */
+
 .scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -187,20 +109,7 @@ body {
   display: none;
 }
 
-/*
- * Hero slideshow (PHASE 4C) — see src/components/homepage/HeroSlideshow.tsx.
- * Each slide is its own absolutely-positioned layer; only `.hero-slide-active`
- * toggles per slide. Driven by a CSS TRANSITION (base → active), not a
- * free-running `@keyframes` loop, deliberately: a transition always starts
- * fresh from the base state (scale 1.02, opacity 0) and climbs once to the
- * active state (scale 1.08, opacity 1) — it cannot "yo-yo" or reset
- * mid-cycle while visible the way a continuously-looping keyframe could.
- * The crossfade (opacity) is intentionally much shorter than the zoom
- * (transform), so the zoom keeps drifting slowly for the whole ~10s a slide
- * is shown, while the actual hand-off between two images is a brief,
- * smooth dissolve — matching "very subtle, almost invisible" rather than a
- * noticeable zoom-in/zoom-out.
- */
+
 .hero-slide {
   position: absolute;
   inset: 0;
@@ -225,3 +134,21 @@ body {
     transform: none;
   }
 }
+/* Phase 5A.1: homepage composition; booking layout remains independent. */
+section[id] { scroll-margin-top: 7rem; }
+.homepage h1, .homepage h2, .homepage h3 { text-wrap: balance; }
+.homepage h2 { font-size: clamp(2rem, 4.5vw, 4.5rem); line-height: 1.08; font-weight: 500; letter-spacing: -.045em; }
+.homepage h3 { font-weight: 500; letter-spacing: -.025em; }
+.homepage p { line-height: 1.7; }
+.homepage section { overflow: clip; }
+.eyebrow { font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.hero-content { pointer-events: none; }
+.hero-content a { pointer-events: auto; }
+.hero-title { font-size: clamp(3rem, 6.6vw, 6.4rem); line-height: 1.02; letter-spacing: -.055em; font-weight: 500; max-width: 12ch; }
+.hero-shade { background: linear-gradient(90deg,rgba(10,25,17,.72),rgba(10,25,17,.22) 65%),linear-gradient(0deg,rgba(10,25,17,.38),transparent 45%); }
+.brand-lockup { object-fit: contain; width: 4.25rem; height: 4.7rem; }
+@media (min-width: 1024px) { .brand-lockup { width: 4.8rem; height: 5.3rem; } }
+@media (max-width: 639px) { .hero-title { font-size: clamp(2.6rem, 10.6vw, 4rem); } }
+:lang(th) .hero-title, :lang(zh) .hero-title { line-height: 1.25; letter-spacing: 0; max-width: 15ch; }
+:lang(th) .homepage h2, :lang(zh) .homepage h2 { line-height: 1.3; letter-spacing: 0; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none !important; } }

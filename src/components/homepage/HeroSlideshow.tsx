@@ -102,7 +102,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             onClick={goPrev}
             aria-label={t("heroPrevSlide")}
             className={cn(
-              "absolute bottom-5 right-[108px] z-20 flex h-11 w-11 items-center justify-center border border-white/40",
+              "absolute bottom-5 hero-control-prev z-20 flex h-11 w-11 items-center justify-center border border-white/40",
               "bg-ink/30 text-canvas backdrop-blur-sm transition-colors hover:bg-ink/50",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas",
             )}
@@ -115,7 +115,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             onClick={goNext}
             aria-label={t("heroNextSlide")}
             className={cn(
-              "absolute bottom-5 right-4 z-20 flex h-11 w-11 items-center justify-center border border-white/40",
+              "absolute bottom-5 hero-control-next z-20 flex h-11 w-11 items-center justify-center border border-white/40",
               "bg-ink/30 text-canvas backdrop-blur-sm transition-colors hover:bg-ink/50",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas",
             )}
@@ -123,8 +123,8 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             <ChevronRight aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
-          <button type="button" onClick={togglePause} aria-label={t(paused ? "heroPlay" : "heroPause")} className="absolute bottom-5 right-[62px] z-20 flex h-11 w-11 items-center justify-center border border-white/40 bg-ink/30 text-white hover:bg-ink/50">{paused ? <Play size={16} aria-hidden="true"/> : <Pause size={16} aria-hidden="true"/>}</button>
-          <div className="absolute left-4 bottom-5 z-20 flex items-center gap-1 sm:left-8">
+          <button type="button" onClick={togglePause} aria-label={t(paused ? "heroPlay" : "heroPause")} className="absolute bottom-5 hero-control-pause z-20 flex h-11 w-11 items-center justify-center border border-white/40 bg-ink/30 text-white hover:bg-ink/50">{paused ? <Play size={16} aria-hidden="true"/> : <Pause size={16} aria-hidden="true"/>}</button>
+          <div className="absolute hero-controls-start bottom-5 z-20 flex items-center gap-1">
             {images.map((src, index) => (
               <button
                 key={src}

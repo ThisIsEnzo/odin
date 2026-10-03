@@ -15,5 +15,5 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
 
 /** Generic vertical rhythm for page sections. Page-specific layout stays in the page, not here. */
 export function Section({ tone = "canvas", className, ...props }: SectionProps) {
-  return <section className={cn("py-16 sm:py-24", tones[tone], className)} {...props} />;
+  return <section className={cn("py-18 sm:py-24 lg:py-28", tones[tone], className)} {...props} />;
 }

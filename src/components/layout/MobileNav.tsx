@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BrandLogo } from "./BrandLogo";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
@@ -21,20 +21,20 @@ export function MobileNav() {
         <button
           type="button"
           aria-label={tCommon("openMenu")}
-          className="inline-flex items-center justify-center rounded-button p-2 text-ink hover:bg-moss/10 xl:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+          className="inline-flex items-center justify-center rounded-button p-2 text-cream-brand hover:bg-cream-brand/10 lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
         >
           <Menu aria-hidden="true" className="h-6 w-6" />
         </button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 xl:hidden" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 lg:hidden" />
         <Dialog.Content
           aria-label={tCommon("mobileMenuLabel")} aria-describedby={undefined}
-          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 xl:hidden"
+          className="ground-menu fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 lg:hidden"
         >
-          <div className="flex items-center justify-between">
-            <Image src="/images/brand/odin-logo.jpg" alt="ODIN" width={1387} height={1536} className="brand-lockup" />
+          <div className="ground-menu-heading -mx-6 -mt-6 flex items-center justify-between px-6 py-5 sm:-mx-10 sm:-mt-10 sm:px-10">
+            <BrandLogo className="ground-menu-logo" />
             <Dialog.Title className="sr-only">
               {tCommon("menu")}
             </Dialog.Title>
@@ -42,7 +42,7 @@ export function MobileNav() {
               <button
                 type="button"
                 aria-label={tCommon("closeMenu")}
-                className="rounded-button p-2 hover:bg-moss/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                className="rounded-button p-2 text-cream-brand hover:bg-cream-brand/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
               >
                 <X aria-hidden="true" className="h-6 w-6" />
               </button>

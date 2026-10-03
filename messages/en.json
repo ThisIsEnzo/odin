@@ -1,8 +1,8 @@
 {
   "meta": {
-    "siteName": "ODIN",
-    "defaultTitle": "ODIN — Farm & Resort Experience near Pattaya",
-    "description": "Ride, explore, relax and eat at ODIN, a countryside farm and resort experience about 20 km from Pattaya, Thailand."
+    "siteName": "ON GROUND CAFE & FARM",
+    "defaultTitle": "ON GROUND CAFE & FARM — Farm & Resort Experience near Pattaya",
+    "description": "Ride, explore, relax and eat at ON GROUND CAFE & FARM, a countryside farm and resort experience about 20 km from Pattaya, Thailand."
   },
   "common": {
     "logoSuffix": "Farm & Resort Experience near Pattaya",
@@ -47,7 +47,7 @@
     "statExperiencesLabel": "Number of experiences",
     "statExperiences": "{count} signature experiences",
     "experiencesHeading": "Experiences",
-    "experiencesIntro": "Four ways to spend your day at ODIN, each with its own pace.",
+    "experiencesIntro": "Four ways to spend your day at ON GROUND, each with its own pace.",
     "heroPrevSlide": "Previous slide",
     "heroNextSlide": "Next slide",
     "heroGoToSlide": "Go to slide {number}",
@@ -79,9 +79,9 @@
     "bookCta": "Book this experience"
   },
   "whyOdin": {
-    "kicker": "Why ODIN",
+    "kicker": "Why ON GROUND",
     "heading": "A working farm, not a theme park",
-    "lead": "ODIN pairs open countryside with a slower pace — ride and explore by day, unwind by evening, and finish at a table that's part of the same place, not a separate attraction bolted on beside it.",
+    "lead": "ON GROUND pairs open countryside with a slower pace — ride and explore by day, unwind by evening, and finish at a table that's part of the same place, not a separate attraction bolted on beside it.",
     "distanceNote": "{distance} from Pattaya — close enough for a day trip, far enough to feel like the countryside.",
     "pillarRide": {
       "title": "Ride & Explore",
@@ -126,9 +126,9 @@
   },
   "packages": {
     "heading": "Packages",
-    "intro": "A few ways to combine ODIN's experiences into a single day.",
+    "intro": "A few ways to combine ON GROUND's experiences into a single day.",
     "includesRestaurant": "Includes restaurant",
-    "mockNote": "Indicative pricing — subject to confirmation with ODIN.",
+    "mockNote": "Indicative pricing — subject to confirmation with ON GROUND.",
     "cta": "Request this package",
     "familyDay": {
       "title": "Family Day",
@@ -173,11 +173,11 @@
   "reviews": {
     "heading": "Guest Stories",
     "comingSoonTitle": "Guest stories, coming soon",
-    "comingSoonBody": "ODIN is just getting started welcoming guests — real stories from the people who visit will appear here once they're in."
+    "comingSoonBody": "ON GROUND is just getting started welcoming guests — real stories from the people who visit will appear here once they're in."
   },
   "location": {
     "heading": "Location",
-    "body": "ODIN is set in the countryside {distance} from Pattaya. Directions and a map link will be available closer to launch.",
+    "body": "ON GROUND is set in the countryside {distance} from Pattaya.",
     "distanceBadge": "{distance} from Pattaya",
     "mapPlaceholder": "Map preview coming soon",
     "openInMaps": "Open in Google Maps"
@@ -194,13 +194,13 @@
         "answer": "Comfortable clothing and closed-toe shoes are recommended. Anything specific to an experience is listed on its page."
       },
       "gettingThere": {
-        "question": "How do I get to ODIN?",
-        "answer": "ODIN is located approximately {distance} from Pattaya. See the Location page for directions and a map link."
+        "question": "How do I get to ON GROUND?",
+        "answer": "ON GROUND is located approximately {distance} from Pattaya. See the Location page for directions and a map link."
       }
     }
   },
   "finalCta": {
-    "heading": "Ready to plan your day at ODIN?",
+    "heading": "Ready to plan your day at ON GROUND?",
     "body": "Send a request and our team will confirm availability with you directly.",
     "primaryCta": "Book Now",
     "secondaryCta": "See experiences"
@@ -298,9 +298,9 @@
       "options": "Options",
       "selected": "Your selections",
       "packages": "Packages",
-      "packageNotice": "Package contents and prices are illustrative. ODIN will verify the details with you.",
+      "packageNotice": "Package contents and prices are illustrative. ON GROUND will verify the details with you.",
       "restaurant": "Restaurant",
-      "restaurantNotice": "Restaurant included. Timing and arrangements will be agreed with ODIN.",
+      "restaurantNotice": "Restaurant included. Timing and arrangements will be agreed with ON GROUND.",
       "edit": "Edit",
       "duplicate": "Duplicate",
       "remove": "Remove",
@@ -310,7 +310,7 @@
       "contactPreference": "Preferred contact channel",
       "noPreference": "No preference",
       "contactIdentity": "LINE ID or WhatsApp number",
-      "reviewNotice": "This is a request. ODIN will contact you to confirm availability.",
+      "reviewNotice": "This is a request. ON GROUND will contact you to confirm availability.",
       "channels": {
         "phone": "Phone",
         "email": "Email",

@@ -5,6 +5,7 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { Inter, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
+import { HomepageAnchorNavigation } from "@/components/layout/HomepageAnchorNavigation";
 import { Footer } from "@/components/layout/Footer";
 import "../globals.css";
 
@@ -77,6 +78,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           >
             Skip to content
           </a>
+          <HomepageAnchorNavigation />
           <Header />
           <main id="main-content" className="flex-1">
             {children}

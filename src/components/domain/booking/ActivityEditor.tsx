@@ -3,7 +3,7 @@ import {useTranslations} from "next-intl";
 import {experiences} from "@/data/odin/experiences";
 import {getAvailableTimeSlots,todayIsoDate,maxIsoDate} from "@/lib/booking/time-slots";
 import type {ActivityBookingItem} from "@/types/domain";
-export const inputClass="mt-2 min-h-12 w-full min-w-0 rounded-lg border border-ink/25 bg-canvas px-3 py-3 text-base text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss";
+export const inputClass="form-control";
 export function ActivityEditor({activity,path,onChange,error}:{activity:ActivityBookingItem;path:string;onChange:(a:ActivityBookingItem)=>void;error:(path:string)=>string|undefined}) {
   const t=useTranslations("booking");
   const exp=experiences.find(e=>e.id===activity.experienceId)!;

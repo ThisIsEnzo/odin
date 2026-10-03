@@ -2,7 +2,7 @@
   "name": "odin-web",
   "version": "0.1.0",
   "private": true,
-  "description": "ODIN \u2014 Farm & Resort Experience near Pattaya. Marketing + request-to-book MVP.",
+  "description": "ODIN — Farm & Resort Experience near Pattaya. Marketing + request-to-book MVP.",
   "engines": {
     "node": ">=20.9.0"
   },
@@ -48,6 +48,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9.15.0",
     "eslint-config-next": "^16.3.1",
+    "jsdom": "^26.1.0",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.23.15",
     "typescript": "^5.7.0",

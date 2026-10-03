@@ -10,7 +10,7 @@ export function Restaurant() {
   const t = useTranslations(restaurant.translationNamespace);
 
   return (
-    <Section id="restaurant" tone="moss" className="!py-0">
+    <Section id="restaurant" tone="moss" className="surface-inverse !py-0">
       <div className="restaurant-feature">
         <Reveal className="restaurant-photo">
           <Image
@@ -35,7 +35,7 @@ export function Restaurant() {
               </div>
             </dl>
             <p className="mt-5 text-sm text-canvas/65">{t("menuComingSoon")}</p>
-            <Link href="/book" className={buttonVariants({ variant: "primary", size: "md", className: "mt-7 w-full sm:w-auto" })}>
+            <Link href="/book" className={buttonVariants({ variant: "inverse", size: "md", className: "mt-7 w-full sm:w-auto" })}>
               {t("cta")} <span aria-hidden="true">↗</span>
             </Link>
           </div>

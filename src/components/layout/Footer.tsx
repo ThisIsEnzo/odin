@@ -29,7 +29,7 @@ export function Footer() {
           <p className="text-sm font-semibold uppercase tracking-wide text-cream-brand/85">
             {tFooter("navigationHeading")}
           </p>
-          <ul className="mt-3 space-y-2">
+          <ul className="mt-3 grid grid-cols-2 gap-x-4 sm:block sm:space-y-2">
             {[...primaryNavItems, ...footerNavItems].map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-sm text-cream-brand hover:text-canvas">

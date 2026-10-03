@@ -76,7 +76,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       </div>
 
       
-      <div className="relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-moss">
+      <div className="surface-inverse relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-moss">
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
           const maxWeight = experience.restrictions.maxWeightKg;

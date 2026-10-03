@@ -32,7 +32,7 @@ export function Header() {
 
         <nav
           aria-label={tCommon("primaryNavigation")}
-          className="hidden items-center gap-0 lg:flex"
+          className="hidden items-center gap-0 xl:flex"
         >
           {primaryNavItems.map((item) => (
             <Link

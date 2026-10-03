@@ -39,7 +39,7 @@ export default async function BookPage({ params, searchParams }: PageProps) {
 
   return (
     <Section tone="canvas" className="pt-16 sm:pt-20">
-      <Container className="max-w-4xl">
+      <Container>
         <BookingFlow
           locale={locale as Locale}
           initialExperienceId={initialExperienceId}

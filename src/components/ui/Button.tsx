@@ -1,18 +1,19 @@
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "inverse";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-button font-medium " +
+  "inline-flex max-w-full items-center justify-center gap-2 text-center whitespace-normal rounded-button font-medium " +
   "transition-colors duration-150 disabled:opacity-50 disabled:pointer-events-none " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss";
 
 const variants: Record<ButtonVariant, string> = {
   // Primary = the terracotta brand accent, reserved for the main
   // action on a screen ("Book Your Experience", "Book Now").
-  primary: "bg-terracotta text-white hover:bg-terracotta-dark",
+  primary: "bg-brand-primary text-white hover:bg-brand-primary-hover active:bg-brand-primary-hover",
+  inverse: "bg-brand-cream text-brand-primary hover:bg-canvas active:bg-brand-cream",
   secondary: "bg-moss text-canvas hover:bg-moss-dark",
   outline: "border border-moss text-moss bg-transparent hover:bg-moss/10",
   ghost: "text-moss bg-transparent hover:bg-moss/10",

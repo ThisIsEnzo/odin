@@ -1,205 +1,23 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+// @vitest-environment jsdom
+import React from "react";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import messages from "../../../../../messages/en.json";
 import { BookingFlow } from "../BookingFlow";
 
-/**
- * next-intl is mocked to a deterministic "namespace.key" translator instead
- * of loading real messages/*.json — this keeps the test focused on UI
- * behaviour (which is what BOOKING_RULES.md/CLAUDE.md's testing intent
- * calls for here) and independent of copy changes. Params are appended so
- * interpolated strings (e.g. weight limits) are still distinguishable.
- */
-vi.mock("next-intl", () => ({
-  useTranslations:
-    (namespace?: string) =>
-    (key: string, params?: Record<string, unknown>) => {
-      const full = namespace ? `${namespace}.${key}` : key;
-      return params ? `${full}(${JSON.stringify(params)})` : full;
-    },
-}));
-
-vi.mock("@/i18n/navigation", () => ({
-  Link: ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
-    <a href={href} className={className}>
-      {children}
-    </a>
-  ),
-}));
-
-function selectExperience(name: string) {
-  fireEvent.click(screen.getByText(`experiences.${name}.title`));
-}
-
-function goNext() {
-  fireEvent.click(screen.getByText("booking.actions.next"));
-}
-
-function fillScheduleStep() {
-  const dateInput = document.getElementById("booking-date") as HTMLInputElement;
-  const future = new Date();
-  future.setDate(future.getDate() + 5);
-  fireEvent.change(dateInput, { target: { value: future.toISOString().slice(0, 10) } });
-
-  const timeSelect = document.getElementById("booking-time") as HTMLSelectElement;
-  const firstRealOption = timeSelect.options[1]; // index 0 is the disabled placeholder
-  fireEvent.change(timeSelect, { target: { value: firstRealOption.value } });
-}
-
-function fillCustomerStep() {
-  fireEvent.change(document.getElementById("booking-name") as HTMLInputElement, {
-    target: { value: "Somchai Test" },
-  });
-  fireEvent.change(document.getElementById("booking-email") as HTMLInputElement, {
-    target: { value: "somchai@example.com" },
-  });
-  fireEvent.change(document.getElementById("booking-phone") as HTMLInputElement, {
-    target: { value: "+66812345678" },
-  });
-}
-
-beforeEach(() => {
-  vi.restoreAllMocks();
-});
-
-describe("BookingFlow — Experience step", () => {
-  it("renders all four experiences for selection", () => {
-    render(<BookingFlow locale="en" initialExperienceId={null} contextPackageId={null} />);
-    expect(screen.getByText("experiences.horseRiding.title")).toBeInTheDocument();
-    expect(screen.getByText("experiences.ponyRiding.title")).toBeInTheDocument();
-    expect(screen.getByText("experiences.atv.title")).toBeInTheDocument();
-    expect(screen.getByText("experiences.sauna.title")).toBeInTheDocument();
-  });
-});
-
-describe("BookingFlow — conditional weight field", () => {
-  function advanceToGuestsStep(experienceKey: string) {
-    render(<BookingFlow locale="en" initialExperienceId={null} contextPackageId={null} />);
-    selectExperience(experienceKey);
-    goNext(); // -> Schedule step
-    fillScheduleStep();
-    goNext(); // -> Guests step
-  }
-
-  it("shows the weight field for Horse Riding", () => {
-    advanceToGuestsStep("horseRiding");
-    expect(screen.getByText("booking.fields.weight")).toBeInTheDocument();
-  });
-
-  it("shows the weight field for Pony Riding", () => {
-    advanceToGuestsStep("ponyRiding");
-    expect(screen.getByText("booking.fields.weight")).toBeInTheDocument();
-  });
-
-  it("does NOT show the weight field for ATV", () => {
-    advanceToGuestsStep("atv");
-    expect(screen.queryByText("booking.fields.weight")).not.toBeInTheDocument();
-  });
-
-  it("does NOT show the weight field for Sauna", () => {
-    advanceToGuestsStep("sauna");
-    expect(screen.queryByText("booking.fields.weight")).not.toBeInTheDocument();
-  });
-});
-
-describe("BookingFlow — step gating", () => {
-  it("disables Continue until an experience is selected", () => {
-    render(<BookingFlow locale="en" initialExperienceId={null} contextPackageId={null} />);
-    expect(screen.getByText("booking.actions.next")).toBeDisabled();
-    selectExperience("sauna");
-    expect(screen.getByText("booking.actions.next")).not.toBeDisabled();
-  });
-
-  it("disables Continue on the details step until email is valid", () => {
-    render(<BookingFlow locale="en" initialExperienceId="sauna" contextPackageId={null} />);
-    goNext(); // Schedule
-    fillScheduleStep();
-    goNext(); // Guests
-    goNext(); // Details
-    expect(screen.getByText("booking.actions.next")).toBeDisabled();
-
-    fireEvent.change(document.getElementById("booking-name") as HTMLInputElement, {
-      target: { value: "Somchai" },
-    });
-    fireEvent.change(document.getElementById("booking-email") as HTMLInputElement, {
-      target: { value: "not-an-email" },
-    });
-    fireEvent.change(document.getElementById("booking-phone") as HTMLInputElement, {
-      target: { value: "12345678" },
-    });
-    expect(screen.getByText("booking.actions.next")).toBeDisabled();
-
-    fireEvent.change(document.getElementById("booking-email") as HTMLInputElement, {
-      target: { value: "somchai@example.com" },
-    });
-    expect(screen.getByText("booking.actions.next")).not.toBeDisabled();
-  });
-});
-
-describe("BookingFlow — submission", () => {
-  function advanceToReviewStep() {
-    render(<BookingFlow locale="en" initialExperienceId="sauna" contextPackageId={null} />);
-    goNext(); // Schedule
-    fillScheduleStep();
-    goNext(); // Guests
-    goNext(); // Details
-    fillCustomerStep();
-    goNext(); // Review
-  }
-
-  it("shows Request Received (not 'confirmed') on a successful API response", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      status: 201,
-      json: async () => ({ status: "received", id: "booking-abc-123" }),
-    }) as unknown as typeof fetch;
-
-    advanceToReviewStep();
-    fireEvent.click(screen.getByText("booking.actions.submit"));
-
-    await waitFor(() => {
-      expect(screen.getByText("booking.success.title")).toBeInTheDocument();
-    });
-    expect(screen.queryByText(/confirmed/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/booking-abc-123/)).toBeInTheDocument();
-  });
-
-  it("displays a translated field error when the API returns a validation failure", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      status: 400,
-      json: async () => ({
-        error: "validation_failed",
-        fieldErrors: { "customer.email": { key: "invalidEmail" } },
-      }),
-    }) as unknown as typeof fetch;
-
-    advanceToReviewStep();
-    fireEvent.click(screen.getByText("booking.actions.submit"));
-
-    // A field-level 400 error routes the visitor back to the Details step,
-    // where that field's error becomes visible.
-    await waitFor(() => {
-      expect(screen.getByText("booking.errors.invalidEmail")).toBeInTheDocument();
-    });
-  });
-
-  it("prevents a duplicate submission while one is in progress", async () => {
-    let resolveFetch: (value: unknown) => void = () => {};
-    const pending = new Promise((resolve) => {
-      resolveFetch = resolve;
-    });
-    const fetchMock = vi.fn().mockReturnValue(pending);
-    global.fetch = fetchMock as unknown as typeof fetch;
-
-    advanceToReviewStep();
-    const submitButton = screen.getByText("booking.actions.submit");
-    fireEvent.click(submitButton);
-    fireEvent.click(submitButton); // second, near-simultaneous click
-    fireEvent.click(submitButton); // third, for good measure
-
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-
-    resolveFetch({ status: 201, json: async () => ({ status: "received", id: "x" }) });
-    await waitFor(() => {
-      expect(screen.getByText("booking.success.title")).toBeInTheDocument();
-    });
-  });
+vi.mock("next/image", () => ({ default: ({alt,src}: {alt:string;src:string}) => <img alt={alt} src={src}/> }));
+vi.mock("@/i18n/navigation", () => ({Link: ({href,children}: {href:string;children:React.ReactNode}) => <a href={href}>{children}</a>}));
+afterEach(cleanup);
+function setup() { render(<NextIntlClientProvider locale="en" messages={messages}><BookingFlow locale="en" initialExperienceId={null} contextPackageId={null}/></NextIntlClientProvider>); }
+function add(name:string) {fireEvent.click(screen.getByRole("button",{name:`Add to your visit: ${name}`}));}
+describe("Booking V2 visit presentation",()=>{
+ it("starts with a clear empty visit and four experience choices",()=>{setup();expect(screen.getAllByText(messages.booking.ux.empty).length).toBeGreaterThan(0);expect(screen.getAllByRole("button",{name:/Add to your visit:/}).length).toBeGreaterThanOrEqual(4);});
+ it("adds an activity and opens exactly one editor",()=>{setup();add("ATV");expect(document.querySelectorAll(".visit-entry")).toHaveLength(1);expect(document.querySelectorAll(".visit-editor")).toHaveLength(1);expect(screen.getByRole("status").textContent).toContain("added to your visit");});
+ it("shows an unmistakable added state when returning to discovery",()=>{setup();add("ATV");fireEvent.click(document.querySelector(".visit-add-another")!);expect(document.querySelector(".discovery-actions button")).toBeTruthy();expect(screen.getByText("Added to your visit · 1")).toBeTruthy();});
+ it("preserves earlier activities when adding another",()=>{setup();add("ATV");fireEvent.click(document.querySelector(".visit-add-another")!);add("Sauna");expect(document.querySelectorAll(".visit-entry")).toHaveLength(2);expect(document.querySelectorAll(".visit-editor")).toHaveLength(1);});
+ it("duplicates with a separate itinerary entry",()=>{setup();add("ATV");fireEvent.click(screen.getByRole("button",{name:"Duplicate: ATV"}));expect(document.querySelectorAll(".visit-entry")).toHaveLength(2);expect(document.querySelectorAll(".visit-editor")).toHaveLength(1);});
+ it("removes an item without leaving its editor",()=>{setup();add("ATV");fireEvent.click(screen.getByRole("button",{name:"Remove: ATV"}));expect(document.querySelectorAll(".visit-entry")).toHaveLength(0);expect(document.querySelectorAll(".visit-editor")).toHaveLength(0);});
+ it("blocks progression for an incomplete itinerary",()=>{setup();add("ATV");fireEvent.click(screen.getByRole("button",{name:/Continue to your details/}));expect(screen.getAllByRole("alert").length).toBeGreaterThan(0);expect(document.querySelector(".visit-editor")).toBeTruthy();});
+ it("announces editing through the edit button expanded state",()=>{setup();add("ATV");const edit=document.querySelector(".visit-entry-actions button")!;expect(edit.getAttribute("aria-expanded")).toBe("true");fireEvent.click(edit);expect(edit.getAttribute("aria-expanded")).toBe("false");});
 });

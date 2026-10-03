@@ -6,7 +6,7 @@ import type { SiteConfig } from "@/types/domain";
  * full pre-launch checklist. Do not read these values as verified.
  */
 export const siteConfig: SiteConfig = {
-  businessName: "ODIN",
+  businessName: "ON GROUND CAFE & FARM",
   address: {
     value: "88/8 Rural Road, Nong Prue, Chon Buri, Thailand",
     isMock: true,

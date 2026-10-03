@@ -42,7 +42,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   return (
     <>
       
-      <div className="hidden gap-3 lg:grid lg:grid-cols-[280px_1fr] lg:items-stretch lg:gap-8">
+      <div className="hidden gap-3 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch lg:gap-8">
       
       <div
         aria-label={tExperienceCard("bookCta")}
@@ -76,7 +76,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       </div>
 
       
-      <div className="relative min-h-[640px] overflow-hidden bg-moss">
+      <div className="relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-moss">
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
           const maxWeight = experience.restrictions.maxWeightKg;
@@ -111,7 +111,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
 
               <div
                 className={cn(
-                  "relative flex h-full flex-col justify-end p-6 sm:p-8",
+                  "relative flex h-full flex-col justify-end p-6 sm:p-10",
                   image ? "text-canvas" : "justify-between text-ink",
                 )}
               >
@@ -192,7 +192,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   aria-controls={panelId}
                   onClick={() => setActiveIndex(index)}
                   className={cn(
-                    "flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left",
+                    "flex w-full items-center justify-between gap-3 px-4 py-5 text-left",
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
                   )}
                 >
@@ -227,7 +227,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   <div className="overflow-hidden">
                     <div className="px-4 pb-4">
                       {image ? (
-                        <div className="relative mb-4 aspect-[4/5] w-full overflow-hidden rounded-button">
+                        <div className="relative mb-4 aspect-[5/6] sm:aspect-[4/3] w-full overflow-hidden rounded-button">
                           <Image
                             src={image.src}
                             alt={title}

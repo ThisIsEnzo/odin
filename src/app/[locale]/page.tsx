@@ -25,7 +25,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <section className="relative isolate bg-moss text-white">
       <HeroSlideshow images={["/images/hero/odin-hero.jpg", "/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg"]} className="absolute inset-0 overflow-hidden" />
       <div className="hero-shade pointer-events-none absolute inset-0" />
-      <Container className="hero-content relative flex min-h-[min(850px,90svh)] flex-col justify-center py-24 sm:min-h-[780px] lg:min-h-[calc(100svh-104px)]">
+      <Container className="hero-content relative flex min-h-[700px] flex-col justify-center pb-28 pt-20 sm:min-h-[760px] lg:min-h-[min(850px,calc(100svh-96px))]">
         <p className="eyebrow mb-6 text-white/85">{t("heroKicker")}</p>
         <h1 className="hero-title">{t("heroTitle")}</h1>
         <p className="mt-6 max-w-md text-base text-white/85 sm:text-lg">{t("heroSubtitle")}</p>
@@ -42,7 +42,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <span>{t("statExperiences", {count:experiences.length})}</span>
       </Container>
     </div>
-    <Section id="experiences" className="lg:py-32">
+    <Section id="experiences" className="lg:py-28">
       <Container>
         <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
           <h2>{t("experiencesHeading")}</h2>

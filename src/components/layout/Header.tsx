@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { BrandLogo } from "./BrandLogo";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
@@ -20,32 +20,25 @@ export function Header() {
   const tCommon = useTranslations("common");
 
   return (
-    <header className={`sticky top-0 z-30 border-b border-ink/10 bg-canvas/95 backdrop-blur ${scrolled ? "shadow-sm" : ""}`}>
-      <Container className={`flex items-center justify-between gap-4 transition-[min-height] duration-300 ${scrolled ? "min-h-20" : "min-h-24 lg:min-h-[104px]"}`}>
+    <header className={`ground-header sticky top-0 z-30 border-b border-cream-brand/20 ${scrolled ? "shadow-sm" : ""}`}>
+      <Container className={`flex items-center justify-between gap-3 transition-[min-height] duration-300 ${scrolled ? "min-h-20" : "min-h-22 lg:min-h-24"}`}>
         
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-display text-2xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+          className="ground-brand-zone flex shrink-0 items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
         >
-          <Image
-            src="/images/brand/odin-logo.jpg"
-            alt=""
-            width={1387}
-            height={1536}
-            className="brand-lockup"
-          />
-          <span className="sr-only">ODIN — {tCommon("logoSuffix")}</span>
+          <BrandLogo />
         </Link>
 
         <nav
           aria-label={tCommon("primaryNavigation")}
-          className="hidden items-center gap-1 xl:flex"
+          className="hidden items-center gap-0 lg:flex"
         >
           {primaryNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="border-b border-transparent px-3 py-3 text-sm font-medium text-ink/80 hover:border-terracotta hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+              className="border-b border-transparent px-2 py-3 text-[13px] font-medium text-cream-brand hover:border-cream-brand hover:text-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
             >
               {t(item.translationKey)}
             </Link>
@@ -53,10 +46,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden xl:inline-flex" />
+          <LanguageSwitcher className="hidden xl:inline-flex [&_select]:text-cream-brand [&_select]:border-cream-brand/40 [&_option]:bg-terracotta" />
           <Link
             href={bookNowItem.href}
-            className={buttonVariants({ variant: "primary", size: "sm" })}
+            className={buttonVariants({ variant: "primary", size: "sm", className: "ground-header-cta" })}
           >
             {t(bookNowItem.translationKey)}
           </Link>

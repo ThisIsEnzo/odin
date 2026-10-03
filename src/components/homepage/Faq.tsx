@@ -17,7 +17,7 @@ export function Faq() {
   return (
     <Section id="faq" tone="canvas-soft">
       <Reveal>
-        <Container className="max-w-4xl">
+        <Container className="faq-layout">
           <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
 
           <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">

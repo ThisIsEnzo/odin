@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { BrandLogo } from "./BrandLogo";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
@@ -13,32 +13,26 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-canvas/10 bg-moss-dark text-canvas">
-      <Container className="grid gap-10 py-12 break-words sm:py-16 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="ground-footer border-t border-cream-brand/20">
+      <Container className="grid gap-x-10 gap-y-12 py-16 break-words sm:py-20 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr_.8fr]">
         <div>
           
-          <Image
-            src="/images/brand/odin-logo.jpg"
-            alt={siteConfig.businessName}
-            width={1387}
-            height={1536}
-            className="mb-5 h-auto w-28"
-          />
-          <p className="font-display text-xl">{siteConfig.businessName}</p>
-          <p className="mt-2 max-w-xs text-sm text-canvas/75">{tFooter("tagline")}</p>
-          <p className="mt-4 text-sm text-canvas/75">
+          <BrandLogo full className="mb-6" />
+          <p className="sr-only">{siteConfig.businessName}</p>
+          <p className="mt-2 max-w-xs text-sm text-cream-brand/90">{tFooter("tagline")}</p>
+          <p className="mt-4 text-sm text-cream-brand/90">
             {tFooter("openDaily", { hours: `${restaurant.operatingHours.open}–${restaurant.operatingHours.close}` })}
           </p>
         </div>
 
         <nav aria-label={tFooter("navigationHeading")}>
-          <p className="text-sm font-semibold uppercase tracking-wide text-canvas/60">
+          <p className="text-sm font-semibold uppercase tracking-wide text-cream-brand/85">
             {tFooter("navigationHeading")}
           </p>
           <ul className="mt-3 space-y-2">
             {[...primaryNavItems, ...footerNavItems].map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="text-sm text-canvas/85 hover:text-canvas">
+                <Link href={item.href} className="text-sm text-cream-brand hover:text-canvas">
                   {t(item.translationKey)}
                 </Link>
               </li>
@@ -47,16 +41,16 @@ export function Footer() {
         </nav>
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-canvas/60">
+          <p className="text-sm font-semibold uppercase tracking-wide text-cream-brand/85">
             {tFooter("contactHeading")}
           </p>
-          <ul className="mt-3 space-y-2 text-sm text-canvas/85">
+          <ul className="mt-3 space-y-2 text-sm text-cream-brand">
             <li>
               <a href={`tel:${siteConfig.phone.value.replace(/\s+/g, "")}`} className="hover:text-canvas">
                 {siteConfig.phone.value}
               </a>
             </li>
-            <li>
+            <li hidden={siteConfig.email.isMock}>
               <a href={`mailto:${siteConfig.email.value}`} className="hover:text-canvas">
                 {siteConfig.email.value}
               </a>
@@ -69,13 +63,13 @@ export function Footer() {
                 WhatsApp
               </a>
             </li>
-            <li>
+            <li hidden={siteConfig.line.isMock}>
               <a href={`https://line.me/ti/p/~${siteConfig.line.value.replace("@", "")}`} className="hover:text-canvas">
                 LINE {siteConfig.line.value}
               </a>
             </li>
-            <li className="pt-1 text-canvas/70">{siteConfig.address.value}</li>
-            <li className="text-canvas/70">
+            <li className="pt-1 text-cream-brand/90">{siteConfig.address.value}</li>
+            <li className="text-cream-brand/90">
               {tFooter("distanceFromPattaya", { distance: siteConfig.locationDistanceFromPattaya })}
             </li>
           </ul>
@@ -83,12 +77,12 @@ export function Footer() {
 
         <div className="flex flex-col gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-canvas/60">
+            <p className="text-sm font-semibold uppercase tracking-wide text-cream-brand/85">
               {tFooter("languageHeading")}
             </p>
-            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-canvas [&_select]:border-canvas/40 [&_select:focus-visible]:outline-canvas [&_option]:bg-moss-dark" />
+            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-cream-brand [&_select]:border-cream-brand/40 [&_select:focus-visible]:outline-cream-brand [&_option]:bg-terracotta" />
           </div>
-          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-canvas/75">
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-cream-brand/90">
             {legalNavItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-canvas">
@@ -100,9 +94,9 @@ export function Footer() {
         </div>
       </Container>
 
-      <div className="border-t border-canvas/10 py-4">
+      <div className="border-t border-cream-brand/20 py-4">
         <Container>
-          <p className="text-xs text-canvas/60">
+          <p className="text-xs text-cream-brand/85">
             © {year} {siteConfig.businessName}. {tFooter("rightsReserved")}
           </p>
         </Container>

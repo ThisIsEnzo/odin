@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
-import { Parallax } from "@/components/motion/Parallax";
 import { gallery as galleryItems } from "@/data/odin/gallery";
 import { GalleryLightbox } from "./GalleryLightbox";
 
@@ -33,8 +32,6 @@ export function Gallery() {
   const resolveSrc = (index: number) => galleryImageOverrides[index] ?? galleryItems[index]?.src;
   const resolveFocus = (index: number) => galleryImageFocus[index] ?? "center";
 
-  const [featured, ...rest] = galleryItems;
-  if (!featured) return null;
 
   const lightboxItems = galleryItems.map((item, index) => ({
     key: item.id,
@@ -65,7 +62,7 @@ export function Gallery() {
               type="button"
               onClick={() => setOpenIndex(index)}
               aria-label={t(item.altTranslationKey)}
-              className="relative h-80 w-[82%] shrink-0 snap-center overflow-hidden rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+              className="relative h-[400px] w-[88%] shrink-0 snap-center overflow-hidden rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
             >
               <Image
                 src={resolveSrc(index) ?? item.src}
@@ -80,59 +77,13 @@ export function Gallery() {
         </div>
 
         
-        <div className="mt-10 hidden sm:block">
-          <div className="grid grid-cols-6 auto-rows-[170px] gap-4 lg:auto-rows-[240px]">
-            <Reveal
-              variant="scale"
-              className="group relative col-span-3 row-span-2 overflow-hidden rounded-card"
-            >
-              <button
-                type="button"
-                onClick={() => setOpenIndex(0)}
-                aria-label={t(featured.altTranslationKey)}
-                className="absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
-              >
-                <Parallax strength={22} className="absolute -inset-6">
-                  <Image
-                    src={resolveSrc(0) ?? featured.src}
-                    alt={t(featured.altTranslationKey)}
-                    fill
-                    sizes="(min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    style={{ objectPosition: resolveFocus(0) }}
-                  />
-                </Parallax>
-              </button>
-            </Reveal>
-
-            {rest.map((item, restIndex) => {
-              const index = restIndex + 1;
-              return (
-                <Reveal
-                  key={item.id}
-                  variant="scale"
-                  delayMs={Math.min((restIndex + 1) * 60, 240)}
-                  className={`group relative overflow-hidden ${restIndex === 0 || restIndex === 3 ? "col-span-2" : "col-span-1"}`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(index)}
-                    aria-label={t(item.altTranslationKey)}
-                    className="absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
-                  >
-                    <Image
-                      src={resolveSrc(index) ?? item.src}
-                      alt={t(item.altTranslationKey)}
-                      fill
-                      sizes="(min-width: 640px) 25vw, 100vw"
-                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                      style={{ objectPosition: resolveFocus(index) }}
-                    />
-                  </button>
-                </Reveal>
-              );
-            })}
-          </div>
+        <div className="gallery-editorial mt-10 hidden gap-5 sm:grid">
+          {galleryItems.map((item, index) => <Reveal key={item.id} variant="scale" className={`gallery-frame gallery-frame-${index}`}>
+            <button type="button" onClick={() => setOpenIndex(index)} aria-label={t(item.altTranslationKey)} className="group relative block h-full w-full overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-moss">
+              <Image src={resolveSrc(index) ?? item.src} alt={t(item.altTranslationKey)} fill sizes={index === 0 || index > 2 ? "(min-width: 1440px) 580px, 50vw" : "25vw"} className="object-cover transition-transform duration-700 group-hover:scale-[1.03] motion-reduce:transform-none" style={{objectPosition: resolveFocus(index)}} />
+              <span aria-hidden="true" className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-ink/30 text-white">↗</span>
+            </button>
+          </Reveal>)}
         </div>
 
         <GalleryLightbox items={lightboxItems} openIndex={openIndex} onOpenIndexChange={setOpenIndex} />

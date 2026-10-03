@@ -47,9 +47,9 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
   const format = useFormatter();
 
   return (
-    <article className="grid gap-5 py-10 lg:grid-cols-[80px_1fr]">
-      <span aria-hidden="true" className="text-4xl font-light text-terracotta/50">0{index + 1}</span>
-      <div className="grid gap-x-12 lg:grid-cols-[1fr_260px]">
+    <article className="grid grid-cols-[36px_minmax(0,1fr)] gap-4 py-10 sm:py-12 lg:grid-cols-[64px_minmax(0,1fr)]">
+      <span aria-hidden="true" className="pt-1 text-lg font-normal tabular-nums text-terracotta/70">0{index + 1}</span>
+      <div className="grid gap-x-12 lg:grid-cols-[minmax(0,1fr)_250px]">
         <div>
         <h3 className="text-2xl sm:text-3xl">{t("title")}</h3>
         <p className="mt-4 max-w-xl text-ink/70">{t("description")}</p>

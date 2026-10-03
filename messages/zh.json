@@ -1,8 +1,8 @@
 {
   "meta": {
-    "siteName": "ODIN",
-    "defaultTitle": "ODIN — 芭堤雅附近的农场与度假体验",
-    "description": "在 ODIN 骑马、探索、放松、用餐 — 一处距离泰国芭堤雅约 20 公里的乡村农场与度假胜地。"
+    "siteName": "ON GROUND CAFE & FARM",
+    "defaultTitle": "ON GROUND CAFE & FARM — 芭堤雅附近的农场与度假体验",
+    "description": "在 ON GROUND CAFE & FARM 骑马、探索、放松、用餐 — 一处距离泰国芭堤雅约 20 公里的乡村农场与度假胜地。"
   },
   "common": {
     "logoSuffix": "芭堤雅附近的农场与度假体验",
@@ -47,7 +47,7 @@
     "statExperiencesLabel": "体验项目数量",
     "statExperiences": "{count} 项特色体验",
     "experiencesHeading": "体验项目",
-    "experiencesIntro": "在 ODIN 度过一天的四种方式，每一种都有自己的节奏。",
+    "experiencesIntro": "在 ON GROUND 度过一天的四种方式，每一种都有自己的节奏。",
     "heroPrevSlide": "上一张",
     "heroNextSlide": "下一张",
     "heroGoToSlide": "跳转到第 {number} 张",
@@ -79,9 +79,9 @@
     "bookCta": "预订此体验项目"
   },
   "whyOdin": {
-    "kicker": "为什么选择 ODIN",
+    "kicker": "为什么选择 ON GROUND",
     "heading": "一座真实运营的农场，而非主题乐园",
-    "lead": "ODIN 将开阔的乡村与舒缓的节奏结合在一起 — 白天骑行探索，傍晚放松身心，最后在同一片土地上的餐桌前收尾，而不是另一个独立附加的项目。",
+    "lead": "ON GROUND 将开阔的乡村与舒缓的节奏结合在一起 — 白天骑行探索，傍晚放松身心，最后在同一片土地上的餐桌前收尾，而不是另一个独立附加的项目。",
     "distanceNote": "距芭堤雅 {distance} — 近到可以当日往返，又足够远，能感受到乡村的氛围。",
     "pillarRide": {
       "title": "骑行与探索",
@@ -126,9 +126,9 @@
   },
   "packages": {
     "heading": "套餐",
-    "intro": "几种将 ODIN 体验项目组合成一天行程的方式。",
+    "intro": "几种将 ON GROUND 体验项目组合成一天行程的方式。",
     "includesRestaurant": "含餐厅用餐",
-    "mockNote": "价格为参考价，需经 ODIN 确认。",
+    "mockNote": "价格为参考价，需经 ON GROUND 确认。",
     "cta": "咨询该套餐",
     "familyDay": {
       "title": "家庭日",
@@ -173,11 +173,11 @@
   "reviews": {
     "heading": "宾客故事",
     "comingSoonTitle": "宾客故事即将上线",
-    "comingSoonBody": "ODIN 才刚刚开始接待宾客 — 真实的到访故事将在后续陆续呈现。"
+    "comingSoonBody": "ON GROUND 才刚刚开始接待宾客 — 真实的到访故事将在后续陆续呈现。"
   },
   "location": {
     "heading": "位置",
-    "body": "ODIN 位于乡村地区，距芭堤雅 {distance}。路线和地图链接将在开业前提供。",
+    "body": "ON GROUND 位于乡村地区，距芭堤雅 {distance}。",
     "distanceBadge": "距芭堤雅 {distance}",
     "mapPlaceholder": "地图预览即将推出",
     "openInMaps": "在 Google 地图中打开"
@@ -194,13 +194,13 @@
         "answer": "建议穿着舒适的衣物和包头鞋。特定体验项目的具体要求会列在该项目的页面上。"
       },
       "gettingThere": {
-        "question": "如何前往 ODIN？",
-        "answer": "ODIN 距芭堤雅约 {distance}。请查看位置页面获取路线和地图链接。"
+        "question": "如何前往 ON GROUND？",
+        "answer": "ON GROUND 距芭堤雅约 {distance}。请查看位置页面获取路线和地图链接。"
       }
     }
   },
   "finalCta": {
-    "heading": "准备好安排您在 ODIN 的一天了吗？",
+    "heading": "准备好安排您在 ON GROUND 的一天了吗？",
     "body": "提交申请，我们的团队会直接与您确认可预订时间。",
     "primaryCta": "立即预订",
     "secondaryCta": "查看体验项目"
@@ -298,9 +298,9 @@
       "options": "附加选项",
       "selected": "已选项目",
       "packages": "套餐",
-      "packageNotice": "套餐内容和价格仅为示例，ODIN 将与您核实详情。",
+      "packageNotice": "套餐内容和价格仅为示例，ON GROUND 将与您核实详情。",
       "restaurant": "餐厅",
-      "restaurantNotice": "已包含餐厅。时间和具体安排将由 ODIN 与您协商。",
+      "restaurantNotice": "已包含餐厅。时间和具体安排将由 ON GROUND 与您协商。",
       "edit": "编辑",
       "duplicate": "复制",
       "remove": "移除",
@@ -310,7 +310,7 @@
       "contactPreference": "首选联系方式",
       "noPreference": "无偏好",
       "contactIdentity": "LINE ID 或 WhatsApp 号码",
-      "reviewNotice": "这是一份申请，ODIN 将联系您确认是否可安排。",
+      "reviewNotice": "这是一份申请，ON GROUND 将联系您确认是否可安排。",
       "channels": {
         "phone": "电话",
         "email": "电子邮箱",

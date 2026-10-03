@@ -12,7 +12,7 @@ export function WhyOdin() {
 
   return (
     <Section tone="canvas">
-      <Container className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-16">
+      <Container className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-16">
         <Reveal variant="left">
           <div>
             <Badge variant="moss" className="mb-4">
@@ -29,7 +29,7 @@ export function WhyOdin() {
         </Reveal>
 
         <Reveal variant="right" delayMs={80}>
-          <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-1">
+          <div className="grid gap-8">
             <div className="border-t border-ink/20 pt-5">
               <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-terracotta">01</span>{t("pillarRide.title")}</h3>
               <p className="mt-1.5 text-sm text-ink/70">{t("pillarRide.description")}</p>
@@ -47,8 +47,8 @@ export function WhyOdin() {
       </Container>
 
       
-      <Container className="mt-10 border-t border-ink/10 pt-6">
-        <p className="text-sm text-ink/60">
+      <Container className="mt-12">
+        <p className="border-t border-ink/15 pt-6 text-sm text-ink/60">
           {t("experienceCount", { count: experiences.length })}
         </p>
       </Container>

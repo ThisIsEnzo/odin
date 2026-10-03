@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 
 export interface RequestReceivedProps {
   bookingId: string;
@@ -16,15 +16,17 @@ export interface RequestReceivedProps {
  */
 export function RequestReceived({ bookingId }: RequestReceivedProps) {
   const t = useTranslations("booking");
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { heading.current?.focus(); }, []);
 
   return (
-    <div className="text-center">
-      <Badge variant="moss" className="mb-4">
+    <div className="booking-surface mx-auto max-w-2xl py-12 text-center">
+      <p className="eyebrow text-terracotta mb-6">
         {t("success.badge")}
-      </Badge>
-      <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("success.title")}</h2>
+      </p>
+      <h1 ref={heading} tabIndex={-1}>{t("success.title")}</h1>
       <p className="mx-auto mt-3 max-w-md text-ink/75">{t("success.body")}</p>
-      <p className="mt-4 break-all text-sm text-ink/50">{t("success.reference", { id: bookingId })}</p>
+      <p className="mt-8 border-y border-ink/15 py-5 break-all text-sm text-ink/75">{t("success.reference", { id: bookingId })}</p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
         <Link href="/" className={buttonVariants({ variant: "primary" })}>

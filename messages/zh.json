@@ -317,6 +317,32 @@
         "line": "LINE",
         "whatsapp": "WhatsApp"
       }
+    },
+    "ux": {
+      "empty": "选择体验或套餐，开始规划您的行程。",
+      "package": "套餐",
+      "ready": "可供核对",
+      "needsDetails": "待填写详情",
+      "addAnother": "添加另一项体验",
+      "pending": "{count} 项待填写详情",
+      "summary": "您的行程概览",
+      "count": "{count} 项体验",
+      "addedCount": "已添加至行程 · {count}",
+      "editInVisit": "编辑行程中的体验",
+      "add": "添加至行程",
+      "addAgain": "再次添加",
+      "inPackage": "您的套餐也包含此体验",
+      "together": "一起体验",
+      "includes": "包含",
+      "addedName": "已将{name}添加至行程。请在下方填写详情。",
+      "experience": "体验",
+      "editing": "正在编辑",
+      "stage0": "选择单项体验或套餐。每次添加都会成为行程的一部分。",
+      "stage1": "为每项体验安排日期、时间和人数。",
+      "stage2": "请留下联系方式，以便我们与您沟通行程。",
+      "stage3": "发送申请前，请核对您的行程。",
+      "reviewCta": "核对申请",
+      "detailsCta": "填写联系方式"
     }
   }
 }

@@ -38,7 +38,7 @@ function FaqRow({ item }: { item: FAQItem }) {
     <details className="group py-6 sm:py-8">
       <summary
         className={
-          "flex cursor-pointer list-none items-center justify-between gap-4 " +
+          "flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 " +
           "font-display text-lg text-ink marker:content-none " +
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
         }

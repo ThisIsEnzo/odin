@@ -111,6 +111,7 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
         <Dialog.Overlay className="fixed inset-0 z-50 bg-ink/90" />
         <Dialog.Content
           aria-label={current ? current.alt : undefined}
+          aria-describedby={undefined}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 outline-none sm:p-8"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -126,7 +127,7 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
               type="button"
               aria-label={t("close")}
               className={cn(
-                "absolute right-4 top-4 z-10 rounded-full bg-canvas/10 p-2.5 text-canvas backdrop-blur-sm",
+                "absolute right-4 top-4 z-10 min-h-11 min-w-11 rounded-full bg-canvas/10 p-2.5 text-canvas backdrop-blur-sm",
                 "hover:bg-canvas/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas",
               )}
             >

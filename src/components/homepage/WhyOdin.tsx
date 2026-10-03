@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/motion/Reveal";
 import { siteConfig } from "@/data/odin/site";
 import { experiences } from "@/data/odin/experiences";
@@ -15,9 +14,9 @@ export function WhyOdin() {
       <Container className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-16">
         <Reveal variant="left">
           <div>
-            <Badge variant="moss" className="mb-4">
+            <p className="eyebrow mb-4 text-terracotta">
               {t("kicker")}
-            </Badge>
+            </p>
             <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl">
               {t("heading")}
             </h2>

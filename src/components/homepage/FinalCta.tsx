@@ -11,7 +11,7 @@ export function FinalCta() {
   const home = useTranslations("home");
 
   return (
-    <section className="relative isolate bg-moss py-28 text-canvas sm:py-40">
+    <section className="surface-inverse relative isolate bg-moss py-28 text-canvas sm:py-40">
       <Image src="/images/hero/odin-hero-2.jpg" alt="" fill sizes="100vw" className="-z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-moss-dark/65" />
       <Reveal>
@@ -22,7 +22,7 @@ export function FinalCta() {
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Reveal delayMs={0}>
-              <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>
+              <Link href="/book" className={buttonVariants({ variant: "inverse", size: "lg" })}>
                 {t("primaryCta")}
               </Link>
             </Reveal>

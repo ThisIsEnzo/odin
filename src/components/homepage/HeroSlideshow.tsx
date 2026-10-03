@@ -123,7 +123,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
             <ChevronRight aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
-          <button type="button" onClick={togglePause} aria-label={t(paused ? "heroPlay" : "heroPause")} className="absolute bottom-5 hero-control-pause z-20 flex h-11 w-11 items-center justify-center border border-white/40 bg-ink/30 text-white hover:bg-ink/50">{paused ? <Play size={16} aria-hidden="true"/> : <Pause size={16} aria-hidden="true"/>}</button>
+          <button type="button" onClick={togglePause} aria-label={t(paused ? "heroPlay" : "heroPause")} className="absolute bottom-5 hero-control-pause z-20 focus-visible:outline-canvas flex h-11 w-11 items-center justify-center border border-white/40 bg-ink/30 text-white hover:bg-ink/50">{paused ? <Play size={16} aria-hidden="true"/> : <Pause size={16} aria-hidden="true"/>}</button>
           <div className="absolute hero-controls-start bottom-5 z-20 flex items-center gap-1">
             {images.map((src, index) => (
               <button
@@ -133,7 +133,7 @@ export function HeroSlideshow({ images, className }: HeroSlideshowProps) {
                 aria-label={t("heroGoToSlide", { number: index + 1 })}
                 aria-current={index === activeIndex}
                 className={cn(
-                  "flex h-11 w-10 items-center justify-center border-b-2 text-xs transition-colors",
+                  "flex h-11 w-11 items-center justify-center border-b-2 text-xs transition-colors",
                   index === activeIndex ? "border-white text-white" : "border-white/25 text-white/70 hover:text-white",
                 )}
               >{String(index + 1).padStart(2, "0")}</button>

@@ -29,7 +29,7 @@ export function CustomerStep({
 
   return (
     <div>
-      <h2 className="font-display text-xl text-ink sm:text-2xl">{t("steps.details")}</h2>
+      <h2 className="sr-only">{t("steps.details")}</h2>
 
       <div className="mt-6 grid gap-6">
         <div>
@@ -45,13 +45,13 @@ export function CustomerStep({
             aria-invalid={nameError ? true : undefined}
             aria-describedby={nameError ? "booking-name-error" : undefined}
             className={cn(
-              "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
+              "form-control",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-              nameError ? "border-saddle" : "border-ink/20",
+              nameError ? "border-error" : "border-ink/20",
             )}
           />
           {nameError && (
-            <p id="booking-name-error" role="alert" className="mt-1.5 text-sm text-saddle">
+            <p id="booking-name-error" role="alert" className="mt-1.5 text-sm text-error">
               {nameError}
             </p>
           )}
@@ -71,13 +71,13 @@ export function CustomerStep({
               aria-invalid={emailError ? true : undefined}
               aria-describedby={emailError ? "booking-email-error" : undefined}
               className={cn(
-                "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
+                "form-control",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-                emailError ? "border-saddle" : "border-ink/20",
+                emailError ? "border-error" : "border-ink/20",
               )}
             />
             {emailError && (
-              <p id="booking-email-error" role="alert" className="mt-1.5 text-sm text-saddle">
+              <p id="booking-email-error" role="alert" className="mt-1.5 text-sm text-error">
                 {emailError}
               </p>
             )}
@@ -96,13 +96,13 @@ export function CustomerStep({
               aria-invalid={phoneError ? true : undefined}
               aria-describedby={phoneError ? "booking-phone-error" : undefined}
               className={cn(
-                "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
+                "form-control",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-                phoneError ? "border-saddle" : "border-ink/20",
+                phoneError ? "border-error" : "border-ink/20",
               )}
             />
             {phoneError && (
-              <p id="booking-phone-error" role="alert" className="mt-1.5 text-sm text-saddle">
+              <p id="booking-phone-error" role="alert" className="mt-1.5 text-sm text-error">
                 {phoneError}
               </p>
             )}
@@ -120,7 +120,7 @@ export function CustomerStep({
             value={notes}
             onChange={(e) => onChange("notes", e.target.value)}
             className={cn(
-              "mt-2 w-full rounded-button border border-ink/20 bg-transparent px-3 py-2.5 text-ink",
+              "form-control",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
             )}
           />

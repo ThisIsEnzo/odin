@@ -317,6 +317,32 @@
         "line": "LINE",
         "whatsapp": "WhatsApp"
       }
+    },
+    "ux": {
+      "empty": "Choose an experience or package to begin your visit.",
+      "package": "Package",
+      "ready": "Ready to review",
+      "needsDetails": "Details needed",
+      "addAnother": "Add another experience",
+      "pending": "{count} items need details",
+      "summary": "Your visit summary",
+      "count": "{count} experiences",
+      "addedCount": "Added to your visit · {count}",
+      "editInVisit": "Edit in your visit",
+      "add": "Add to your visit",
+      "addAgain": "Add again",
+      "inPackage": "Also included in your package",
+      "together": "Enjoy together",
+      "includes": "Includes",
+      "addedName": "{name} added to your visit. Set the details below.",
+      "experience": "Experience",
+      "editing": "Currently editing",
+      "stage0": "Choose individual experiences or a package. Each addition becomes part of your visit.",
+      "stage1": "Set the date, time and guests for each experience.",
+      "stage2": "Let us know how to reach you about your visit.",
+      "stage3": "Check your visit before sending your request.",
+      "reviewCta": "Review request",
+      "detailsCta": "Continue to your details"
     }
   }
 }

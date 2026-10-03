@@ -88,8 +88,8 @@ export function GuestsStep({
             />
             <p id="booking-weight-help" className="mt-1.5 text-sm text-ink/60">
               {minWeightKg !== undefined
-                ? t("fields.weightHelpRange", { min: minWeightKg, max: maxWeightKg, experience: experienceName })
-                : t("fields.weightHelpMax", { max: maxWeightKg, experience: experienceName })}
+                ? t("fields.weightHelpRange", { min: minWeightKg, max: maxWeightKg ?? "", experience: experienceName })
+                : t("fields.weightHelpMax", { max: maxWeightKg ?? "", experience: experienceName })}
             </p>
             {weightError && (
               <p id="booking-weight-error" role="alert" className="mt-1.5 text-sm text-saddle">

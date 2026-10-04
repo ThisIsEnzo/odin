@@ -107,3 +107,7 @@ Everything below must be explicitly resolved — not left as-is — before this 
 - [ ] Days-closed / blackout-dates assumption (7 days/week) confirmed with ODIN
 - [ ] Guest-count upper bound per booking type confirmed, or explicitly left unbounded
 - [ ] Persistence + email provider chosen and provisioned with real credentials (`ARCHITECTURE.md` §15)
+
+## Final release cleanup (supersedes old presentation notes)
+
+All four experiences have empty approved `durationOptions`. No duration-price pairs or quantity bases were supplied, and no hourly interpolation is permitted. Legacy mock activity/package numbers remain historical data only; public UI hides numeric mock prices and shows manager confirmation. Mock phone/email/LINE/WhatsApp/address/map links are not rendered. Package content remains explicitly illustrative. Missing legal/informational routes are removed from navigation. Real existing photography and ON GROUND branding are already in use; the old Phase 0 photography/business-name notes above are historical.

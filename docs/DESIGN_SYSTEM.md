@@ -76,3 +76,13 @@ Desktop has a sticky “Your visit” summary at 112px from the viewport top, in
 Four restrained numbered progress labels identify Choose, Plan your visit, Your details and Review. The primary action progresses to details, review or submission; add-another is secondary; edit/duplicate/remove/back are tertiary. Review groups the visit by package/experience with dates, times, guests, weights, options, contact details and notes. Receipt remains **request received**, includes the returned reference and focuses its heading. No confirmation, payment or guaranteed-availability semantics are introduced.
 
 The UI uses native buttons, labels and date/select controls; edit controls expose expanded state, validation errors retain their associations, and stage headings receive keyboard focus. New presentation adds no animation framework or independent motion effects.
+
+## Duration and estimated-price presentation
+
+Activity editing follows date/start time → duration → guests → rider weights. Approved duration tiers render as square editorial button choices, with minute label and locale-formatted THB price/unit, a terracotta selected rule and check, and `aria-pressed`. Package component choices say included rather than implying a standalone surcharge. Changing duration updates estimates and clears an invalid late start.
+
+There are currently **no approved tiers**. Instead of fabricated buttons, each duration field shows “Duration to be agreed” and an explanation that the manager will agree duration and price. Item subtotals, desktop Your Visit, the collapsed mobile summary and Review show “Manager to confirm”. A mixed known/unknown visit never shows a partial sum as its total. Numeric tiers are exercised only by synthetic test fixtures.
+
+`.visit-estimate` uses a divider, restrained label/amount and the visible final-price-manager notice. Currency uses next-intl number formatting; minute labels use localized messages. Review uses a two-column detail grid on small screens and four columns from 640px. No checkout/payment styling is introduced.
+
+The single shared primary navigation is Experiences → Packages → Restaurant → Gallery → Location. Unavailable About/Contact/Privacy/Terms destinations are absent. Mock contact/address/map destinations and numeric mock prices are not rendered. Restaurant links to visit planning, with no table-reservation claim. Skip navigation is localized.

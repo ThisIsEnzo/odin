@@ -34,6 +34,7 @@ it('migrates and round-trips duration plus immutable server price snapshot and o
 it('preserves pending estimates and nullable duration without promoting mock prices',async()=>{
  const d=draft();if(d.items[0]?.type==='activity')delete d.items[0].durationMinutes;
  const saved=await repo.create(d,{idempotencyKey:crypto.randomUUID()});expect(saved.estimate?.amount).toBeNull();expect(await repo.getById(saved.id)).toEqual(saved);
+ const [event]=await db.select().from(schema.notificationOutbox).where(eq(schema.notificationOutbox.bookingId,saved.id));expect(event?.payload.text).toContain("Duration: manager to confirm");expect(event?.payload.text).toContain("Estimated total: manager to confirm");
 });
 it('rejects nonpositive stored durations at the database boundary',async()=>{
  const d=draft();if(d.items[0]?.type==='activity')d.items[0].durationMinutes=0;

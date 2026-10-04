@@ -83,7 +83,7 @@
   },
   "whyOdin": {
     "kicker": "Why ON GROUND",
-    "heading": "A working farm, not a theme park",
+    "heading": "A day in the countryside",
     "lead": "ON GROUND pairs open countryside with a slower pace — ride and explore by day, unwind by evening, and finish at a table that's part of the same place, not a separate attraction bolted on beside it.",
     "distanceNote": "{distance} from Pattaya — close enough for a day trip, far enough to feel like the countryside.",
     "pillarRide": {
@@ -92,11 +92,11 @@
     },
     "pillarRest": {
       "title": "Slow Down",
-      "description": "A wood-fired sauna to unwind after a day outdoors."
+      "description": "Unwind in the sauna after a day outdoors."
     },
     "pillarTable": {
       "title": "A Table Waiting",
-      "description": "Farm-to-table dining to close out the day."
+      "description": "Stay for a meal at the restaurant."
     },
     "experienceCount": "{count} signature experiences, each bookable on its own or as part of a package."
   },
@@ -106,7 +106,9 @@
       "child": "per child",
       "vehicle": "per vehicle",
       "family": "per family",
-      "couple": "per couple"
+      "couple": "per couple",
+      "activity": "per activity",
+      "group": "per group"
     }
   },
   "notFound": {
@@ -131,7 +133,7 @@
     "heading": "Packages",
     "intro": "A few ways to combine ON GROUND's experiences into a single day.",
     "includesRestaurant": "Includes restaurant",
-    "mockNote": "Indicative pricing — subject to confirmation with ON GROUND.",
+    "mockNote": "Package contents and prices are illustrative and need confirmation.",
     "cta": "Request this package",
     "familyDay": {
       "title": "Family Day",

@@ -25,7 +25,7 @@ export type ExperienceRestrictions = {
 
 export type Currency = "THB";
 
-export type PricingUnit = "person" | "child" | "vehicle" | "family" | "couple";
+export type PricingUnit = "person" | "child" | "vehicle" | "family" | "couple" | "activity" | "group";
 
 export type Money = {
   amount: number;
@@ -41,6 +41,27 @@ export type MockFlag = {
 
 export type ExperienceId = "horse-riding" | "pony-riding" | "atv" | "sauna";
 
+/** Only confirmed tiers belong here; slot intervals are not durations. */
+export interface DurationOption {
+  durationMinutes: number;
+  price: Money;
+  /** Explicit billing quantity: never infer vehicles/groups from guest count. */
+  quantityBasis: "participant" | "booking";
+}
+export interface EstimateLine {
+  itemId: string;
+  amount: number | null;
+  durationMinutes?: number;
+  unitAmount?: number;
+  quantity?: number;
+  unit?: PricingUnit;
+}
+export interface BookingEstimate {
+  version: 1;
+  currency: Currency;
+  amount: number | null;
+  items: EstimateLine[];
+}
 export interface Experience {
   id: ExperienceId;
   slug: string;
@@ -54,6 +75,7 @@ export interface Experience {
   requiresWeight: boolean;
   /** Only set after business confirmation; never inferred from slot interval. */
   durationMinutes?: number;
+  durationOptions?: DurationOption[];
   gallerySlugs: string[];
   mock: {
     price: MockFlag;
@@ -69,6 +91,8 @@ export interface Package {
   includesRestaurant: boolean;
   price: Money;
   mock: MockFlag;
+  /** Explicit confirmed package billing basis; components never charged separately. */
+  estimateBasis?: "package" | "participant";
 }
 
 export interface RestaurantInfo {
@@ -125,6 +149,8 @@ export interface ActivityBookingItem {
   experienceId: ExperienceId;
   date: string;
   time: string;
+  /** Absent only when no approved duration tiers are available. */
+  durationMinutes?: number;
   /** Count is derived from this array, never duplicated in the persisted model. */
   participants: BookingParticipant[];
   options: BookingOptionSelection[];
@@ -154,6 +180,8 @@ export interface BookingDraft {
   locale: Locale;
 }
 export interface BookingRequest extends BookingDraft {
+  /** Server-derived immutable estimate at initial receipt; absent on legacy rows. */
+  estimate?: BookingEstimate;
   /** Server-generated public reference; optional only for legacy fixtures. */
   reference?: string;
   id: string;

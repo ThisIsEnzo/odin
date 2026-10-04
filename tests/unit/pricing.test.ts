@@ -1,0 +1,34 @@
+import {describe,it,expect,vi} from 'vitest';
+import {catalog,packageCatalog,activity,draft} from '../fixtures/pricing';
+import {calculateActivityEstimate,calculateBookingEstimate} from '@/lib/booking/pricing';
+import {availableTimeSlots,validateVisit} from '@/lib/booking/rules';
+import {createPackage} from '@/lib/booking/itinerary';
+import {experiences} from '@/data/odin/experiences';
+import {packages} from '@/data/odin/packages';
+import {bookingSchema} from '@/lib/validation/booking.schema';
+import {InMemoryBookingRepository} from '@/lib/booking/repository';
+import {primaryNavItems,footerNavItems,legalNavItems} from '@/lib/nav-items';
+import {buildBookingNotificationPayload} from '@/lib/booking/notify';
+
+describe('canonical duration pricing (synthetic fixtures)',()=>{
+ it('accepts an allowed tier',()=>expect(validateVisit([activity()],catalog,packageCatalog)).toEqual([]));
+ it('rejects an arbitrary duration',()=>expect(validateVisit([activity('atv',75)],catalog,packageCatalog)).toEqual(expect.arrayContaining([expect.objectContaining({key:'invalidDuration'})])));
+ it('requires a duration once approved tiers exist',()=>{const a=activity();delete a.durationMinutes;expect(validateVisit([a],catalog,packageCatalog).some(i=>i.key==='invalidDuration')).toBe(true);});
+ it('rejects numeric durations when no approved tiers exist',()=>expect(bookingSchema.safeParse(draft()).success).toBe(false));
+ it('rejects a tier with invalid canonical price',()=>{const c=structuredClone(catalog);c[2]!.durationOptions![0]!.price.amount=NaN;expect(validateVisit([activity()],c,packageCatalog).some(i=>i.key==='invalidDuration')).toBe(true);});
+ it('filters latest start by duration; permits finishing at closing',()=>{const e=catalog.find(e=>e.id==='horse-riding')!;expect(availableTimeSlots(e,60).at(-1)).toBe('17:00');expect(availableTimeSlots(e,90).at(-1)).toBe('16:00');expect(availableTimeSlots(e,90)).not.toContain('18:00');});
+ it('server rejects overrunning and off-grid starts',()=>{const a=activity('horse-riding',90);for(const time of ['17:00','16:30','18:00']){a.time=time;expect(validateVisit([a],catalog,packageCatalog).some(i=>i.path.at(-1)==='time')).toBe(true);}});
+ it('looks up exact canonical price and explicit per-person quantity',()=>expect(calculateActivityEstimate(activity('atv',90,3),catalog)).toMatchObject({amount:525,unitAmount:175,quantity:3,durationMinutes:90}));
+ it('does not use client supplied price',()=>{const a={...activity(),price:1,amount:1};expect(calculateActivityEstimate(a,catalog).amount).toBe(200);});
+ it('does not infer vehicle quantity from guests',()=>{const c=structuredClone(catalog);c[2]!.durationOptions![0]!.quantityBasis='booking';c[2]!.durationOptions![0]!.price.unit='vehicle';expect(calculateActivityEstimate(activity('atv',60,5),c)).toMatchObject({quantity:1,amount:100});});
+ it('sums multiple activities',()=>expect(calculateBookingEstimate([activity(),activity('sauna',90)],catalog,packageCatalog).amount).toBe(550));
+ it('uses fixed package plus extra without charging package components',()=>{const p=createPackage('couple-escape');p.components=p.components.map(a=>activity(a.experienceId,90,3));expect(calculateBookingEstimate([p,activity()],catalog,packageCatalog).amount).toBe(700);});
+ it('leaves mock package prices pending',()=>expect(calculateBookingEstimate([createPackage('family-day')],catalog,packages).amount).toBeNull());
+ it('does not show partial total as full estimate',()=>{const a=activity();delete a.durationMinutes;expect(calculateBookingEstimate([activity(),a],catalog,packageCatalog).amount).toBeNull();});
+ it('does not reuse legacy mock prices',()=>expect(calculateBookingEstimate([activity()],experiences,packages).amount).toBeNull());
+ it('requires explicit package quantity basis and consistent per-person counts',()=>{const p=createPackage('couple-escape');p.components=p.components.map((a,i)=>activity(a.experienceId,60,i+1));const c=structuredClone(packageCatalog);c[2]!.estimateBasis='participant';expect(calculateBookingEstimate([p],catalog,c).amount).toBeNull();delete c[2]!.estimateBasis;expect(calculateBookingEstimate([p],catalog,c).amount).toBeNull();});
+ it('does not silently omit unpriced options',()=>{const a=activity();a.options=[{optionId:'future',quantity:1}];expect(calculateActivityEstimate(a,catalog).amount).toBeNull();});
+ it('schema strips untrusted estimate fields',()=>{const d=draft();delete (d.items[0] as ReturnType<typeof activity>).durationMinutes;const r=bookingSchema.parse({...d,estimate:{amount:1},price:1});expect(r).not.toHaveProperty('estimate');expect(r).not.toHaveProperty('price');});
+ it('memory snapshot and idempotent replay preserve submitted estimate after catalog changes',async()=>{vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue(catalog[2]!.durationOptions);try{const repo=new InMemoryBookingRepository(),d=draft(),key=crypto.randomUUID();const saved=await repo.create(d,{idempotencyKey:key});expect(saved.estimate?.amount).toBe(200);const newer=structuredClone(catalog[2]!.durationOptions!);newer[0]!.price.amount=999;vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue(newer);expect((await repo.create(d,{idempotencyKey:key})).estimate?.amount).toBe(200);expect((await repo.getById(saved.id))?.items).toEqual(d.items);expect(buildBookingNotificationPayload(saved).text).toContain('Duration: 60 minutes');expect(buildBookingNotificationPayload(saved).text).toContain('Estimated total: 200 THB');}finally{vi.restoreAllMocks();}});
+ it('uses the required shared navigation order and only available routes',()=>{expect(primaryNavItems.map(i=>i.translationKey)).toEqual(['experiences','packages','restaurant','gallery','location']);expect([...footerNavItems,...legalNavItems].every(i=>i.href.startsWith('/#'))).toBe(true);});
+});

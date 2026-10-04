@@ -11,7 +11,7 @@ const options = z.array(z.object({ optionId: id, quantity: z.number().int("inval
 const participant = z.object({ id, weightKg: z.number().positive("weightRequired").optional() });
 export const activityShape = z.object({
   id, type: z.literal("activity"), experienceId: z.enum(["horse-riding", "pony-riding", "atv", "sauna"], {message:"invalidExperience"}),
-  date: z.string(), time: z.string(), participants: z.array(participant).max(200,"requestTooLarge"), options,
+  date: z.string(), time: z.string(), durationMinutes: z.number().int("invalidDuration").positive("invalidDuration").optional(), participants: z.array(participant).max(200,"requestTooLarge"), options,
 });
 const itemShape = z.discriminatedUnion("type", [activityShape, z.object({
   id, type: z.literal("package"), packageId: id, components: z.array(activityShape).max(50,"requestTooLarge"), options,

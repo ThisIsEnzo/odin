@@ -11,7 +11,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menu": "Menu",
-    "mobileMenuLabel": "Mobile navigation"
+    "mobileMenuLabel": "Mobile navigation",
+    "skipToContent": "Skip to content"
   },
   "nav": {
     "experiences": "Experiences",
@@ -33,7 +34,8 @@
     "contactHeading": "Contact",
     "languageHeading": "Language",
     "distanceFromPattaya": "Approximately {distance} from Pattaya",
-    "rightsReserved": "All rights reserved."
+    "rightsReserved": "All rights reserved.",
+    "requestContact": "Request a visit"
   },
   "home": {
     "badge": "Foundation preview",
@@ -76,7 +78,8 @@
     "hours": "Open {open}–{close}",
     "maxWeight": "Max weight {max} kg",
     "priceFrom": "From {amount} {currency}",
-    "bookCta": "Book this experience"
+    "bookCta": "Book this experience",
+    "pricePending": "Manager to confirm"
   },
   "whyOdin": {
     "kicker": "Why ON GROUND",
@@ -118,11 +121,11 @@
   },
   "restaurant": {
     "title": "Restaurant",
-    "description": "Farm-to-table dining after a day of riding and exploring — see the Restaurant page for hours and cuisine.",
+    "description": "Restaurant hours are shown below. Menu details are coming soon.",
     "hoursLabel": "Open",
     "avgSpendLabel": "Average spend",
     "menuComingSoon": "Full menu details coming soon.",
-    "cta": "Reserve a table"
+    "cta": "Plan your visit"
   },
   "packages": {
     "heading": "Packages",
@@ -141,7 +144,8 @@
     "coupleEscape": {
       "title": "Couple Escape",
       "description": "Horse riding, sauna, and dinner for two."
-    }
+    },
+    "pricePending": "Manager to confirm"
   },
   "gallery": {
     "heading": "Gallery",
@@ -180,7 +184,8 @@
     "body": "ON GROUND is set in the countryside {distance} from Pattaya.",
     "distanceBadge": "{distance} from Pattaya",
     "mapPlaceholder": "Map preview coming soon",
-    "openInMaps": "Open in Google Maps"
+    "openInMaps": "Open in Google Maps",
+    "pendingDirections": "Directions will be published once the address is verified."
   },
   "faq": {
     "heading": "Frequently Asked Questions",
@@ -191,11 +196,11 @@
       },
       "whatToBring": {
         "question": "What should I bring?",
-        "answer": "Comfortable clothing and closed-toe shoes are recommended. Anything specific to an experience is listed on its page."
+        "answer": "Comfortable clothing and closed-toe shoes are recommended. Ask our team about any activity-specific requirements."
       },
       "gettingThere": {
         "question": "How do I get to ON GROUND?",
-        "answer": "ON GROUND is located approximately {distance} from Pattaya. See the Location page for directions and a map link."
+        "answer": "ON GROUND is approximately {distance} from Pattaya. Verified directions will be published when available."
       }
     }
   },
@@ -230,7 +235,8 @@
       "invalidContactChannel": "This contact channel is not configured.",
       "contactIdentityRequired": "Enter your LINE ID or WhatsApp number.",
       "requestTooLarge": "This request exceeds the form size limit. Please split it into smaller requests.",
-      "notesTooLong": "Notes must be 500 characters or fewer."
+      "notesTooLong": "Notes must be 500 characters or fewer.",
+      "invalidDuration": "Choose an approved duration."
     },
     "pageTitle": "Book Your Experience",
     "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
@@ -343,6 +349,27 @@
       "stage3": "Check your visit before sending your request.",
       "reviewCta": "Review request",
       "detailsCta": "Continue to your details"
+    },
+    "pricing": {
+      "duration": "Duration",
+      "minutes": "{count, plural, one {# minute} other {# minutes}}",
+      "subtotal": "Estimated subtotal",
+      "total": "Estimated total",
+      "pending": "Manager to confirm",
+      "managerNotice": "The final price will be confirmed by our manager after reviewing your request.",
+      "durationPending": "Duration to be agreed",
+      "missingTiers": "Duration options and prices are awaiting approval. You can request a visit; our manager will agree the duration and price with you.",
+      "durationHelp": "Changing duration may require a different start time.",
+      "included": "Included in package",
+      "unit": {
+        "person": "per person",
+        "child": "per child",
+        "vehicle": "per vehicle",
+        "family": "per family",
+        "couple": "per couple",
+        "activity": "per activity",
+        "group": "per group"
+      }
     }
   }
 }

@@ -45,33 +45,13 @@ export function Footer() {
             {tFooter("contactHeading")}
           </p>
           <ul className="mt-3 space-y-2 text-sm text-cream-brand">
-            <li>
-              <a href={`tel:${siteConfig.phone.value.replace(/\s+/g, "")}`} className="hover:text-canvas">
-                {siteConfig.phone.value}
-              </a>
-            </li>
-            <li hidden={siteConfig.email.isMock}>
-              <a href={`mailto:${siteConfig.email.value}`} className="hover:text-canvas">
-                {siteConfig.email.value}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`https://wa.me/${siteConfig.whatsapp.value.replace(/[^\d]/g, "")}`}
-                className="hover:text-canvas"
-              >
-                WhatsApp
-              </a>
-            </li>
-            <li hidden={siteConfig.line.isMock}>
-              <a href={`https://line.me/ti/p/~${siteConfig.line.value.replace("@", "")}`} className="hover:text-canvas">
-                LINE {siteConfig.line.value}
-              </a>
-            </li>
-            <li className="pt-1 text-cream-brand/90">{siteConfig.address.value}</li>
-            <li className="text-cream-brand/90">
-              {tFooter("distanceFromPattaya", { distance: siteConfig.locationDistanceFromPattaya })}
-            </li>
+            {!siteConfig.phone.isMock&&<li><a href={`tel:${siteConfig.phone.value.replace(/\s+/g, "")}`}>{siteConfig.phone.value}</a></li>}
+            {!siteConfig.email.isMock&&<li><a href={`mailto:${siteConfig.email.value}`}>{siteConfig.email.value}</a></li>}
+            {!siteConfig.whatsapp.isMock&&<li><a href={`https://wa.me/${siteConfig.whatsapp.value.replace(/[^\d]/g, "")}`}>WhatsApp</a></li>}
+            {!siteConfig.line.isMock&&<li><a href={`https://line.me/ti/p/~${siteConfig.line.value.replace("@", "")}`}>LINE {siteConfig.line.value}</a></li>}
+            {!siteConfig.address.isMock&&<li>{siteConfig.address.value}</li>}
+            <li>{tFooter("distanceFromPattaya", { distance: siteConfig.locationDistanceFromPattaya })}</li>
+            <li><Link href="/book">{tFooter("requestContact")}</Link></li>
           </ul>
         </div>
 

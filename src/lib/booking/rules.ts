@@ -241,12 +241,14 @@ export function thailandToday(now = new Date()): string {
 export function maxBookingDate(now = new Date()): string {
   return new Date(Date.parse(thailandToday(now)) + MAX_BOOKING_WINDOW_DAYS * 86400000).toISOString().slice(0, 10);
 }
-export function availableTimeSlots(experience: Experience): string[] {
+export function availableTimeSlots(experience: Experience, durationMinutes?: number): string[] {
   const minutes = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3));
   const interval = experience.bookingIntervalMinutes;
   if (!Number.isFinite(interval) || interval <= 0) return [];
+  if (durationMinutes !== undefined && (!Number.isInteger(durationMinutes) || durationMinutes <= 0)) return [];
   const slots: string[] = [];
   for (let m = minutes(experience.operatingHours.open); m < minutes(experience.operatingHours.close); m += interval) {
+    if (durationMinutes !== undefined && m + durationMinutes > minutes(experience.operatingHours.close)) continue;
     slots.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
   }
   return slots;
@@ -284,9 +286,12 @@ export function validateVisit(items: BookingItem[], catalog: Experience[], packa
     const exp = catalog.find(e => e.id === a.experienceId);
     if (!exp) { add([...path,"experienceId"], "invalidExperience"); return; }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(a.date) || !Number.isFinite(Date.parse(a.date)) || new Date(a.date).toISOString().slice(0,10) !== a.date || a.date < thailandToday(now) || a.date > maxBookingDate(now)) add([...path,"date"], "invalidDate");
+    const tiers = exp.durationOptions ?? [];
+    const tier = tiers.find(t => t.durationMinutes === a.durationMinutes);
+    if ((tiers.length > 0 || a.durationMinutes !== undefined) && (!tier || !Number.isFinite(tier.price.amount) || tier.price.amount < 0 || tier.price.currency !== "THB")) add([...path,"durationMinutes"], "invalidDuration");
     if (!isValidTimeFormat(a.time)) add([...path,"time"], "invalidTimeFormat");
     else if (!isTimeWithinOperatingHours(a.time, exp.operatingHours)) add([...path,"time"], "outsideOperatingHours", exp.operatingHours);
-    else if (!availableTimeSlots(exp).includes(a.time)) add([...path,"time"], "invalidTimeInterval");
+    else if (!availableTimeSlots(exp,a.durationMinutes).includes(a.time)) add([...path,"time"], "invalidTimeInterval");
     if (!a.participants.length) add([...path,"participants"], "invalidGuestCount");
     a.participants.forEach((p,i) => {
       checkId(p.id,[...path,"participants",i]);

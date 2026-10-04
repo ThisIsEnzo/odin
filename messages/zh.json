@@ -11,7 +11,8 @@
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
     "menu": "菜单",
-    "mobileMenuLabel": "移动端导航"
+    "mobileMenuLabel": "移动端导航",
+    "skipToContent": "跳至正文"
   },
   "nav": {
     "experiences": "体验项目",
@@ -33,7 +34,8 @@
     "contactHeading": "联系方式",
     "languageHeading": "语言",
     "distanceFromPattaya": "距芭堤雅约 {distance}",
-    "rightsReserved": "版权所有。"
+    "rightsReserved": "版权所有。",
+    "requestContact": "申请到访"
   },
   "home": {
     "badge": "初版预览",
@@ -76,7 +78,8 @@
     "hours": "营业时间 {open}–{close}",
     "maxWeight": "最大承重 {max} 公斤",
     "priceFrom": "起价 {amount} {currency}",
-    "bookCta": "预订此体验项目"
+    "bookCta": "预订此体验项目",
+    "pricePending": "由经理确认"
   },
   "whyOdin": {
     "kicker": "为什么选择 ON GROUND",
@@ -118,11 +121,11 @@
   },
   "restaurant": {
     "title": "餐厅",
-    "description": "在骑行与探索一天之后享用农场直供的餐食 — 详见餐厅页面的营业时间与菜系介绍。",
+    "description": "餐厅营业时间见下方，菜单详情即将公布。",
     "hoursLabel": "营业时间",
     "avgSpendLabel": "人均消费",
     "menuComingSoon": "完整菜单详情即将公布。",
-    "cta": "预订餐位"
+    "cta": "规划您的行程"
   },
   "packages": {
     "heading": "套餐",
@@ -141,7 +144,8 @@
     "coupleEscape": {
       "title": "情侣度假",
       "description": "骑马、桑拿，以及一顿双人晚餐。"
-    }
+    },
+    "pricePending": "由经理确认"
   },
   "gallery": {
     "heading": "图库",
@@ -180,7 +184,8 @@
     "body": "ON GROUND 位于乡村地区，距芭堤雅 {distance}。",
     "distanceBadge": "距芭堤雅 {distance}",
     "mapPlaceholder": "地图预览即将推出",
-    "openInMaps": "在 Google 地图中打开"
+    "openInMaps": "在 Google 地图中打开",
+    "pendingDirections": "地址核实后，我们将公布路线。"
   },
   "faq": {
     "heading": "常见问题",
@@ -191,11 +196,11 @@
       },
       "whatToBring": {
         "question": "需要携带什么？",
-        "answer": "建议穿着舒适的衣物和包头鞋。特定体验项目的具体要求会列在该项目的页面上。"
+        "answer": "建议穿着舒适的衣物和包头鞋。各项活动的具体要求请咨询我们的团队。"
       },
       "gettingThere": {
         "question": "如何前往 ON GROUND？",
-        "answer": "ON GROUND 距芭堤雅约 {distance}。请查看位置页面获取路线和地图链接。"
+        "answer": "ON GROUND 距芭堤雅约 {distance}。路线核实后将予以公布。"
       }
     }
   },
@@ -230,7 +235,8 @@
       "invalidContactChannel": "此联系方式尚未配置。",
       "contactIdentityRequired": "请输入您的 LINE ID 或 WhatsApp 号码。",
       "requestTooLarge": "申请超出表单技术大小限制，请分成较小的申请。",
-      "notesTooLong": "备注不得超过500个字符。"
+      "notesTooLong": "备注不得超过500个字符。",
+      "invalidDuration": "请选择已确认的体验时长。"
     },
     "pageTitle": "预订您的体验",
     "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
@@ -343,6 +349,27 @@
       "stage3": "发送申请前，请核对您的行程。",
       "reviewCta": "核对申请",
       "detailsCta": "填写联系方式"
+    },
+    "pricing": {
+      "duration": "时长",
+      "minutes": "{count} 分钟",
+      "subtotal": "预估小计",
+      "total": "预估总价",
+      "pending": "由经理确认",
+      "managerNotice": "经理审核您的申请后，将与您确认最终价格。",
+      "durationPending": "时长待协商",
+      "missingTiers": "体验时长和价格尚待确认。您可以先提交到访申请，经理会与您协商时长和价格。",
+      "durationHelp": "更改时长后，可能需要重新选择开始时间。",
+      "included": "套餐已包含",
+      "unit": {
+        "person": "每人",
+        "child": "每名儿童",
+        "vehicle": "每辆车",
+        "family": "每个家庭",
+        "couple": "每对",
+        "activity": "每项体验",
+        "group": "每组"
+      }
     }
   }
 }

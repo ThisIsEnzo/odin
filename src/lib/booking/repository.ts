@@ -1,3 +1,4 @@
+import {calculateBookingEstimate} from "./pricing";
 import {bookingReference,fingerprint,IdempotencyConflict} from "./idempotency";
 import type { BookingRequest } from "@/types/domain";
 
@@ -42,6 +43,7 @@ export class InMemoryBookingRepository implements BookingRepository {
     if(existing){if(existing.hash!==hash)throw new IdempotencyConflict();return (await this.getById(existing.id))!;}
     const request: BookingRequest = {
       ...structuredClone(input),
+      estimate: calculateBookingEstimate(input.items),
       id: crypto.randomUUID(),
       reference:bookingReference(),
       status: "received", // BOOKING_RULES.md §8 — never anything else on creation

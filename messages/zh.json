@@ -83,7 +83,7 @@
   },
   "whyOdin": {
     "kicker": "为什么选择 ON GROUND",
-    "heading": "一座真实运营的农场，而非主题乐园",
+    "heading": "乡野间的一天",
     "lead": "ON GROUND 将开阔的乡村与舒缓的节奏结合在一起 — 白天骑行探索，傍晚放松身心，最后在同一片土地上的餐桌前收尾，而不是另一个独立附加的项目。",
     "distanceNote": "距芭堤雅 {distance} — 近到可以当日往返，又足够远，能感受到乡村的氛围。",
     "pillarRide": {
@@ -92,11 +92,11 @@
     },
     "pillarRest": {
       "title": "放慢脚步",
-      "description": "木烧桑拿，在户外活动一天后放松身心。"
+      "description": "户外活动后，在桑拿中放松身心。"
     },
     "pillarTable": {
       "title": "为你留一张餐桌",
-      "description": "农场直供的餐食，为一天画上句点。"
+      "description": "在餐厅用餐，为一天画上句号。"
     },
     "experienceCount": "{count} 项特色体验，可单独预订，也可组合成套餐。"
   },
@@ -106,7 +106,9 @@
       "child": "每名儿童",
       "vehicle": "每辆车",
       "family": "每个家庭",
-      "couple": "每对情侣"
+      "couple": "每对情侣",
+      "activity": "每项体验",
+      "group": "每组"
     }
   },
   "notFound": {
@@ -131,7 +133,7 @@
     "heading": "套餐",
     "intro": "几种将 ON GROUND 体验项目组合成一天行程的方式。",
     "includesRestaurant": "含餐厅用餐",
-    "mockNote": "价格为参考价，需经 ON GROUND 确认。",
+    "mockNote": "套餐内容和价格仅为示例，尚待确认。",
     "cta": "咨询该套餐",
     "familyDay": {
       "title": "家庭日",

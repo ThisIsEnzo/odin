@@ -73,6 +73,21 @@ Current canonical MOCK packages:
 
 Root and component positions are persisted separately with unique indexes. Duplicate frontend IDs in different bookings do not conflict. Participant counts remain derived, and decimals are preserved as PostgreSQL float8 for JavaScript-number round trips. Activity dates/times remain canonical local strings for Asia/Bangkok scheduling, not silently converted UTC instants. Creation/update/processing timestamps are timestamptz.
 
-Operational booking data is normalized; only immutable notification snapshots/envelopes use JSONB. This is intentional: retries must not reinterpret historical requests against a changed business catalog, template or destination. Stored snapshots/envelopes contain PII and require the same retention/access protection as bookings. No credentials are stored in them.
+Operational booking data is normalized; immutable notification snapshots/envelopes and the historical estimate snapshot use JSONB. This is intentional: retries must not reinterpret historical requests against a changed business catalog, template or destination. Stored snapshots/envelopes contain PII and require the same retention/access protection as bookings. No credentials are stored in them.
 
 The whole request, event and delivery plans commit atomically. Separate recipient/part state preserves partial success. PostgresBookingRepository reconstructs the existing aggregate without introducing a second incompatible domain model. SQL shape/FK/uniqueness constraints supplement API validation; semantic catalog/rider rules remain in the shared application layer. Memory mode remains explicitly non-production and volatile.
+
+## Duration and estimate snapshot extension
+
+The additive `0001_superb_wiccan.sql` migration preserves `0000` and adds:
+
+- `booking_items.duration_minutes INTEGER NULL`, constrained to positive values on activity rows only. Null supports legacy rows and requests whose duration still needs agreement.
+- `bookings.estimate JSONB NULL`, typed as `BookingEstimate`. Null is reserved for legacy rows without a snapshot; new requests store a version-1 snapshot even when its amount is pending.
+
+`ActivityBookingItem.durationMinutes` is numeric and optional only while no approved tiers exist. Package component duration uses the same activity structure. Approved catalog tiers carry minutes, THB amount/unit and an explicit billing basis. No production tiers are populated yet.
+
+The server-generated snapshot stores currency, overall amount (number or null), and top-level estimate lines with item ID, amount, selected duration where applicable, unit amount, unit and quantity when known. Package components remain normalized rows and contribute no standalone charge. This is the least additional storage needed to preserve the quoted tier and total without recomputing old requests against a changed catalog.
+
+The snapshot is written with the booking, duration rows and outbox in the existing transaction. Outbox payloads include that same snapshot; notification text records duration or pending, each priced tier and overall estimate/pending plus manager-confirmation semantics. Provider envelopes, retry processing and transaction boundaries are unchanged. Reads and same-key idempotent replays return the stored estimate, even after catalog prices change. The request fingerprint uses the submitted selection, not a newly calculated price. Client price/estimate input is stripped at the API boundary.
+
+Both migrations and repository round trips are exercised by an isolated PGlite PostgreSQL engine test, including catalog change, historical snapshot, duration, outbox equality and invalid stored duration. This does not claim deployment to the production database or replace live PostgreSQL concurrency/provider verification.

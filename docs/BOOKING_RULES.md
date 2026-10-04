@@ -44,3 +44,17 @@ A unique idempotency key and canonical request hash protect same-intent retries:
 Persistence or required configuration failure returns safe 503; it must not report received. Any transaction failure rolls back the entire aggregate/outbox. Notification failure after commit cannot erase the request or change API acceptance. Failed parts remain retryable or dead for operator review, while successful channel parts remain sent.
 
 No business hours, weight thresholds, status semantics, prices, packages or options changed. No inventory locking, payment, customer account or instant confirmation. See ARCHITECTURE.md and PRODUCTION_BACKEND_SETUP.md for retry, concurrency and production configuration details.
+
+## Duration and estimated pricing — final continuation
+
+`Experience.durationOptions` is the canonical, approved duration-price catalog. A tier contains integer `durationMinutes`, THB `price` (amount and unit), and explicit `quantityBasis` (`participant` or `booking`). **All four live catalogs currently contain empty arrays.** Repository data, master handoff and supplied archives contain no approved duration-price pairs. Legacy mock activity prices are not reused, interpolated or associated with slot intervals.
+
+With approved tiers, selection is required and the shared server/client validator accepts only an exact tier with a finite nonnegative canonical THB price. Without tiers, a request may omit duration and remains a manager-assisted inquiry; arbitrary numeric duration is rejected. Zod strips untrusted price/estimate fields. Repositories calculate their own estimate from canonical data, never client arithmetic.
+
+Start slots remain on the existing interval grid, opening inclusive and closing exclusive for starts. If a duration is selected, `start + duration <= close` must also hold. Finishing exactly at closing is allowed; starting then is not. A duration change clears a now-invalid start. No duration is inferred from `bookingIntervalMinutes`.
+
+`calculateActivityEstimate` and `calculateBookingEstimate` centralize calculations. Participant multiplication occurs only for an explicit participant basis. Booking-based tiers charge once, so guests are not silently treated as vehicles. Monetary addition uses rounded minor units. Unknown tiers, unsupported option pricing, missing quantity semantics or any unknown line produce a pending overall amount (`null`), never zero or a partial numeric grand total.
+
+A confirmed package additionally needs an explicit `estimateBasis`: `package` charges once; `participant` requires the same nonzero headcount across components. Mock or unspecified-basis packages remain pending. Component standalone prices are never added to package price. A package plus extra sums the package line and standalone extra only. Restaurant has no duration tier and no invented price.
+
+Displayed prices are estimates. EN/RU/TH/ZH place the manager-confirmation disclaimer beside the visit/review total. Request receipt remains received, not confirmed or payment due; the receipt screen intentionally omits pricing rather than recomputing it after submission.

@@ -25,7 +25,7 @@ The rendered baseline was inspected in Chromium before edits, including the comp
 - Preserve all source logo artwork; no generated/reinterpreted logo or photography.
 - Green remains an editorial secondary surface; primary page canvas stays warm ivory.
 - Preserve canonical request shape, domain rules, validators, participants, packages, times, idempotency, submission and public API semantics. Frontend presentation and editing composition were deliberately improved.
-- Backend, migrations, notifications and business data remain unchanged. Four locales receive matching new presentation copy; business facts are unchanged.
+- The initial design-only pass preserved backend/data. The later duration continuation below adds a migration, canonical estimate model and notification fields without changing business facts.
 - Existing empty reviews produce no fabricated testimonials.
 - Existing generic anchor implementation remains byte-identical.
 
@@ -33,4 +33,21 @@ The rendered baseline was inspected in Chromium before edits, including the comp
 
 See `PHASE_5_UI_FINAL_STATUS.md` for measured checks and release blockers. This is a practical visual/accessibility pass, not an independent WCAG certification or linguistic review.
 
-Client decisions still required by the existing data/docs: replace marked mock contact/address/package/restaurant facts with approved content; supply missing About, Contact, Privacy and Terms pages. No facts or legal copy were invented in this pass. Existing placeholder-linked destinations remain a launch concern.
+Client decisions still required by the existing data/docs: replace marked mock contact/address/package/restaurant facts with approved content; supply missing About, Contact, Privacy and Terms pages. No facts or legal copy were invented in this pass. Unavailable destinations are now removed by the continuation below; approved content is still needed before publishing those pages.
+
+## Duration / release-cleanup continuation
+
+| Finding | Severity | Implemented resolution |
+| --- | --- | --- |
+| No approved duration tiers; legacy prices are mock | High | Empty approved-tier arrays, canonical duration/pricing architecture and explicit pending UI; no extrapolation |
+| Visit had no estimate/provenance context | High | Item subtotals and overall estimate/pending in summary and Review, with manager-confirmation disclaimer |
+| Closing-time slots ignored selected activity length | High | Shared duration-aware slot filter and server validation; invalid late start clears on duration change |
+| Historical estimate could change with catalog | High | Server-owned immutable snapshot persisted atomically with booking/outbox |
+| Public Footer/map exposed mock phone, WhatsApp and address | High | Conditional rendering based on provenance flags; no mock contact links or directions |
+| About/Contact/Privacy/Terms links pointed to absent routes | High | Remove unavailable shared-nav destinations; no invented legal content |
+| Restaurant CTA implied unsupported reservations | High | Truthful localized visit-planning CTA |
+| Farm-to-table / wood-fired sauna claims lack canonical evidence | Medium | Neutral restaurant/sauna copy in all four locales |
+| Skip link was English-only | Medium | Localized accessible link in EN/RU/TH/ZH |
+| Navigation order did not match client requirement | Medium | Reorder the one shared source; Header, menu and Footer inherit it |
+
+Remaining client decisions: approved duration-price pairs and billing basis for Horse Riding, Pony Riding, ATV and Sauna; confirmed package contents/price/billing basis; verified contacts/address/directions; approved legal content. Existing pending package contents remain clearly described as illustrative. No replacements or business claims were invented.

@@ -13,7 +13,7 @@ export function buildBookingNotificationPayload(booking: BookingRequest): Bookin
     `Customer: ${booking.customer.name}`, `Phone: ${booking.customer.phone}`, `Email: ${booking.customer.email}`];
   if (booking.customer.preferredChannel) lines.push(`Preferred contact: ${booking.customer.preferredChannel}`, `Identity: ${booking.customer.channelIdentity ?? "see contact above"}`);
   const activity = (a: import("@/types/domain").ActivityBookingItem) => {
-    lines.push(`Activity: ${a.experienceId}`, `${a.date} ${a.time} Asia/Bangkok`, `Participants: ${a.participants.length}`);
+    lines.push(`Activity: ${a.experienceId}`, `${a.date} ${a.time} Asia/Bangkok`, `Duration: ${a.durationMinutes === undefined ? "manager to confirm" : `${a.durationMinutes} minutes`}`, `Participants: ${a.participants.length}`);
     a.participants.forEach((p,i) => { if (p.weightKg !== undefined) lines.push(`Guest ${i+1}: ${p.weightKg} kg`); });
     a.options.forEach(o => lines.push(`Option: ${o.optionId} x ${o.quantity}`));
   };
@@ -29,6 +29,10 @@ export function buildBookingNotificationPayload(booking: BookingRequest): Bookin
       item.options.forEach(o => lines.push(`Package option: ${o.optionId} x ${o.quantity}`));
     }
   });
+  if (booking.estimate) {
+    for (const line of booking.estimate.items) lines.push(`Estimate ${line.itemId}: ${line.amount === null ? "manager to confirm" : `${line.amount} THB`}${line.unitAmount === undefined ? "" : ` (${line.unitAmount} THB/${line.unit} × ${line.quantity})`}`);
+    lines.push(`Estimated total: ${booking.estimate.amount === null ? "manager to confirm" : `${booking.estimate.amount} THB`}`, "Final price will be confirmed by our manager after reviewing the request.");
+  }
   if (booking.notes) lines.push(`\nNotes: ${booking.notes}`);
   return {reference:booking.reference??booking.id,event:"booking.received",booking:structuredClone(booking),text:lines.join("\n")};
 }

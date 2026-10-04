@@ -73,10 +73,10 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
 
         </div><div className="mt-6 flex flex-col items-start gap-3 lg:mt-0 lg:border-l lg:border-ink/15 lg:pl-8">
           <p className="text-sm font-medium text-ink">
-            {format.number(pkg.price.amount)} {pkg.price.currency}{" "}
+            {pkg.mock.isMock ? tPackages("pricePending") : <>{format.number(pkg.price.amount,{style:"currency",currency:pkg.price.currency})}{" "}
             <span className="font-normal text-text-secondary">
               {tPricing(`unit.${pkg.price.unit}`)}
-            </span>
+            </span></>}
           </p>
           {pkg.mock.isMock ? (
             <p className="text-xs text-text-secondary">{tPackages("mockNote")}</p>

@@ -19,6 +19,8 @@ export const experiences: Experience[] = [
     operatingHours: { open: "07:00", close: "18:00" },
     restrictions: { minAge: 12, maxWeightKg: 90 },
     price: { amount: 1200, currency: "THB", unit: "person" },
+    // No approved duration/price pairs supplied. Do not infer from legacy mock price.
+    durationOptions: [],
     bookingIntervalMinutes: 60,
     requiresWeight: true,
     gallerySlugs: ["horse-01"],
@@ -34,6 +36,8 @@ export const experiences: Experience[] = [
     operatingHours: { open: "07:00", close: "18:00" },
     restrictions: { minAge: 3, maxAge: 12, maxWeightKg: 60 },
     price: { amount: 500, currency: "THB", unit: "child" },
+    // No approved duration/price pairs supplied. Do not infer from legacy mock price.
+    durationOptions: [],
     bookingIntervalMinutes: 60,
     requiresWeight: true,
     gallerySlugs: ["pony-01"],
@@ -49,6 +53,8 @@ export const experiences: Experience[] = [
     operatingHours: { open: "07:00", close: "20:00" },
     restrictions: { minAge: 16 },
     price: { amount: 1500, currency: "THB", unit: "vehicle" },
+    // No approved duration/price pairs supplied. Do not infer from legacy mock price.
+    durationOptions: [],
     bookingIntervalMinutes: 30,
     requiresWeight: false,
     gallerySlugs: ["atv-01"],
@@ -64,6 +70,8 @@ export const experiences: Experience[] = [
     operatingHours: { open: "08:00", close: "21:00" },
     restrictions: {},
     price: { amount: 800, currency: "THB", unit: "person" },
+    // No approved duration/price pairs supplied. Do not infer from legacy mock price.
+    durationOptions: [],
     bookingIntervalMinutes: 30,
     requiresWeight: false,
     gallerySlugs: ["sauna-01"],

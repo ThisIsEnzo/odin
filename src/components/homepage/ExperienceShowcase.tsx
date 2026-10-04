@@ -136,11 +136,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                     <Badge variant="saddle">{tExperienceCard("maxWeight", { max: maxWeight })}</Badge>
                   ) : null}
                   <span className={cn("text-sm", image ? "text-canvas/80" : "text-ink/60")}>
-                    {tExperienceCard("priceFrom", {
-                      amount: format.number(experience.price.amount),
-                      currency: experience.price.currency,
-                    })}{" "}
-                    {tPricing(`unit.${experience.price.unit}`)}
+                    {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
                   </span>
                 </div>
 
@@ -256,11 +252,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                           </Badge>
                         ) : null}
                         <span className="text-sm text-ink/60">
-                          {tExperienceCard("priceFrom", {
-                            amount: format.number(experience.price.amount),
-                            currency: experience.price.currency,
-                          })}{" "}
-                          {tPricing(`unit.${experience.price.unit}`)}
+                          {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
                         </span>
                       </div>
 

@@ -1,6 +1,8 @@
 "use client";
 
+import {DurationText, ItemEstimate, VisitEstimate, EstimateAmount} from "./Estimate";
 import { useTranslations } from "next-intl";
+import {calculateBookingEstimate} from "@/lib/booking/pricing";
 import { activitiesOf } from "@/lib/booking/itinerary";
 import { visitSchema } from "@/lib/validation/booking.schema";
 import type { ActivityBookingItem, BookingItem, Locale } from "@/types/domain";
@@ -30,18 +32,20 @@ export function VisitSummary({items, locale, nameOf, itemName, onEdit, onAdd}: {
           {activitiesOf(item).map(a => <div className="visit-summary-detail" key={a.id}>
             {item.type === "package" && <p>{nameOf(a)}</p>}
             <p>{a.date ? visitDate(a.date, locale) : t("v2.datePending")} · {a.time || t("v2.timePending")}</p>
-            <p>{t("v2.guestCount", {count: a.participants.length})}</p>
+            <p><DurationText minutes={a.durationMinutes}/></p><p>{t("v2.guestCount", {count: a.participants.length})}</p>
           </div>)}
+          <ItemEstimate item={item}/>
           <p className="visit-readiness">{visitSchema.safeParse([item]).success ? t("ux.ready") : t("ux.needsDetails")}</p>
         </div>
       </li>)}
     </ol>}
+    <VisitEstimate items={items}/>
     <button type="button" className="visit-add-link" onClick={onAdd}><span aria-hidden="true">+</span> {t("ux.addAnother")}</button>
     <p className="visit-request-note">{t("v2.reviewNotice")}</p>
   </>;
   return <>
     <details className="visit-summary-mobile">
-      <summary><span>{t("v2.title")} <span className="visit-count">{count}</span>{pending > 0 && <span className="visit-pending block">{t("ux.pending", {count: pending})}</span>}</span><span aria-hidden="true">＋</span></summary>
+      <summary><span>{t("v2.title")} <span className="visit-count">{count}</span><span className="visit-estimate-compact"><span>{t("pricing.total")}: </span><EstimateAmount amount={calculateBookingEstimate(items).amount}/></span>{pending > 0 && <span className="visit-pending block">{t("ux.pending", {count: pending})}</span>}</span><span aria-hidden="true">＋</span></summary>
       <div className="visit-summary-content">{content}</div>
     </details>
     <aside className="visit-summary-desktop" aria-label={t("ux.summary")}>

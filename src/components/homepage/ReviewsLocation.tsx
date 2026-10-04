@@ -30,10 +30,10 @@ export function ReviewsLocation() {
           <p className="mt-5 max-w-md text-ink/70">{location("body", {distance: siteConfig.locationDistanceFromPattaya})}</p>
         </div>
         <div className="flex flex-col items-start justify-center border-y border-ink/20 py-10">
-          <p className="max-w-md text-xl leading-relaxed sm:text-2xl">{siteConfig.address.value}</p>
-          <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className={buttonVariants({variant:"outline", className:"mt-8"})}>
+          <p className="max-w-md text-xl leading-relaxed sm:text-2xl">{siteConfig.address.isMock?location("pendingDirections"):siteConfig.address.value}</p>
+          {!siteConfig.address.isMock&&<a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className={buttonVariants({variant:"outline", className:"mt-8"})}>
             {location("openInMaps")} <span aria-hidden="true">↗</span>
-          </a>
+          </a>}
         </div>
       </Reveal>
     </Container>

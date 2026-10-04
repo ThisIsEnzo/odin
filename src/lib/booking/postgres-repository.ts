@@ -1,3 +1,4 @@
+import {calculateBookingEstimate} from './pricing';
 import {randomUUID} from 'node:crypto';
 import {eq,inArray,asc} from 'drizzle-orm';
 import type {Database} from '../db/client';
@@ -15,17 +16,18 @@ export class PostgresBookingRepository implements BookingRepository {
   const hash=fingerprint(draft);
   return this.db.transaction(async tx=>{
    const id=randomUUID(),reference=bookingReference(),createdAt=new Date();
-   const inserted=await tx.insert(s.bookings).values({id,reference,status:'received',schemaVersion:2,locale:draft.locale,customerName:draft.customer.name,email:draft.customer.email,phone:draft.customer.phone,preferredChannel:draft.customer.preferredChannel,channelIdentity:draft.customer.channelIdentity,notes:draft.notes,idempotencyKey:key,requestHash:hash,createdAt,updatedAt:createdAt}).onConflictDoNothing({target:s.bookings.idempotencyKey}).returning({id:s.bookings.id});
+   const estimate=calculateBookingEstimate(draft.items);
+   const inserted=await tx.insert(s.bookings).values({id,reference,estimate,status:'received',schemaVersion:2,locale:draft.locale,customerName:draft.customer.name,email:draft.customer.email,phone:draft.customer.phone,preferredChannel:draft.customer.preferredChannel,channelIdentity:draft.customer.channelIdentity,notes:draft.notes,idempotencyKey:key,requestHash:hash,createdAt,updatedAt:createdAt}).onConflictDoNothing({target:s.bookings.idempotencyKey}).returning({id:s.bookings.id});
    if(!inserted.length){const [existing]=await tx.select().from(s.bookings).where(eq(s.bookings.idempotencyKey,key));if(!existing||existing.requestHash!==hash)throw new IdempotencyConflict();return (await this.read(tx,existing.id))!;}
    const insertItem=async(item:BookingItem,position:number,parentId?:string)=>{
     const rowId=randomUUID();
-    await tx.insert(s.bookingItems).values({id:rowId,bookingId:id,domainId:item.id,parentId,position,type:item.type,...(item.type==='activity'?{experienceId:item.experienceId,date:item.date,time:item.time}:{packageId:item.packageId})});
+    await tx.insert(s.bookingItems).values({id:rowId,bookingId:id,domainId:item.id,parentId,position,type:item.type,...(item.type==='activity'?{experienceId:item.experienceId,date:item.date,time:item.time,durationMinutes:item.durationMinutes}:{packageId:item.packageId})});
     if(item.options.length)await tx.insert(s.bookingItemOptions).values(item.options.map((o,position)=>({id:randomUUID(),itemId:rowId,position,...o})));
     if(item.type==='activity'&&item.participants.length)await tx.insert(s.bookingParticipants).values(item.participants.map((p,position)=>({id:randomUUID(),itemId:rowId,domainId:p.id,position,weightKg:p.weightKg})));
     if(item.type==='package')for(const [i,c] of item.components.entries())await insertItem(c,i,rowId);
    };
    for(const [i,item] of draft.items.entries())await insertItem(item,i);
-   const booking:BookingRequest={...structuredClone(draft),id,reference,status:'received',createdAt:createdAt.toISOString()};
+   const booking:BookingRequest={...structuredClone(draft),estimate,id,reference,status:'received',createdAt:createdAt.toISOString()};
    const payload=buildBookingNotificationPayload(booking),outboxId=randomUUID();
    await tx.insert(s.notificationOutbox).values({id:outboxId,bookingId:id,eventType:payload.event,payload});
    const plans=planDeliveries(payload,this.targets);
@@ -43,8 +45,8 @@ export class PostgresBookingRepository implements BookingRepository {
   const item=(r:typeof rows[number]):BookingItem=>{
    const common={id:r.domainId,options:options.filter(o=>o.itemId===r.id).map(o=>({optionId:o.optionId,quantity:o.quantity}))};
    if(r.type==='package')return {...common,type:'package',packageId:r.packageId!,components:rows.filter(c=>c.parentId===r.id).map(c=>item(c) as ActivityBookingItem)};
-   return {...common,type:'activity',experienceId:r.experienceId as ExperienceId,date:r.date!,time:r.time!,participants:participants.filter(p=>p.itemId===r.id).map(p=>({id:p.domainId,...(p.weightKg===null?{}:{weightKg:p.weightKg})}))};
+   return {...common,type:'activity',experienceId:r.experienceId as ExperienceId,date:r.date!,time:r.time!,...(r.durationMinutes===null?{}:{durationMinutes:r.durationMinutes}),participants:participants.filter(p=>p.itemId===r.id).map(p=>({id:p.domainId,...(p.weightKg===null?{}:{weightKg:p.weightKg})}))};
   };
-  return {schemaVersion:2,id:b.id,reference:b.reference,status:b.status as BookingRequest['status'],createdAt:b.createdAt.toISOString(),locale:b.locale as Locale,customer:{name:b.customerName,email:b.email,phone:b.phone,...(b.preferredChannel?{preferredChannel:b.preferredChannel as ContactChannel}:{}),...(b.channelIdentity!==null?{channelIdentity:b.channelIdentity}:{})},...(b.notes!==null?{notes:b.notes}:{}),items:rows.filter(r=>r.parentId===null).map(item)};
+  return {schemaVersion:2,...(b.estimate?{estimate:b.estimate}:{}),id:b.id,reference:b.reference,status:b.status as BookingRequest['status'],createdAt:b.createdAt.toISOString(),locale:b.locale as Locale,customer:{name:b.customerName,email:b.email,phone:b.phone,...(b.preferredChannel?{preferredChannel:b.preferredChannel as ContactChannel}:{}),...(b.channelIdentity!==null?{channelIdentity:b.channelIdentity}:{})},...(b.notes!==null?{notes:b.notes}:{}),items:rows.filter(r=>r.parentId===null).map(item)};
  }
 }

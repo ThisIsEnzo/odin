@@ -64,6 +64,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   // cross the server/client boundary explicitly for anything marked
   // "use client". Without this, next-intl throws in those components.
   const messages = await getMessages();
+  const common = await getTranslations("common");
 
   return (
     <html
@@ -76,7 +77,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-button focus:bg-moss focus:px-4 focus:py-2 focus:text-canvas"
           >
-            Skip to content
+            {common("skipToContent")}
           </a>
           <HomepageAnchorNavigation />
           <Header />

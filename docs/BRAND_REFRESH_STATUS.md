@@ -1,97 +1,57 @@
 # Official brand refresh status
 
-## Delivery and recovered base
+## Recovered delivery
 
-- Repository: ThisIsEnzo/odin; base main `0f9eb3ded5fd653bf20f5b68d56098a45e8a0e0f`.
-- Branch: `brand/on-ground-khao-mai-kaeo-refresh`, starts directly at that main commit. PR #2 is merged and untouched. No merging or deployment performed.
-- Original checkout was absent. GitHub app retrieved source from the exact main SHA. All 173 file blobs, the root tree `1888b3e8a187eb8d4f04cacb6cad5665b4ed5d04` and base commit object were verified/recovered exactly. Large unchanged photographs were recovered from local photo copies only after their Git blob hashes matched the authoritative GitHub tree. No archive source code was used.
-- Direct Git authentication is unavailable; publication uses connected GitHub Git-object/ref operations, preserving the exact base parent and brand-only delta.
+- Continued existing branch `brand/on-ground-khao-mai-kaeo-refresh` and existing open Draft PR #3; no new branch/PR, merge or deployment.
+- Recovered remote HEAD `25ef01b85c7ab6ddee5059a0e391460ccb9dcce4`, tree `f873c7625fbe1168ff2ee8f38cce78009ca01f01`, against main `0f9eb3ded5fd653bf20f5b68d56098a45e8a0e0f` before editing. Inspected its history, main diff, design/audit/status documents and production browser rendering.
+- Direct Git authentication was unavailable. GitHub connector Git objects supplied the authoritative checkout and publication. All 177 recovered blobs matched GitHub hashes; large photographs were recovered from supplied copies only after exact blob verification. No previous local source/archive code was trusted.
+- Existing successful homepage/Booking architecture, locale fonts, navigation order and semantic action/control treatment were retained.
 
-## Artwork and palette
+## Extended official identity
 
-Source: newly uploaded `1000070899.jpg`, visually “on ground · KHAO MAI KAEO”; the older `odin-logo(2).jpg` is not the new authority. Untouched new original, 1224 × 390 full wordmark WebP crop and 64/180px source-lettering icons are production assets. No cutout, redrawing, generated lettering or stretched geometry. Original texture/shadows are retained deliberately.
+- **Primary signature:** ON GROUND / KHAO MAI KAEO actual wordmark. Untouched original retained. Lossless 1224 × 390 transparent WebP extracts the photographed lettering and shaded edges, eliminating the opaque Header rectangle without substitute typography or redraw. Inspected against the material surface for fringes/halos.
+- **Secondary mark:** untouched new 1536 × 1536 horse relief JPEG. Cream bounds approximately (277,237)–(1250,1241); highlights, warm bevels and downward/right wall shadows are intentional. Retaining the wall inside a clean seal crop preserves depth better than forced transparency.
+- Derivatives: 440px seal WebP, 512px app PNG, 64px icon PNG, 180px Apple icon and 16/32px RGBA favicon ICO. Ring/horse silhouette inspected at small sizes; fine relief naturally reduces at 16px.
+- Header and mobile retain the readable primary wordmark, with no competing horse mark. Footer has one 104px circular seal, 24px separation and a 232px wordmark in a deliberate vertical lockup. No repeated horse stamps/watermarks.
+- Public textual name ON GROUND CAFE & FARM and internal ODIN identifiers remain; supplied artwork does not independently approve a legal name change.
 
-Sampled terracotta #B16545 and cream #F0DCC2. Derived action #87462F, hover #703824, active #592C1D, canvas #FCF8F2, muted surface #F3E8DA, umber #38261F, depth/body #281B16, on-terracotta text #090604, secondary #69564C, border #9B8273. Functional error #991B1B. See DESIGN_SYSTEM.md for sampling rectangles, filters and semantic mapping.
+## Sampled palette and material
 
-Textual **ON GROUND CAFE & FARM** is preserved: the artwork's location line does not independently confirm a business-name change. Technical identifiers, environment names, migrations and ODIN reference prefix remain intact.
+Both originals were sampled: wordmark background #B16545 / cream #F0DCC2; horse median background **#AE583A** / cream **#F4E3CA**. Horse colors establish the canonical site family; photographic variation stays in the originals.
 
-## Presentation and preserved behavior
+- Canonical terra #AE583A; accessible material base #96472D; action/focus #87462F; hover #703824; pressed #592C1D.
+- Cream #F4E3CA; main canvas #FCF8F2; soft canvas #F3E8DA; earth #38261F; ink/depth #281B16.
+- Secondary #69564C; control border #9B8273; real errors only #991B1B.
+- Reusable `.brand-terra-surface`: two very diffuse 2.5% cream/umber radial fields and a tiny inline procedural SVG fractal grain at 2.5% opacity over #96472D. No repeating JPEG wallpaper, heavy bitmap, animation or obvious gradient. Solid/material comparison favored the restrained tactile treatment.
+- Material appears selectively in Header, mobile menu heading and Footer. Editorial canvas remains airy; Restaurant retains earth. Header navigation is 15px medium, restrained tracking (reset TH/ZH), underline hover and cream inverse Book CTA. Existing Inter/Noto Sans Thai/Noto Sans SC retained.
+- Hours/max-weight metadata share cream/earth pills. Pending pricing is solid secondary on light surfaces and cream on photos. Ordinary restrictions never use error red.
+- Post-Hero stats strip removed; Hero flows directly to Experiences.
 
-- Header: proportional 224px wordmark (188px small mobile), sampled terracotta, readable dark nav/language/menu controls and umber CTA; existing sticky/scrolled behavior retained.
-- Mobile menu: full wordmark in matching heading, pale body, clear close/language controls and primary CTA. Existing Radix focus/close behavior retained.
-- Footer: dark umber with deliberate source artwork plaque; mock-contact and unavailable-link rules remain unchanged.
-- Homepage: existing hero, editorial Experiences, Packages, compact Restaurant, Gallery, Location, FAQ and Final CTA compositions retained. Warm neutral surfaces and controlled terracotta/umber replace green visual legacy. Existing fonts and photographs unchanged.
-- Booking: Your Visit, active editor, sticky desktop/mobile summaries, add/edit/duplicate/remove, package plus extras, progress, review and receipt retained; presentation consumes new semantic colors. No approved duration tiers were supplied. Duration-to-be-agreed and Manager-to-confirm behavior remains; no prices invented.
-- Shared navigation is byte-identical: Experiences → Packages → Restaurant → Gallery → Location.
-- Old logo files have no active production references. Historical originals/derivatives remain where cited by earlier documentation. Old active icon.svg removed; Next icon metadata now serves icon.png and apple-icon.png. No existing OpenGraph/structured organization logo was present.
+## Location and contact safety
+
+Canonical frontend config contains exactly **https://maps.app.goo.gl/5SAXfYQpQMktn8fv6?g_st=ac**. Localized external Maps CTA uses it directly, with `noopener noreferrer`; no derived mock-address destination or iframe. Location label Khao Mai Kaeo comes from official artwork. Existing canonical 20km distance retained in Location/Footer, not recreated as a stats strip.
+
+Phone, WhatsApp, LINE, email and textual street address remain hidden behind existing mock flags. Maps listings are not approved contact data. No unconfirmed business fact was invented.
+
+## Booking and backend freeze
+
+Booking presentation inherits the unified palette: progress, selected states, duration choices, editor, forms, summaries, estimates/pending states and CTA hierarchy. Your Visit, activity/package plus extra, one editor, add/edit/duplicate/remove, duration architecture, Manager to confirm, Review and Request Received remain intact. No domain logic redesigned.
+
+Hash verification against recovered HEAD confirms `src/lib`, `src/types`, API routes, Drizzle/migrations, tests, package manifests and locale messages unchanged. PostgreSQL, validation, pricing/duration rules, idempotency, outbox, LINE/WhatsApp and notification processing unchanged. Only business-data change is the supplied Maps URL in `src/data/odin/site.ts`.
 
 ## Verification
 
-- `npm test`: 153 passed across 9 files; baseline coverage retained. Includes duration validation, closing boundaries, estimates, package double-count protection, snapshots and UI behavior.
+- `npm test`: **153 tests passed**, 9 files; coverage retained.
 - `npm run typecheck`: passed.
-- `npm run build`: passed, including four locale homepages and new icon routes.
-- `python scripts/check_i18n_parity.py`: passed; 271 matching EN/RU/TH/ZH keys. No locale messages changed.
+- `npm run build`: passed, including four locales and favicon/Apple/icon routes.
+- `python scripts/check_i18n_parity.py`: **271 matching keys** EN/RU/TH/ZH; passed.
 - `git diff --check`: passed.
-- `npm run lint`: attempted; inherited FlatCompat/config-validator circular JSON serialization failure persists. Not claimed passing; ESLint configuration untouched.
-- Production Chromium: 283 matrix checks across 375/390/430/768/1024/1280/1440/1920px and RU/TH/ZH 390px; zero page errors/horizontal overflow. Header logo loaded at 2× density, sticky state, navigation/menu order, footer, booking editor/pending duration/pricing, contact details, Review and mocked Request Received. Mobile locale home/menu/editor and raw-key checks passed. Screenshots visually inspected for desktop/mobile Booking, mobile menu and Thai editor.
-- Additional 21 browser checks passed: Restaurant and repeated same-hash anchors, FAQ, Gallery open/Escape, image loading, language selection, duplicate/remove/edit, two activities, one active editor, package plus extra, pending total, absent mock/dead destinations, icon metadata and mobile summary expansion.
-- Receipt API was intercepted in browser QA. No actual request, DB migration or provider message was sent.
-- Measured key color pairs: header text/terracotta 4.63:1; cream/action 5.33:1; cream/footer 10.73:1; secondary/canvas 6.54:1; action/editor 5.89:1; boundary/canvas 3.40:1. Focus remains 2px with offset and contextual dark/cream contrast. Disabled states retain native disabled semantics. Logo artwork fidelity was preserved. This is targeted QA, not full WCAG certification.
+- Production Chromium matrix: all **32 combinations** of EN/RU/TH/ZH × 375/390/430/768/1024/1280/1440/1920px passed **456 checks**. Header wordmark, mobile menu/locale/Escape, navigation order, Footer seal, exact Maps CTA, absent contacts/stats, image loading, translated Booking editor, pending duration and overflow checked. No raw translation keys, horizontal overflow or page JavaScript errors.
+- Additional **22 passing focused browser checks** cover homepage sections, repeated Location anchor, package plus extra, duplicate/remove, one editor, mobile summary expansion/pending total, keyboard focus, icon metadata, Review and intercepted Request Received. Receipt fixture is local browser interception; no DB/provider side effects.
+- Visual review: desktop/mobile Header/menu, complete homepage, Experiences metadata, Location, Footer lockup, EN/RU/TH/ZH typography and Booking editor/review/receipt. Asset rectangle removed; texture understated; horse restrained; design frozen.
+- Contrast: cream/material base **5.16:1**, conservative brightest material composite **4.68:1**, cream/action **5.66:1**, cream/earth **11.39:1**, ink/cream **13.26:1**, secondary/canvas **6.54:1**, control border/canvas **3.40:1**, action/editor **5.89:1**. Solid small inverse copy avoids opacity contrast loss. Keyboard Header/form focus is 2px; native controls/menu behavior retained. Targeted accessibility QA, not full certification.
+- Prior delivery reported an inherited ESLint FlatCompat circular serialization failure. Its configuration was not changed; lint is not claimed passing.
 
-## Backend freeze and remaining items
+## Remaining client inputs
 
-`src/lib`, `src/data`, `src/types`, APIs, database schema, Drizzle migrations, outbox, LINE/WhatsApp, idempotency, domain rules and translations are byte-identical to base. No backend change or migration required.
-
-Remaining existing release inputs: approved activity duration/price tiers/billing basis; confirmed packages, contacts/directions/legal content; live database/provider setup. Separate inherited ESLint configuration repair remains outside this task. A flat vector/transparent official logo could improve future small-size rendering; it is not supplied or fabricated here.
-
-## Files changed
-
-- `docs/DESIGN_SYSTEM.md`
-- `docs/UI_UX_AUDIT.md`
-- `public/images/brand/on-ground-khao-mai-kaeo-original.jpg`
-- `public/images/brand/on-ground-khao-mai-kaeo-wordmark.webp`
-- `src/app/[locale]/layout.tsx`
-- `src/app/[locale]/page.tsx`
-- `src/app/apple-icon.png`
-- `src/app/globals.css`
-- `src/app/icon.png`
-- `src/app/icon.svg`
-- `src/components/domain/booking/ActivityEditor.tsx`
-- `src/components/domain/booking/BookingFlow.tsx`
-- `src/components/domain/booking/BookingStepper.tsx`
-- `src/components/domain/booking/ExperiencePicker.tsx`
-- `src/components/domain/booking/RequestReceived.tsx`
-- `src/components/domain/booking/VisitSummary.tsx`
-- `src/components/domain/booking/steps/CustomerStep.tsx`
-- `src/components/domain/booking/steps/ExperienceStep.tsx`
-- `src/components/domain/booking/steps/GuestsStep.tsx`
-- `src/components/domain/booking/steps/ReviewStep.tsx`
-- `src/components/domain/booking/steps/ScheduleStep.tsx`
-- `src/components/homepage/ExperienceShowcase.tsx`
-- `src/components/homepage/Faq.tsx`
-- `src/components/homepage/FinalCta.tsx`
-- `src/components/homepage/Gallery.tsx`
-- `src/components/homepage/Packages.tsx`
-- `src/components/homepage/Restaurant.tsx`
-- `src/components/homepage/ReviewsLocation.tsx`
-- `src/components/homepage/WhyOdin.tsx`
-- `src/components/layout/BrandLogo.tsx`
-- `src/components/layout/Footer.tsx`
-- `src/components/layout/Header.tsx`
-- `src/components/layout/LanguageSwitcher.tsx`
-- `src/components/layout/MobileNav.tsx`
-- `src/components/ui/Badge.tsx`
-- `src/components/ui/Button.tsx`
-- `src/components/ui/Card.tsx`
-- `src/components/ui/Section.tsx`
-- `docs/BRAND_REFRESH_STATUS.md`
-
-## Final independent verification and control fix
-
-The completed brand-refresh commit `9f47f2b12ae08830c60806477140f54030229051` and its matching Draft PR #3 appeared while a separate session was preparing publication. Its exact GitHub tree and commit were recovered and verified; the published implementation was preserved. The only presentation follow-up changes the default language-selector class from a translucent ink border to the existing semantic control-border token.
-
-Independent verification of the published source: all 153 tests pass; typecheck/build pass; 271-key locale parity and diff checks pass. The domain/backend/configuration/data/migration/package files remain byte-identical to the base main SHA. The final one-class control update was built/typechecked and tested again.
-
-Additional final production-browser pass: **43 successful focused checkpoints**, EN/RU/TH/ZH locale controls and Review at 375/390/430, high-resolution Why/final CTA/form checks at 1440/1920, package plus extra, duplicate/remove/edit, one editor, clear added state, repeated anchors, Gallery, FAQ, Restaurant, mock-data safety and icon metadata. No document overflow, raw keys or page JavaScript errors in this run. Receipt and provider side effects remain mocked/absent. The original 304-check responsive verification above is retained as the preceding commit's handoff evidence; final focused verification covers the selector follow-up.
-
-Actual alpha-composited locale-control border contrast increases from **1.52:1 to 3.40:1** on the pale menu surface. Header navigation is 4.63:1; primary Booking CTA 5.33:1; Footer text 10.73:1; selected/progress 6.73:1; pending copy 6.54:1; form border against its fill 3.40:1; keyboard form focus against editor 5.89:1. Existing logo geometry, palette and all other presentation/behavior are preserved.
+Confirm phone, WhatsApp, LINE, email and exact address text if desired. Existing approval needs remain for activity duration/price tiers/billing basis, illustrative packages and legal/business facts. Live environment/provider acceptance remains a separate release task. This visual pass neither invents these facts nor enables contacts.

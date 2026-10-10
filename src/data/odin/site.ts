@@ -5,7 +5,8 @@ import type { SiteConfig } from "@/types/domain";
  * MUST be replaced before launch — see /docs/MOCK_DATA.md §2 and §7 for the
  * full pre-launch checklist. Do not read these values as verified.
  */
-export const siteConfig: SiteConfig = {
+export const siteConfig: SiteConfig & { mapsUrl: string } = {
+  mapsUrl: "https://maps.app.goo.gl/5SAXfYQpQMktn8fv6?g_st=ac",
   businessName: "ON GROUND CAFE & FARM",
   address: {
     value: "88/8 Rural Road, Nong Prue, Chon Buri, Thailand",

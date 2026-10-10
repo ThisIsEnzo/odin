@@ -61,3 +61,24 @@ Updated Header, sticky/mobile menu, Footer, buttons, shared forms, homepage edit
 Preserved textual ON GROUND CAFE & FARM, internal identifiers, navigation order, repeated anchors, Booking V2/Your Visit, pending duration/pricing, snapshots, mock-data suppression, API/domain/DB/outbox/provider code. No tier, business fact or backend migration was added. See `BRAND_REFRESH_STATUS.md` for current measured QA.
 
 The final control pass replaces the default language-selector border with the semantic control boundary. Its actual contrast against the pale menu improves from 1.52:1 to 3.40:1. EN/RU/TH/ZH mobile selector focus and Review were checked at 375/390/430px; no locale or booking behavior changed.
+
+
+## Client review: second official mark and material refinement
+
+This continuation starts from PR #3 HEAD `25ef01b85c7ab6ddee5059a0e391460ccb9dcce4`; prior successful Booking and layout work is preserved. The new horse relief complements the primary wordmark rather than replacing it.
+
+| Client finding | Resolution |
+| --- | --- |
+| Wordmark appeared pasted over the Header wall | A color-matted transparent derivative of the actual lettering removes the rectangular wall; original JPEG remains untouched |
+| New horse mark needed a distinct role | One dimensional Footer seal, plus source-derived favicon/app icons; Header/mobile retain a readable primary signature |
+| Flat terracotta lacked material quality | Reusable `.brand-terra-surface`: low-opacity procedural grain and diffuse tonal fields, limited to Header/menu/Footer |
+| Two photographed terracotta/cream families needed discipline | Sample both originals; canonical #AE583A/#F4E3CA with explicitly derived accessible material/action tones |
+| Small dark navigation and umber CTA felt generic | 15px cream navigation, restrained tracking/underline, inverse cream CTA and matching locale boundary |
+| Maximum-weight restrictions inherited error-red styling | Cream/earth metadata pills shared with opening hours; error red remains for actual errors |
+| Post-Hero stats strip was still present | Remove the strip; Hero now transitions directly to Experiences with existing section whitespace |
+| Location had no approved destination | Exact client Maps URL in canonical site config; editorial Khao Mai Kaeo label and localized external CTA; no iframe |
+| Contact details remain unconfirmed | Existing mock flags stay true; phone/WhatsApp/LINE/email/textual address remain hidden |
+
+Footer composition intentionally uses a small seal above the signature with generous spacing, not two equally prominent logos. Relief wall/shadows are retained in the seal; removing them would flatten the authoritative artwork. No horse stamps are added to editorial sections or Booking controls. Latin/Cyrillic Inter and Thai/Chinese Noto typography remain; no ornamental face or re-typeset wordmark.
+
+Booking receives updated semantic cream/surface colors only. Domain handlers, package-plus-extra composition, duration/price pending behavior, review/receipt semantics, database/API and providers remain unchanged. Final verification is recorded in BRAND_REFRESH_STATUS.md. Earlier QA counts above are historical evidence and are not combined with this continuation's checks.

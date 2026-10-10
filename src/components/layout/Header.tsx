@@ -20,7 +20,7 @@ export function Header() {
   const tCommon = useTranslations("common");
 
   return (
-    <header className={`ground-header sticky top-0 z-30 border-b border-brand-cream/20 ${scrolled ? "shadow-sm" : ""}`}>
+    <header className={`ground-header brand-terra-surface sticky top-0 z-30 border-b border-brand-cream/20 ${scrolled ? "shadow-sm" : ""}`}>
       <Container className={`flex items-center justify-between gap-3 transition-[min-height] duration-300 ${scrolled ? "min-h-20" : "min-h-22 lg:min-h-24"}`}>
         
         <Link
@@ -38,7 +38,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="border-b border-transparent px-2 py-3 text-[13px] font-medium text-ink hover:border-ink hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
+              className="ground-nav-link border-b border-transparent px-3 py-3 text-[15px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
             >
               {t(item.translationKey)}
             </Link>
@@ -46,7 +46,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden xl:inline-flex [&_select]:text-text-on-accent [&_select]:border-ink/60 [&_option]:bg-canvas" />
+          <LanguageSwitcher className="hidden xl:inline-flex [&_select]:text-text-on-accent [&_select]:border-brand-cream [&_option]:bg-canvas [&_option]:text-ink" />
           <Link
             href={bookNowItem.href}
             className={buttonVariants({ variant: "primary", size: "sm", className: "ground-header-cta" })}

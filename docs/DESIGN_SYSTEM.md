@@ -2,40 +2,49 @@
 
 Implemented in `src/app/globals.css`, shared UI components and existing presentation components. This documents the current system, not a proposed framework.
 
-## Official artwork and palette
+## Official artwork and identity hierarchy
 
-The October 10 client reference `1000070899.jpg` is authoritative visually. Its actual lettering is “on ground · KHAO MAI KAEO”. This is a 1536 × 823 opaque photograph with textured terracotta and dimensional cream lettering, not a flat vector logo. No explicit HEX values, alternate variants or typeface specifications were supplied.
+Two client originals are authoritative: the 1536 × 823 ON GROUND / KHAO MAI KAEO wordmark and the 1536 × 1536 circular horse relief. Both original JPEGs remain untouched. Historical logos remain for provenance and are not active UI assets.
 
-Production assets:
-- `public/images/brand/on-ground-khao-mai-kaeo-original.jpg`: untouched source bytes.
-- `public/images/brand/on-ground-khao-mai-kaeo-wordmark.webp`: rectangular crop (156,225)–(1380,615), 1224 × 390; complete lettering and location line, original geometry/shadows retained.
-- `src/app/icon.png` (64px), `src/app/apple-icon.png` (180px): legitimate crop of the source's “on” lettering, proportionally fitted with terracotta padding. No invented compact symbol.
+**Primary signature:** the actual wordmark lettering, never typeset with a substitute font. `on-ground-wordmark-cutout.webp` isolates the cream lettering from the original crop (156,225)–(1380,615), 1224 × 390. A color-difference alpha matte removes terracotta while retaining the photographed letter faces, shaded edge geometry and antialiasing. External wall shadows are omitted; the original relief photograph remains available. The cutout was inspected on both the sampled and deeper CSS surfaces; there is no opaque rectangular wall, visible fringe or stretched geometry.
 
-Transparency was not forced: texture, cream depth and shadows do not support a clean flat cutout. Header and menu heading use the sampled terracotta; Footer uses a deliberate terracotta artwork plaque within a dark umber zone. The same full wordmark appears in Header, menu and Footer. Old SVG logo derivatives have no active UI references and remain only for historical documentation; the superseded icon was removed. Historical originals remain for provenance. No OpenGraph or structured logo implementation existed to update.
+**Secondary mark:** `on-ground-horse-original.jpg` is the unchanged new JPEG. Cream bounds from the sampling filter are (277,237)–(1250,1241); shadows extend beyond those bounds. The production seal uses crop (218,190)–(1318,1290), a 1100px square with room for the ears, ring and cast shadow. The relief has highlights on upper/left edges, warm darker bevels and downward/right wall shadows. Transparent extraction would flatten this dimensional character, so its natural wall is retained deliberately. The 440px WebP appears once per page as a 104px circular Footer seal, above the 232px wordmark with 24px spacing. It is decorative because the adjoining wordmark supplies the accessible brand name. No horse watermark, button icon or repeated section stamp is used.
 
-The textual business name remains **ON GROUND CAFE & FARM**. The location line does not establish a confirmed legal/public rename. Internal ODIN identifiers, booking reference prefix and domain data are unchanged.
+**Header/mobile:** wordmark only (224px desktop, 188px small mobile), cream navigation, inverse cream Book CTA, tactile terracotta surface. The full name remains legible on mobile; a second mark would compete with navigation. Mobile menu uses the same signature/material and an airy warm neutral body. Footer composes the horse seal and smaller signature in one column rather than two equal logos side by side.
 
-Sampling: median RGB over background rectangle (0,0)–(1536,180): (177,101,69). Cream median from (180,250)–(1350,440), filtering pixels with minimum channel >160 and channel spread <90: (240,220,194). The textured image contains variations; these are representative samples, not claimed flat client specifications.
+**Icons:** the official horse crop supplies a 16/32px RGBA favicon ICO, 64px `icon.png`, 180px `apple-icon.png`, and 512px app derivative. Next file conventions generate favicon/apple/icon metadata. At 16px the ring and horse silhouette carry recognition; relief detail is intentionally limited by scale. No invented SVG paths or generic horse symbol.
 
-| Token | HEX | Role/provenance |
+Textual business name remains **ON GROUND CAFE & FARM**. The location line is official artwork; internal ODIN identifiers remain unchanged.
+
+## Canonical sampled palette
+
+Both assets were sampled, not inferred from the prompt. Median background RGB from the upper 180px: wordmark (177,101,69), **#B16545**; horse (174,88,58), **#AE583A**. Horse background 10th–90th channel percentiles: (168,82,52)–(180,94,63). Cream filter: all channels >160 and max/min spread <90; horse median (244,227,202), **#F4E3CA**. The wordmark's previous cream sample (180,250)–(1350,440) is (240,220,194), #F0DCC2. These are photographic families, not client-specified flat inks. The horse establishes the single canonical terracotta/cream family; the original artwork's natural color differences remain within the asset rather than becoming extra site tokens.
+
+| Token | HEX | Role |
 | --- | --- | --- |
-| `brand-accent` | #B16545 | Sampled terracotta; Header/menu brand zones |
-| `brand-cream` | #F0DCC2 | Sampled cream; inverse actions and dark-surface text |
-| `brand-primary` / `focus` | #87462F | Derived accessible action/text companion |
-| `brand-primary-hover` | #703824 | Derived hover |
-| `brand-primary-active` | #592C1D | Derived pressed state |
-| `canvas` / `surface` | #FCF8F2 | Derived warm light canvas |
-| `canvas-soft` / `surface-muted` | #F3E8DA | Derived editor and tonal section surface |
-| `surface-dark` | #38261F | Derived umber editorial/footer surface |
-| `surface-deep` / `ink` / `text-primary` | #281B16 | Derived primary copy/depth |
-| `text-on-accent` | #090604 | Derived small text on sampled terracotta |
-| `text-secondary` | #69564C | Derived muted copy |
-| `border` | #9B8273 | Derived visible form boundary |
-| `error` | #991B1B | Functional error color, independent of brand |
+| `brand-accent` / `surface-terra` | #AE583A | Sampled mineral terracotta reference |
+| `brand-terra-deep` | #96472D | Derived accessible material surface: Header/menu/Footer |
+| `brand-primary` / `focus` | #87462F | Accessible actions, selected states, focus |
+| `brand-primary-hover` | #703824 | Action hover |
+| `brand-primary-active` | #592C1D | Action pressed |
+| `brand-terra-soft` / `canvas-soft` / `surface-muted` | #F3E8DA | Quiet editor/section surface |
+| `brand-cream` / `text-on-accent` / `text-on-dark` | #F4E3CA | Canonical cream; solid inverse text |
+| `brand-cream-soft` / `canvas` / `surface` | #FCF8F2 | Main editorial canvas |
+| `surface-dark` | #38261F | Deep earth editorial companion |
+| `surface-deep` / `ink` / `text-primary` | #281B16 | Depth and primary text |
+| `text-secondary` | #69564C | Ordinary metadata and pending copy |
+| `border` | #9B8273 | Visible control boundary |
+| `error` | #991B1B | Real validation/submission errors only |
 
-Old terracotta/cream/green tokens are absent from active CSS. Existing internal `BadgeVariant` and `SectionTone` names are compatibility identifiers only; they map to new semantic colors.
+## Tactile material and surface hierarchy
 
-Contrast (WCAG relative luminance): cream/action 5.33:1; cream/umber 10.73:1; secondary/canvas 6.54:1; action/editor 5.89:1; border/canvas 3.40:1. Header/menu text on sampled terracotta uses the darker `text-on-accent` (4.63:1), rather than body ink (3.83:1). Original logo lettering is artwork and was not recolored. Focus uses dark companions on light/terracotta and cream on dark/photo surfaces. Disabled controls retain disabled semantics and opacity. These checks cover key combinations, not an independent accessibility certification.
+`.brand-terra-surface` is a reusable CSS treatment on Header, menu heading and Footer only. Base is the derived deep terracotta #96472D so small cream text is accessible. Two diffuse radial fields use 2.5% cream and 2.5% umber; a tiny inline SVG fractal grain (180px, frequency .68, three octaves, 2.5% opacity) provides stationary, nearly subconscious variation. This is procedural CSS/SVG material, not a repeating photograph. No external texture request, animation, large bitmap or obvious gradient stripe. Solid-color comparison was visually flatter; the understated material was retained after browser review.
+
+Main content remains #FCF8F2; soft sections/editor #F3E8DA; Restaurant uses related earth #38261F. Avoid texturing every section. Artwork wall is used only inside the intentional small horse seal/icons. Cream Footer/nav copy is solid; no low-opacity small inverse text. Header hover is a quiet underline; 15px medium navigation has .015em tracking, reset for Thai/Chinese. Desktop navigation starts at 1280px.
+
+Opening-hours and maximum-weight pills share cream/earth styling. Pending price uses solid secondary text on light backgrounds, cream on photos; ordinary restrictions never use error red. Booking progress, selected/duration choices, editor, estimate/pending copy, forms and CTA consume the same tokens. Booking handlers, domain rules, duration architecture, API and request semantics are preserved.
+
+Contrast is measured using WCAG relative luminance including material's theoretical brightest composite, rather than assuming sampled cream/terracotta works for small text. Final measured values and keyboard/browser checks are recorded in BRAND_REFRESH_STATUS.md. Artwork is preserved as artwork. Controls retain 44px minimum targets and 2px contextual focus.
 
 ## Typography
 
@@ -46,7 +55,7 @@ Inter is the Latin/Cyrillic face; Noto Sans Thai and Noto Sans SC are the existi
 - Booking H2: `--type-subheading: clamp(1.5rem, 2.3vw, 1.875rem)`, 500, 1.25, -0.025em.
 - Homepage H3: 24–30px depending on composition, 500, 1.25, -0.025em. Restaurant H2 intentionally caps at 52px to fit its column.
 - H4/form group headings: 16px semibold. Body: 16px; lead 18px; small 14px; metadata 12px. Homepage/Booking paragraphs use 1.7 line height.
-- Eyebrow: .7rem, 600, .18em, uppercase. Navigation 13px; buttons 14px or 16px; labels 14px; input text 16px.
+- Eyebrow: .7rem, 600, .18em, uppercase. Navigation 15px; buttons 14px or 16px; labels 14px; input text 16px.
 - Thai/Chinese headings remove negative tracking and use 1.25–1.45 line height; Booking headings use 1.4. Eyebrow tracking reduces to .04em.
 
 ## Grid and spacing
@@ -63,11 +72,11 @@ Shared Button variants: primary (accessible terracotta/cream), inverse (cream/ac
 
 All active Booking text/date/number/select/textarea controls use `.form-control`: minimum 48px, 12px padding, 16px text, 1px semantic border, 2px radius, ivory fill. Hover darkens the border; focus uses terracotta; `aria-invalid` uses the error border; disabled controls fade. Existing labels, values and event handlers are unchanged.
 
-Booking discovery and itinerary entries use square editorial rows and dividers; the active editor uses a warm tonal inset. Editorial photography is predominantly square-cornered. Pills remain only for compact metadata badges; circular gallery controls remain intentional. Fine tonal dividers provide structure; no new shadows or gradient decoration were added.
+Booking discovery and itinerary entries use square editorial rows and dividers; the active editor uses a warm tonal inset. Editorial photography is predominantly square-cornered. Pills remain only for compact metadata badges; circular gallery controls remain intentional. Fine tonal dividers provide structure; no decorative component shadows were added; material variation is limited to brand surfaces.
 
 ## Interaction, images and motion
 
-Links retain contextual underline/border hover. Focus uses a 2px outline with offset; inverse photographic/umber surfaces use cream; sampled terracotta zones use dark focus. Forced-color mode uses system Highlight. Menu/language/icon controls target at least 44px. Mobile Footer navigation uses two columns with 44px links; larger layouts use 24px links plus vertical spacing.
+Links retain contextual underline/border hover. Focus uses a 2px outline with offset; inverse photographic/umber surfaces use cream; text-bearing terracotta material uses cream focus. Forced-color mode uses system Highlight. Menu/language/icon controls target at least 44px. Mobile Footer navigation uses two columns with 44px links; larger layouts use 24px links plus vertical spacing.
 
 Desktop Header navigation starts at 1280px; below it the branded Radix menu includes the language selector. Existing focus trap, Escape and close behavior stay intact.
 
@@ -99,8 +108,8 @@ There are currently **no approved tiers**. Instead of fabricated buttons, each d
 
 `.visit-estimate` uses a divider, restrained label/amount and the visible final-price-manager notice. Currency uses next-intl number formatting; minute labels use localized messages. Review uses a two-column detail grid on small screens and four columns from 640px. No checkout/payment styling is introduced.
 
-The single shared primary navigation is Experiences → Packages → Restaurant → Gallery → Location. Unavailable About/Contact/Privacy/Terms destinations are absent. Mock contact/address/map destinations and numeric mock prices are not rendered. Restaurant links to visit planning, with no table-reservation claim. Skip navigation is localized.
+The single shared primary navigation is Experiences → Packages → Restaurant → Gallery → Location. Unavailable About/Contact/Privacy/Terms destinations are absent. Mock contacts, textual address and numeric mock prices are not rendered. The client-approved Maps URL is now the only published external location destination. Restaurant links to visit planning, with no table-reservation claim. Skip navigation is localized.
 
 ## Locale-control boundary follow-up
 
-Default language selectors now use the semantic `border` token (#9B8273), replacing a 20%-opacity ink outline. Compositing the former alpha color against the actual pale menu surface measured 1.52:1; the solid semantic border measures 3.40:1. Header/Footer contextual overrides remain. Locale values, routing and change handlers are unchanged.
+Default language selectors now use the semantic `border` token (#9B8273), replacing a 20%-opacity ink outline. Compositing the former alpha color against the actual pale menu surface measured 1.52:1; the solid semantic border measures 3.40:1. Header/Footer use solid cream boundaries on their deeper material surfaces. Locale values, routing and change handlers are unchanged.

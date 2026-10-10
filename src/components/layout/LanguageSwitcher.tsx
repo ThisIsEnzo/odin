@@ -28,7 +28,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           router.replace(pathname, { locale: nextLocale });
         }}
         className={cn(
-          "rounded-button border border-ink/20 bg-transparent",
+          "rounded-button border border-border bg-transparent",
           "min-h-11 px-3 py-2 text-ink",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
         )}

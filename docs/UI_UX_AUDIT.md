@@ -23,7 +23,7 @@ The rendered baseline was inspected in Chromium before edits, including the comp
 
 - Keep cinematic slideshow, existing photographs/crops, desktop experience selector, mobile accordion, package rows, Restaurant 3:2 composition, Gallery grid and mobile strip.
 - Preserve all source logo artwork; no generated/reinterpreted logo or photography.
-- Green remains an editorial secondary surface; primary page canvas stays warm ivory.
+- The earlier green editorial palette was superseded by the official refresh below; the warm light canvas remains.
 - Preserve canonical request shape, domain rules, validators, participants, packages, times, idempotency, submission and public API semantics. Frontend presentation and editing composition were deliberately improved.
 - The initial design-only pass preserved backend/data. The later duration continuation below adds a migration, canonical estimate model and notification fields without changing business facts.
 - Existing empty reviews produce no fabricated testimonials.
@@ -51,3 +51,11 @@ Client decisions still required by the existing data/docs: replace marked mock c
 | Navigation order did not match client requirement | Medium | Reorder the one shared source; Header, menu and Footer inherit it |
 
 Remaining client decisions: approved duration-price pairs and billing basis for Horse Riding, Pony Riding, ATV and Sauna; confirmed package contents/price/billing basis; verified contacts/address/directions; approved legal content. Existing pending package contents remain clearly described as illustrative. No replacements or business claims were invented.
+
+## NEW OFFICIAL BRAND REFRESH
+
+The October 10 “on ground · KHAO MAI KAEO” photograph supersedes the prior horse logo and #84250F/#F4D2A6/#253D32 visual treatment. The new original is retained intact; a proportional wordmark crop and source-lettering icons replace active old derivatives. The sampled palette is #B16545/#F0DCC2 with explicitly documented accessible derived controls and umber surfaces.
+
+Updated Header, sticky/mobile menu, Footer, buttons, shared forms, homepage editorial colors, booking selected/editor/progress/summary/review/receipt colors and generated icon metadata. Small Header/menu navigation uses a darker text companion because body ink on the sampled terracotta did not reach 4.5:1. Existing photography, typography, Restaurant composition and layout hierarchy were retained.
+
+Preserved textual ON GROUND CAFE & FARM, internal identifiers, navigation order, repeated anchors, Booking V2/Your Visit, pending duration/pricing, snapshots, mock-data suppression, API/domain/DB/outbox/provider code. No tier, business fact or backend migration was added. See `BRAND_REFRESH_STATUS.md` for current measured QA.

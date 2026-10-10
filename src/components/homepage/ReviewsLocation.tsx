@@ -17,15 +17,15 @@ export function ReviewsLocation() {
       {realReviews.length > 0 && <Reveal className="mb-16 border-b border-ink/15 pb-12">
         <h2>{t("heading")}</h2>
         <ul className="mt-8 grid gap-8 sm:grid-cols-2">
-          {realReviews.map(review => <li key={review.id} className="border-l border-terracotta pl-5">
-            <p className="text-terracotta">{"★".repeat(review.rating)}<span className="text-ink/30">{"★".repeat(5-review.rating)}</span></p>
+          {realReviews.map(review => <li key={review.id} className="border-l border-brand-primary pl-5">
+            <p className="text-brand-primary">{"★".repeat(review.rating)}<span className="text-ink/30">{"★".repeat(5-review.rating)}</span></p>
             <p className="mt-2 text-sm">{review.authorName}</p>
           </li>)}
         </ul>
       </Reveal>}
       <Reveal className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="eyebrow mb-5 text-terracotta">{location("distanceBadge", {distance: siteConfig.locationDistanceFromPattaya})}</p>
+          <p className="eyebrow mb-5 text-brand-primary">{location("distanceBadge", {distance: siteConfig.locationDistanceFromPattaya})}</p>
           <h2>{location("heading")}</h2>
           <p className="mt-5 max-w-md text-ink/70">{location("body", {distance: siteConfig.locationDistanceFromPattaya})}</p>
         </div>

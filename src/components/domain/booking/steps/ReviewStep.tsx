@@ -75,7 +75,7 @@ export function ReviewStep({
     <div>
       <h2 className="font-display text-xl text-ink sm:text-2xl">{t("steps.review")}</h2>
 
-      <dl className="mt-6 divide-y divide-ink/10 rounded-card border border-moss/15 bg-white/60">
+      <dl className="mt-6 divide-y divide-ink/10 rounded-card border border-surface-dark/15 bg-white/60">
         {rows.map((row) => (
           <div key={row.label} className="flex flex-col gap-1 px-5 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
             <dt className="text-sm font-medium text-ink/60">{row.label}</dt>

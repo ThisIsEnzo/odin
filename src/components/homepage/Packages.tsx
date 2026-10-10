@@ -48,7 +48,7 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
 
   return (
     <article className="grid grid-cols-[36px_minmax(0,1fr)] gap-4 py-10 sm:py-12 lg:grid-cols-[64px_minmax(0,1fr)]">
-      <span aria-hidden="true" className="pt-1 text-lg font-normal tabular-nums text-terracotta/70">0{index + 1}</span>
+      <span aria-hidden="true" className="pt-1 text-lg font-normal tabular-nums text-brand-primary/70">0{index + 1}</span>
       <div className="grid gap-x-12 lg:grid-cols-[minmax(0,1fr)_250px]">
         <div>
         <h3 className="text-2xl sm:text-3xl">{t("title")}</h3>

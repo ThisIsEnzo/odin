@@ -6,7 +6,7 @@ export type SectionTone = "canvas" | "canvas-soft" | "moss";
 const tones: Record<SectionTone, string> = {
   canvas: "bg-canvas",
   "canvas-soft": "bg-canvas-soft",
-  moss: "bg-moss text-canvas",
+  moss: "bg-surface-dark text-canvas",
 };
 
 export interface SectionProps extends HTMLAttributes<HTMLElement> {

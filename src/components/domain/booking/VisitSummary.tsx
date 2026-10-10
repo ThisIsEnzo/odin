@@ -49,7 +49,7 @@ export function VisitSummary({items, locale, nameOf, itemName, onEdit, onAdd}: {
       <div className="visit-summary-content">{content}</div>
     </details>
     <aside className="visit-summary-desktop" aria-label={t("ux.summary")}>
-      <p className="eyebrow text-terracotta">ON GROUND</p>
+      <p className="eyebrow text-brand-primary">ON GROUND</p>
       <h2>{t("v2.title")}</h2>
       <p className="visit-summary-count">{t("ux.count", {count})}</p>
       {content}

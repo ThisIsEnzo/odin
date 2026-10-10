@@ -23,7 +23,7 @@ export function Restaurant() {
         </Reveal>
         <Reveal className="restaurant-panel" delayMs={80}>
           <div className="restaurant-copy">
-            <p className="eyebrow mb-5 text-cream-brand">ON GROUND · {t("title")}</p>
+            <p className="eyebrow mb-5 text-brand-cream">ON GROUND · {t("title")}</p>
             <h2 className="font-display text-canvas">{t("title")}</h2>
             <p className="mt-5 max-w-md text-canvas/80">{t("description")}</p>
             <dl className="mt-7 border-y border-canvas/20 py-5 text-sm">

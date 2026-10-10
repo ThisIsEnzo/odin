@@ -2,26 +2,40 @@
 
 Implemented in `src/app/globals.css`, shared UI components and existing presentation components. This documents the current system, not a proposed framework.
 
-## Palette
+## Official artwork and palette
 
-| Token | Value | Role |
+The October 10 client reference `1000070899.jpg` is authoritative visually. Its actual lettering is “on ground · KHAO MAI KAEO”. This is a 1536 × 823 opaque photograph with textured terracotta and dimensional cream lettering, not a flat vector logo. No explicit HEX values, alternate variants or typeface specifications were supplied.
+
+Production assets:
+- `public/images/brand/on-ground-khao-mai-kaeo-original.jpg`: untouched source bytes.
+- `public/images/brand/on-ground-khao-mai-kaeo-wordmark.webp`: rectangular crop (156,225)–(1380,615), 1224 × 390; complete lettering and location line, original geometry/shadows retained.
+- `src/app/icon.png` (64px), `src/app/apple-icon.png` (180px): legitimate crop of the source's “on” lettering, proportionally fitted with terracotta padding. No invented compact symbol.
+
+Transparency was not forced: texture, cream depth and shadows do not support a clean flat cutout. Header and menu heading use the sampled terracotta; Footer uses a deliberate terracotta artwork plaque within a dark umber zone. The same full wordmark appears in Header, menu and Footer. Old SVG logo derivatives have no active UI references and remain only for historical documentation; the superseded icon was removed. Historical originals remain for provenance. No OpenGraph or structured logo implementation existed to update.
+
+The textual business name remains **ON GROUND CAFE & FARM**. The location line does not establish a confirmed legal/public rename. Internal ODIN identifiers, booking reference prefix and domain data are unchanged.
+
+Sampling: median RGB over background rectangle (0,0)–(1536,180): (177,101,69). Cream median from (180,250)–(1350,440), filtering pixels with minimum channel >160 and channel spread <90: (240,220,194). The textured image contains variations; these are representative samples, not claimed flat client specifications.
+
+| Token | HEX | Role/provenance |
 | --- | --- | --- |
-| `terracotta` / `brand-primary` | #84250F | Logo-derived primary brand, primary actions, selected step |
-| `terracotta-dark` / `brand-primary-hover` | #6A1E0C | Primary hover/pressed |
-| `terracotta-light` | #9D452B | Existing lighter accent |
-| `cream-brand` / `brand-cream` | #F4D2A6 | Logo, dark-brand text, inverse action |
-| `moss` | #253D32 | Editorial green surface and secondary actions |
-| `moss-dark` | #192E25 | Green depth/hover |
-| `canvas` / `surface` | #FAF8F2 | Main ivory canvas |
-| `canvas-soft` / `surface-muted` | #EFECE3 | Tonal section and selection surface |
-| `ink` / `text-primary` | #202C27 | Primary copy |
-| `text-secondary` | #59635B | Solid muted copy, package disclaimers |
-| `border` | #858D80 | Form-control boundary |
-| `error` | #991B1B | Form errors |
-| `saddle` | #77513D | Existing restriction badges |
-| `dusk`, `dusk-light` | #CFAB79, #E5CDA9 | Retained supporting tokens |
+| `brand-accent` | #B16545 | Sampled terracotta; Header/menu brand zones |
+| `brand-cream` | #F0DCC2 | Sampled cream; inverse actions and dark-surface text |
+| `brand-primary` / `focus` | #87462F | Derived accessible action/text companion |
+| `brand-primary-hover` | #703824 | Derived hover |
+| `brand-primary-active` | #592C1D | Derived pressed state |
+| `canvas` / `surface` | #FCF8F2 | Derived warm light canvas |
+| `canvas-soft` / `surface-muted` | #F3E8DA | Derived editor and tonal section surface |
+| `surface-dark` | #38261F | Derived umber editorial/footer surface |
+| `surface-deep` / `ink` / `text-primary` | #281B16 | Derived primary copy/depth |
+| `text-on-accent` | #090604 | Derived small text on sampled terracotta |
+| `text-secondary` | #69564C | Derived muted copy |
+| `border` | #9B8273 | Derived visible form boundary |
+| `error` | #991B1B | Functional error color, independent of brand |
 
-Semantic aliases refer to the same original palette values rather than maintaining duplicate brand HEX declarations. Photography overlays intentionally retain transparency; this is not a rule to replace every contextual opacity with a solid color.
+Old terracotta/cream/green tokens are absent from active CSS. Existing internal `BadgeVariant` and `SectionTone` names are compatibility identifiers only; they map to new semantic colors.
+
+Contrast (WCAG relative luminance): cream/action 5.33:1; cream/umber 10.73:1; secondary/canvas 6.54:1; action/editor 5.89:1; border/canvas 3.40:1. Header/menu text on sampled terracotta uses the darker `text-on-accent` (4.63:1), rather than body ink (3.83:1). Original logo lettering is artwork and was not recolored. Focus uses dark companions on light/terracotta and cream on dark/photo surfaces. Disabled controls retain disabled semantics and opacity. These checks cover key combinations, not an independent accessibility certification.
 
 ## Typography
 
@@ -45,7 +59,7 @@ Booking uses the same 1280px outer rail. From 1024px it splits into a flexible e
 
 ## Controls and surfaces
 
-Shared Button variants: primary (terracotta/white), inverse (cream/terracotta), secondary (green/ivory), outline and ghost. Minimum heights 44/48/56px for sm/md/lg; 2px corners; wrapped labels supported; 150ms color transition. Disabled buttons retain the existing disabled behavior/opacity.
+Shared Button variants: primary (accessible terracotta/cream), inverse (cream/accessible terracotta), secondary (umber/ivory), outline and ghost. Minimum heights 44/48/56px for sm/md/lg; 2px corners; wrapped labels supported; 150ms color transition. Disabled buttons retain the existing disabled behavior/opacity.
 
 All active Booking text/date/number/select/textarea controls use `.form-control`: minimum 48px, 12px padding, 16px text, 1px semantic border, 2px radius, ivory fill. Hover darkens the border; focus uses terracotta; `aria-invalid` uses the error border; disabled controls fade. Existing labels, values and event handlers are unchanged.
 
@@ -53,7 +67,7 @@ Booking discovery and itinerary entries use square editorial rows and dividers; 
 
 ## Interaction, images and motion
 
-Links retain contextual underline/border hover. Focus uses a 2px outline with offset; inverse photographic/green surfaces and brand surfaces use cream. Forced-color mode uses system Highlight. Menu/language/icon controls target at least 44px. Mobile Footer navigation uses two columns with 44px links; larger layouts use 24px links plus vertical spacing.
+Links retain contextual underline/border hover. Focus uses a 2px outline with offset; inverse photographic/umber surfaces use cream; sampled terracotta zones use dark focus. Forced-color mode uses system Highlight. Menu/language/icon controls target at least 44px. Mobile Footer navigation uses two columns with 44px links; larger layouts use 24px links plus vertical spacing.
 
 Desktop Header navigation starts at 1280px; below it the branded Radix menu includes the language selector. Existing focus trap, Escape and close behavior stay intact.
 

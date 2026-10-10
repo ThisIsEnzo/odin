@@ -54,12 +54,12 @@ export function GuestsStep({
             aria-describedby={guestsError ? "booking-guests-error" : undefined}
             className={cn(
               "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-              guestsError ? "border-saddle" : "border-ink/20",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
+              guestsError ? "border-error" : "border-ink/20",
             )}
           />
           {guestsError && (
-            <p id="booking-guests-error" role="alert" className="mt-1.5 text-sm text-saddle">
+            <p id="booking-guests-error" role="alert" className="mt-1.5 text-sm text-error">
               {guestsError}
             </p>
           )}
@@ -82,8 +82,8 @@ export function GuestsStep({
               aria-describedby="booking-weight-help booking-weight-error"
               className={cn(
                 "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-                weightError ? "border-saddle" : "border-ink/20",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
+                weightError ? "border-error" : "border-ink/20",
               )}
             />
             <p id="booking-weight-help" className="mt-1.5 text-sm text-ink/60">
@@ -92,7 +92,7 @@ export function GuestsStep({
                 : t("fields.weightHelpMax", { max: maxWeightKg ?? "", experience: experienceName })}
             </p>
             {weightError && (
-              <p id="booking-weight-error" role="alert" className="mt-1.5 text-sm text-saddle">
+              <p id="booking-weight-error" role="alert" className="mt-1.5 text-sm text-error">
                 {weightError}
               </p>
             )}

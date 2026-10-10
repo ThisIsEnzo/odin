@@ -63,9 +63,9 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
               className={cn(
                 "flex items-center gap-4 shrink-0 border-b px-0 py-6 text-left text-xl font-medium",
                 "transition-colors duration-200",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
                 isActive
-                  ? "border-terracotta text-terracotta"
+                  ? "border-brand-primary text-brand-primary"
                   : "border-ink/15 text-ink/60 hover:text-ink",
               )}
             >
@@ -76,7 +76,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       </div>
 
       
-      <div className="surface-inverse relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-moss">
+      <div className="surface-inverse relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-surface-dark">
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
           const maxWeight = experience.restrictions.maxWeightKg;
@@ -171,14 +171,10 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
             return (
               <div
                 key={experience.id}
-                // PHASE 4 FINALIZATION — the new terracotta brand accent
-                // marks this "selected" state (one of the accent's intended
-                // narrow uses); the desktop selector's moss-based active
-                // state above is left as-is, not touched for consistency's
-                // sake alone.
+                // The selected experience uses the shared accessible brand accent.
                 className={cn(
                   "overflow-hidden border-t transition-colors duration-200",
-                  isActive ? "border-terracotta bg-canvas-soft" : "border-ink/10 bg-transparent",
+                  isActive ? "border-brand-primary bg-canvas-soft" : "border-ink/10 bg-transparent",
                 )}
               >
                 <button
@@ -189,7 +185,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   onClick={() => setActiveIndex(index)}
                   className={cn(
                     "flex w-full items-center justify-between gap-3 px-4 py-5 text-left",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
                   )}
                 >
                   <span

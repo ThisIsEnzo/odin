@@ -12,7 +12,7 @@ export function ActivityEditor({activity,path,onChange,error,included=false}:{ac
   function feedback(name:string) {const text=error(`${path}.${name}`);return text?<p id={`${activity.id}-${name}-error`} className="mt-2 text-sm text-red-800" role="alert">{text}</p>:null;}
   const attrs=(name:string)=>({"aria-invalid":!!error(`${path}.${name}`),"aria-describedby":error(`${path}.${name}`)?`${activity.id}-${name}-error`:undefined});
   return <div className="mt-5 space-y-5">
-    <p className="text-sm text-moss">{t("v2.hours",exp.operatingHours)}</p>
+    <p className="text-sm text-surface-dark">{t("v2.hours",exp.operatingHours)}</p>
     <div className="grid min-w-0 gap-5 sm:grid-cols-2">
       <div className="min-w-0"><label htmlFor={`${activity.id}-date`}>{t("fields.date")}</label><input id={`${activity.id}-date`} type="date" min={todayIsoDate()} max={maxIsoDate()} value={activity.date} onChange={e=>onChange({...activity,date:e.target.value})} className={inputClass} {...attrs("date")}/>{feedback("date")}</div>
       <div><label htmlFor={`${activity.id}-time`}>{t("fields.time")}</label><select id={`${activity.id}-time`} value={activity.time} onChange={e=>onChange({...activity,time:e.target.value})} className={inputClass} {...attrs("time")}><option value="">{t("v2.chooseTime")}</option>{getAvailableTimeSlots(exp,activity.durationMinutes).map(time=><option key={time}>{time}</option>)}</select>{feedback("time")}</div>

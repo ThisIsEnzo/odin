@@ -22,7 +22,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const t = await getTranslations("home");
   const nav = await getTranslations("nav");
   return <div className="homepage">
-    <section className="surface-inverse relative isolate bg-moss text-white">
+    <section className="surface-inverse relative isolate bg-surface-dark text-white">
       <HeroSlideshow images={["/images/hero/odin-hero.jpg", "/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg"]} className="absolute inset-0 overflow-hidden" />
       <div className="hero-shade pointer-events-none absolute inset-0" />
       <Container className="hero-content relative flex min-h-[700px] flex-col justify-center pb-28 pt-20 sm:min-h-[760px] lg:min-h-[min(850px,calc(100svh-96px))]">

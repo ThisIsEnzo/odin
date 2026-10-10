@@ -40,13 +40,13 @@ function FaqRow({ item }: { item: FAQItem }) {
         className={
           "flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 " +
           "font-display text-lg text-ink marker:content-none " +
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark"
         }
       >
         {t("question")}
         <span
           aria-hidden="true"
-          className="shrink-0 text-xl text-moss transition-transform duration-150 group-open:rotate-45"
+          className="shrink-0 text-xl text-surface-dark transition-transform duration-150 group-open:rotate-45"
         >
           +
         </span>

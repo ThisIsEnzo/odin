@@ -46,7 +46,7 @@ export function CustomerStep({
             aria-describedby={nameError ? "booking-name-error" : undefined}
             className={cn(
               "form-control",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
               nameError ? "border-error" : "border-ink/20",
             )}
           />
@@ -72,7 +72,7 @@ export function CustomerStep({
               aria-describedby={emailError ? "booking-email-error" : undefined}
               className={cn(
                 "form-control",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
                 emailError ? "border-error" : "border-ink/20",
               )}
             />
@@ -97,7 +97,7 @@ export function CustomerStep({
               aria-describedby={phoneError ? "booking-phone-error" : undefined}
               className={cn(
                 "form-control",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
                 phoneError ? "border-error" : "border-ink/20",
               )}
             />
@@ -121,7 +121,7 @@ export function CustomerStep({
             onChange={(e) => onChange("notes", e.target.value)}
             className={cn(
               "form-control",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
             )}
           />
         </div>

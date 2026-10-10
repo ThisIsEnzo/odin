@@ -31,8 +31,9 @@ export function VisitSummary({items, locale, nameOf, itemName, onEdit, onAdd}: {
           <button type="button" className="visit-summary-title" onClick={() => onEdit(item.id)} aria-label={`${t("v2.edit")}: ${itemName(item)}`}>{itemName(item)}</button>
           {activitiesOf(item).map(a => <div className="visit-summary-detail" key={a.id}>
             {item.type === "package" && <p>{nameOf(a)}</p>}
-            <p>{a.date ? visitDate(a.date, locale) : t("v2.datePending")} · {a.time || t("v2.timePending")}</p>
-            <p><DurationText minutes={a.durationMinutes}/></p><p>{t("v2.guestCount", {count: a.participants.length})}</p>
+            <p>{a.date ? visitDate(a.date, locale) : t("v2.datePending")} · {t("fields.time")}: {a.time || t("v2.timePending")}</p>
+            <p>{t("pricing.duration")}: <DurationText minutes={a.durationMinutes}/></p><p>{t("v2.guestCount", {count: a.participants.length})}</p>
+            {a.participants.some(p => p.weightKg !== undefined) && <p>{a.participants.filter(p => p.weightKg !== undefined).map(p => `${p.weightKg} kg`).join(" · ")}</p>}
           </div>)}
           <ItemEstimate item={item}/>
           <p className="visit-readiness">{visitSchema.safeParse([item]).success ? t("ux.ready") : t("ux.needsDetails")}</p>
@@ -44,7 +45,7 @@ export function VisitSummary({items, locale, nameOf, itemName, onEdit, onAdd}: {
     <p className="visit-request-note">{t("v2.reviewNotice")}</p>
   </>;
   return <>
-    <details className="visit-summary-mobile">
+    <details className="visit-summary-mobile" open>
       <summary><span>{t("v2.title")} <span className="visit-count">{count}</span><span className="visit-estimate-compact"><span>{t("pricing.total")}: </span><EstimateAmount amount={calculateBookingEstimate(items).amount}/></span>{pending > 0 && <span className="visit-pending block">{t("ux.pending", {count: pending})}</span>}</span><span aria-hidden="true">＋</span></summary>
       <div className="visit-summary-content">{content}</div>
     </details>

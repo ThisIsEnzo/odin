@@ -13,8 +13,8 @@ import {bookingSchema,visitSchema,customerSchema,collectFieldErrors,type FieldEr
 import {buttonVariants} from "@/components/ui/Button";
 import {CustomerStep} from "./steps/CustomerStep";
 import {RequestReceived} from "./RequestReceived";
-import {ActivityEditor,inputClass} from "./ActivityEditor";
-import {BookingOptions} from "./BookingOptions";
+import {inputClass} from "./ActivityEditor";
+import {VisitItemEditor} from "./VisitItemEditor";
 import {ExperiencePicker} from "./ExperiencePicker";
 import {VisitSummary, visitDate} from "./VisitSummary";
 
@@ -99,7 +99,7 @@ export function BookingFlow({locale,initialExperienceId,contextPackageId}:Bookin
             }}>{t(`v2.${action}`)}</button>)}</div>
             {item.type==="package"&&<p className="visit-package-note">{t("v2.packageNotice")}</p>}
             <div id={`editor-${item.id}`}>
-              {editing===item.id?<div className="visit-editor">{activitiesOf(item).map((a,j)=><section key={a.id} className={j>0?"mt-8 border-t border-ink/15 pt-6":""}>{item.type==="package"&&<h4 className="text-lg font-medium">{nameOf(a)}</h4>}<ActivityEditor included={item.type==="package"} activity={a} path={item.type==="activity"?`items.${i}`:`items.${i}.components.${j}`} onChange={changeActivity} error={error}/><BookingOptions item={a} onChange={options=>changeActivity({...a,options})}/></section>)}{item.type==="package"&&<BookingOptions item={item} onChange={options=>setItems(old=>old.map(v=>v.id===item.id?{...item,options}:v))}/>}<button type="button" className={buttonVariants({variant:"outline",className:"mt-6"})} onClick={()=>{if(validateItems(item.id)){setEditing(null);setErrors({});setNotice("");}}}>{t("v2.done")} <span aria-hidden="true">✓</span></button></div>:activitiesOf(item).map(a=><div className="visit-collapsed" key={a.id}>{item.type==="package"&&<p className="font-medium">{nameOf(a)}</p>}<p>{a.date?visitDate(a.date,locale):t("v2.datePending")} · {a.time||t("v2.timePending")} · <DurationText minutes={a.durationMinutes}/> · {t("v2.guestCount",{count:a.participants.length})}</p>{a.participants.some(p=>p.weightKg!==undefined)&&<p className="text-sm text-text-secondary">{a.participants.filter(p=>p.weightKg!==undefined).map(p=>`${p.weightKg} kg`).join(" · ")}</p>}</div>)}
+              {editing===item.id?<div className="visit-editor"><VisitItemEditor item={item} index={i} locale={locale} nameOf={nameOf} onActivity={changeActivity} error={error} errors={errors} onOptions={options=>setItems(old=>old.map(v=>v.id===item.id?{...item,options}:v))}/><button type="button" className={buttonVariants({variant:"outline",className:"mt-6"})} onClick={()=>{if(validateItems(item.id)){setEditing(null);setErrors({});setNotice("");}}}>{t("v2.done")} <span aria-hidden="true">✓</span></button></div>:activitiesOf(item).map(a=><div className="visit-collapsed" key={a.id}>{item.type==="package"&&<p className="font-medium">{nameOf(a)}</p>}<p>{a.date?visitDate(a.date,locale):t("v2.datePending")} · {t("fields.time")}: {a.time||t("v2.timePending")} · {t("pricing.duration")}: <DurationText minutes={a.durationMinutes}/> · {t("v2.guestCount",{count:a.participants.length})}</p>{a.participants.some(p=>p.weightKg!==undefined)&&<p className="text-sm text-text-secondary">{a.participants.filter(p=>p.weightKg!==undefined).map(p=>`${p.weightKg} kg`).join(" · ")}</p>}</div>)}
             </div>
             {(editing!==item.id||item.type==="package")&&<ItemEstimate item={item}/>}
             {item.type==="package"&&packages.find(p=>p.id===item.packageId)?.includesRestaurant&&<p className="visit-package-note">{t("v2.restaurantNotice")}</p>}

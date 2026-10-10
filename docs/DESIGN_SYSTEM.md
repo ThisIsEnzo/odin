@@ -1,115 +1,71 @@
 # ON GROUND design system
 
-Implemented in `src/app/globals.css`, shared UI components and existing presentation components. This documents the current system, not a proposed framework.
+Final corrective pass on brand/on-ground-khao-mai-kaeo-refresh. Recovered GitHub parent: 6bf2421ee65f7e7518627584fbf094d4c05a4a52.
 
-## Official artwork and identity hierarchy
+## Official identity
 
-Two client originals are authoritative: the 1536 × 823 ON GROUND / KHAO MAI KAEO wordmark and the 1536 × 1536 circular horse relief. Both original JPEGs remain untouched. Historical logos remain for provenance and are not active UI assets.
+The supplied logo-title.jpg and logo-horse.jpg are preserved byte-for-byte in public/images/brand. Primary signature: ON GROUND / KHAO MAI KAEO. Secondary mark: circular horse relief. No lettering is retyped and no horse geometry is redrawn.
 
-**Primary signature:** the actual wordmark lettering, never typeset with a substitute font. `on-ground-wordmark-cutout.webp` isolates the cream lettering from the original crop (156,225)–(1380,615), 1224 × 390. A color-difference alpha matte removes terracotta while retaining the photographed letter faces, shaded edge geometry and antialiasing. External wall shadows are omitted; the original relief photograph remains available. The cutout was inspected on both the sampled and deeper CSS surfaces; there is no opaque rectangular wall, visible fringe or stretched geometry.
+on-ground-title-relief.svg embeds the exact logo-title.jpg bytes with a proportional crop (170,230), 1270×400 from the 1600×857 original. An sRGB color matrix changes alpha only, using the green/red difference to remove terracotta; RGB channels remain the photographed cream faces and bevels. This is a source-pixel SVG wrapper, not generated lettering or a flat-color flood. Header, menu and Footer all use it through BrandLogo.
 
-**Secondary mark:** `on-ground-horse-original.jpg` is the unchanged new JPEG. Cream bounds from the sampling filter are (277,237)–(1250,1241); shadows extend beyond those bounds. The production seal uses crop (218,190)–(1318,1290), a 1100px square with room for the ears, ring and cast shadow. The relief has highlights on upper/left edges, warm darker bevels and downward/right wall shadows. Transparent extraction would flatten this dimensional character, so its natural wall is retained deliberately. The 440px WebP appears once per page as a 104px circular Footer seal, above the 232px wordmark with 24px spacing. It is decorative because the adjoining wordmark supplies the accessible brand name. No horse watermark, button icon or repeated section stamp is used.
+Shared shadows: .5px 1px .5px at 40% warm ink and 1px 2px 2px at 18%. Close relief depth is restored without a large floating drop shadow. Wordmark widths: 212px desktop, 188px small mobile, 224px menu, 232px Footer, always proportional.
 
-**Header/mobile:** wordmark only (224px desktop, 188px small mobile), cream navigation, inverse cream Book CTA, tactile terracotta surface. The full name remains legible on mobile; a second mark would compete with navigation. Mobile menu uses the same signature/material and an airy warm neutral body. Footer composes the horse seal and smaller signature in one column rather than two equal logos side by side.
+The horse seal uses the exact uploaded logo-horse.jpg, cropped in CSS inside an 88px circular frame. The image occupies 140% of the frame with a centered crop, retaining cream relief and its natural wall/shadow. Built-in transparent extraction previews were inspected and excluded because they changed edge/bevel character. No generated preview is a production asset.
 
-**Icons:** the official horse crop supplies a 16/32px RGBA favicon ICO, 64px `icon.png`, 180px `apple-icon.png`, and 512px app derivative. Next file conventions generate favicon/apple/icon metadata. At 16px the ring and horse silhouette carry recognition; relief detail is intentionally limited by scale. No invented SVG paths or generic horse symbol.
+Footer lockup: 232px maximum width, centered seal/signature, 20px vertical spacing and a 3px optical correction on the seal. Brand copy is centered within this column; the column follows the page rail. Header uses the primary signature alone. Existing horse favicon/app assets remain.
 
-Textual business name remains **ON GROUND CAFE & FARM**. The location line is official artwork; internal ODIN identifiers remain unchanged.
+## Palette
 
-## Canonical sampled palette
-
-Both assets were sampled, not inferred from the prompt. Median background RGB from the upper 180px: wordmark (177,101,69), **#B16545**; horse (174,88,58), **#AE583A**. Horse background 10th–90th channel percentiles: (168,82,52)–(180,94,63). Cream filter: all channels >160 and max/min spread <90; horse median (244,227,202), **#F4E3CA**. The wordmark's previous cream sample (180,250)–(1350,440) is (240,220,194), #F0DCC2. These are photographic families, not client-specified flat inks. The horse establishes the single canonical terracotta/cream family; the original artwork's natural color differences remain within the asset rather than becoming extra site tokens.
-
-| Token | HEX | Role |
+| Token | HEX | Usage |
 | --- | --- | --- |
-| `brand-accent` / `surface-terra` | #AE583A | Sampled mineral terracotta reference |
-| `brand-terra-deep` | #96472D | Derived accessible material surface: Header/menu/Footer |
-| `brand-primary` / `focus` | #87462F | Accessible actions, selected states, focus |
-| `brand-primary-hover` | #703824 | Action hover |
-| `brand-primary-active` | #592C1D | Action pressed |
-| `brand-terra-soft` / `canvas-soft` / `surface-muted` | #F3E8DA | Quiet editor/section surface |
-| `brand-cream` / `text-on-accent` / `text-on-dark` | #F4E3CA | Canonical cream; solid inverse text |
-| `brand-cream-soft` / `canvas` / `surface` | #FCF8F2 | Main editorial canvas |
-| `surface-dark` | #38261F | Deep earth editorial companion |
-| `surface-deep` / `ink` / `text-primary` | #281B16 | Depth and primary text |
-| `text-secondary` | #69564C | Ordinary metadata and pending copy |
-| `border` | #9B8273 | Visible control boundary |
-| `error` | #991B1B | Real validation/submission errors only |
+| brand-accent | #AE583A | Mineral terracotta reference |
+| brand-terra-deep | #96472D | Header/menu material base |
+| brand-primary / focus | #87462F | Actions and selections |
+| brand-primary-hover | #703824 | Hover |
+| brand-primary-active | #592C1D | Pressed |
+| brand-cream | #F4E3CA | Cream typography/inverse actions |
+| canvas | #FCF8F2 | Main canvas |
+| canvas-soft | #F3E8DA | Quiet sections/editor |
+| surface-dark | #38261F | Restaurant/editorial earth |
+| surface-deep / ink | #281B16 | Footer base/primary text |
+| text-secondary | #69564C | Metadata/pending copy |
+| border | #9B8273 | Control boundaries |
+| error | #991B1B | Actual errors only |
 
-## Tactile material and surface hierarchy
+Terracotta is a reference family, not a compulsory fill for every brand surface. Footer returns to dark warm earth. Ordinary rider restrictions never use error red.
 
-`.brand-terra-surface` is a reusable CSS treatment on Header, menu heading and Footer only. Base is the derived deep terracotta #96472D so small cream text is accessible. Two diffuse radial fields use 2.5% cream and 2.5% umber; a tiny inline SVG fractal grain (180px, frequency .68, three octaves, 2.5% opacity) provides stationary, nearly subconscious variation. This is procedural CSS/SVG material, not a repeating photograph. No external texture request, animation, large bitmap or obvious gradient stripe. Solid-color comparison was visually flatter; the understated material was retained after browser review.
+## Material and navigation
 
-Main content remains #FCF8F2; soft sections/editor #F3E8DA; Restaurant uses related earth #38261F. Avoid texturing every section. Artwork wall is used only inside the intentional small horse seal/icons. Cream Footer/nav copy is solid; no low-opacity small inverse text. Header hover is a quiet underline; 15px medium navigation has .015em tracking, reset for Thai/Chinese. Desktop navigation starts at 1280px.
+.brand-material is one reusable procedural treatment. Its base uses --material-base, defaulting to #96472D; Footer overrides it to #281B16. Two diffuse 2.5% tonal fields and a tiny inline SVG fractal grain at 2.5% opacity supply restrained texture. No tiled JPEG, external texture request, animation or obvious grunge. Selective use: Header, menu heading, Footer.
 
-Opening-hours and maximum-weight pills share cream/earth styling. Pending price uses solid secondary text on light backgrounds, cream on photos; ordinary restrictions never use error red. Booking progress, selected/duration choices, editor, estimate/pending copy, forms and CTA consume the same tokens. Booking handlers, domain rules, duration architecture, API and request semantics are preserved.
+Header height is 88px at rest and 76px after scrolling, with a restrained sticky shadow. Desktop nav starts at 1280px in the approved order: Experiences → Packages → Restaurant → Gallery → Location. Links use 16px medium type, .02em tracking and underline/border hover; Thai/Chinese reset tracking. Language selector uses a quiet cream bottom rule; Book Now uses the shared cream inverse action. Smaller widths retain the accessible menu with booking/language access.
 
-Contrast is measured using WCAG relative luminance including material's theoretical brightest composite, rather than assuming sampled cream/terracotta works for small text. Final measured values and keyboard/browser checks are recorded in BRAND_REFRESH_STATUS.md. Artwork is preserved as artwork. Controls retain 44px minimum targets and 2px contextual focus.
+## Typography, grid and accessibility
 
-## Typography
+Inter covers Latin/Cyrillic; Noto Sans Thai and Noto Sans SC remain locale fallbacks. No ornamental font added. Hero structure, slideshow, photograph, overlay and typography are preserved. Hero transitions directly to Experiences; the deleted statistics strip stays absent.
 
-Inter is the Latin/Cyrillic face; Noto Sans Thai and Noto Sans SC are the existing locale fallbacks. Display and body share this family.
+Shared 1280px rail; gutters 20/32/48px at mobile/640/1024px. Section rhythm remains 72/96/112px. Booking headings share homepage scales/tokens. Restaurant, Gallery and Location retain their architecture.
 
-- Hero: `clamp(3rem, 6.6vw, 6.4rem)`, 500 weight, 1.02 line height, -0.055em tracking; mobile `clamp(2.6rem, 10.6vw, 4rem)`, 11ch measure.
-- Homepage H2 and Booking H1: `--type-heading: clamp(2rem, 4vw, 3.75rem)`, 500, -0.035em. Homepage line height 1.08; Booking 1.12.
-- Booking H2: `--type-subheading: clamp(1.5rem, 2.3vw, 1.875rem)`, 500, 1.25, -0.025em.
-- Homepage H3: 24–30px depending on composition, 500, 1.25, -0.025em. Restaurant H2 intentionally caps at 52px to fit its column.
-- H4/form group headings: 16px semibold. Body: 16px; lead 18px; small 14px; metadata 12px. Homepage/Booking paragraphs use 1.7 line height.
-- Eyebrow: .7rem, 600, .18em, uppercase. Navigation 15px; buttons 14px or 16px; labels 14px; input text 16px.
-- Thai/Chinese headings remove negative tracking and use 1.25–1.45 line height; Booking headings use 1.4. Eyebrow tracking reduces to .04em.
+Interactive controls, including Footer links, have 44px minimum target height. Booking fields have 48px minimum height, 16px text, semantic borders, visible contextual focus and associated labels/errors. Reduced-motion rules, native controls/disclosure and Radix keyboard menu are retained. Targeted QA is not independent accessibility certification.
 
-## Grid and spacing
+## Offer information
 
-`Container` uses `.site-container` in the components cascade layer, so intentional utility overrides remain possible. `--page-width` is 1280px including gutters. Gutters are 20px below 640, 32px from 640, and 48px from 1024. Header, section headings, Gallery and Footer use this rail; Hero controls use its calculated `--page-rail`.
+OfferFacts is shared by homepage experiences and Booking discovery. Every experience shows Duration and Price before adding. Confirmed duration tiers show localized minutes and a minimum THB offer with billing unit. Legacy numeric prices appear only when provenance confirms them. Packages have a distinct Package label, component list, price row and illustrative-content notice.
 
-Booking uses the same 1280px outer rail. From 1024px it splits into a flexible editor and 280px itinerary; from 1280px the itinerary is 320px with an 80px gap. Restaurant intentionally extends to 1440px and uses a 3:2 image/copy grid from 1024px. These are deliberate compositions, not arbitrary section offsets.
+Current canonical data has no approved tiers and all prices/packages are mock. Duration and price therefore show localized Manager to confirm. Slot interval never becomes activity duration. No price, duration or billing quantity is fabricated.
 
-`Section` uses `--section-space`: 72px mobile, 96px from 640, 112px from 1024. The hero, compact Restaurant and final photographic CTA retain contextual spacing. Internal spacing uses the existing 4px-based utility scale, typically 8/12/16/20/24/32/40/48/64px. Heading/content relationships remain contextual, not mechanically identical.
+## Visit planning
 
-## Controls and surfaces
+Discover → add → configure → save → collapsed itinerary. Added/editing/ready/details-needed states remain explicit. One item editor is open at a time. Within a package, VisitItemEditor opens exactly one component form; other components remain visible as itinerary rows. Component selectors expose expanded state; validation opens the component needing details.
 
-Shared Button variants: primary (accessible terracotta/cream), inverse (cream/accessible terracotta), secondary (umber/ivory), outline and ghost. Minimum heights 44/48/56px for sm/md/lg; 2px corners; wrapped labels supported; 150ms color transition. Disabled buttons retain the existing disabled behavior/opacity.
+Date and Start time belong to each activity. Stage help explains different starts within one visit; field help states Thailand local time. Opening hours are labelled as opening hours, without technical slot-generation copy. Duration-aware slots and request payload are unchanged.
 
-All active Booking text/date/number/select/textarea controls use `.form-control`: minimum 48px, 12px padding, 16px text, 1px semantic border, 2px radius, ivory fill. Hover darkens the border; focus uses terracotta; `aria-invalid` uses the error border; disabled controls fade. Existing labels, values and event handlers are unchanged.
+Desktop has a sticky Your visit summary. Mobile uses a native disclosure open by default. Entries show name, date, labelled start time, labelled duration/pending, guests, supplied weights, subtotal and readiness. Add another experience is visible and returns to discovery without dropping prior entries. Package and extra are separate numbered items.
 
-Booking discovery and itinerary entries use square editorial rows and dividers; the active editor uses a warm tonal inset. Editorial photography is predominantly square-cornered. Pills remain only for compact metadata badges; circular gallery controls remain intentional. Fine tonal dividers provide structure; no decorative component shadows were added; material variation is limited to brand surfaces.
+Canonical estimates are reused: numeric total only if every required line is known; otherwise Manager to confirm. Package components are never double charged. Final-price manager disclaimer remains beside the estimate. Review shows itinerary/contact details; Request received preserves request semantics and focuses its heading. No invented visit-end time when duration is unknown.
 
-## Interaction, images and motion
+## Location and technical boundary
 
-Links retain contextual underline/border hover. Focus uses a 2px outline with offset; inverse photographic/umber surfaces use cream; text-bearing terracotta material uses cream focus. Forced-color mode uses system Highlight. Menu/language/icon controls target at least 44px. Mobile Footer navigation uses two columns with 44px links; larger layouts use 24px links plus vertical spacing.
+Approved Maps link: https://maps.app.goo.gl/5SAXfYQpQMktn8fv6?g_st=ac. Unconfirmed phone, WhatsApp, LINE, email and textual address remain suppressed.
 
-Desktop Header navigation starts at 1280px; below it the branded Radix menu includes the language selector. Existing focus trap, Escape and close behavior stay intact.
-
-Photographs retain existing aspect ratios/object positions: cinematic Hero, tall mobile Experiences, Restaurant 3:2 desktop composition, asymmetrical Gallery desktop grid and mobile swipe strip. No uniform card crop is imposed.
-
-Existing 10-second slideshow cadence, reveal and parallax are preserved. CSS reduced-motion rules remove transforms/transitions and reveal hidden content; slideshow already suspends automatic advancement for reduced motion. No animation dependency added.
-
-Breakpoints: existing xs 480, sm 640, md 768, lg 1024, xl 1280, 2xl 1536px. QA includes 1920px.
-
-## Booking UX
-
-The organizing concept is **Your visit**. Adding an experience creates the canonical item immediately, opens its editor and announces the addition through a polite status message. Discovery uses actual activity photographs, titles, existing descriptions/hours and a clear “Add to your visit” action. Already-added standalone experiences show a check, count, terracotta rule and “Edit in your visit”; “Add again” is a quiet explicit action. Activities included in a package carry an inclusion note without pretending a standalone item was added.
-
-The itinerary retains numbered package/experience entries. One editor is open at a time; its terracotta rule and “Currently editing” label distinguish it from collapsed entries. Readiness comes from the existing visit validator. Collapsed entries expose date, time, guests and supplied weights. Edit, Duplicate and Remove use quiet 44px controls. Save details validates the item before collapsing it.
-
-Desktop has a sticky “Your visit” summary at 112px from the viewport top, including package components, dates, times, guest counts and readiness. Below 1024px a native keyboard-accessible disclosure appears above the active stage, with count and pending-detail count visible while collapsed. No desktop sidebar is squeezed onto mobile.
-
-“Add another experience” appears beneath the itinerary and in its summary, returning to discovery without dropping configured items. Packages retain their own heading and component list; additional activities appear as separate numbered entries in the same visit. Existing illustrative-package and restaurant notices remain visible.
-
-Four restrained numbered progress labels identify Choose, Plan your visit, Your details and Review. The primary action progresses to details, review or submission; add-another is secondary; edit/duplicate/remove/back are tertiary. Review groups the visit by package/experience with dates, times, guests, weights, options, contact details and notes. Receipt remains **request received**, includes the returned reference and focuses its heading. No confirmation, payment or guaranteed-availability semantics are introduced.
-
-The UI uses native buttons, labels and date/select controls; edit controls expose expanded state, validation errors retain their associations, and stage headings receive keyboard focus. New presentation adds no animation framework or independent motion effects.
-
-## Duration and estimated-price presentation
-
-Activity editing follows date/start time → duration → guests → rider weights. Approved duration tiers render as square editorial button choices, with minute label and locale-formatted THB price/unit, a terracotta selected rule and check, and `aria-pressed`. Package component choices say included rather than implying a standalone surcharge. Changing duration updates estimates and clears an invalid late start.
-
-There are currently **no approved tiers**. Instead of fabricated buttons, each duration field shows “Duration to be agreed” and an explanation that the manager will agree duration and price. Item subtotals, desktop Your Visit, the collapsed mobile summary and Review show “Manager to confirm”. A mixed known/unknown visit never shows a partial sum as its total. Numeric tiers are exercised only by synthetic test fixtures.
-
-`.visit-estimate` uses a divider, restrained label/amount and the visible final-price-manager notice. Currency uses next-intl number formatting; minute labels use localized messages. Review uses a two-column detail grid on small screens and four columns from 640px. No checkout/payment styling is introduced.
-
-The single shared primary navigation is Experiences → Packages → Restaurant → Gallery → Location. Unavailable About/Contact/Privacy/Terms destinations are absent. Mock contacts, textual address and numeric mock prices are not rendered. The client-approved Maps URL is now the only published external location destination. Restaurant links to visit planning, with no table-reservation claim. Skip navigation is localized.
-
-## Locale-control boundary follow-up
-
-Default language selectors now use the semantic `border` token (#9B8273), replacing a 20%-opacity ink outline. Compositing the former alpha color against the actual pale menu surface measured 1.52:1; the solid semantic border measures 3.40:1. Header/Footer use solid cream boundaries on their deeper material surfaces. Locale values, routing and change handlers are unchanged.
+Backend, catalog facts, pricing, slots, validation, API, PostgreSQL, Drizzle/migrations, idempotency, outbox and providers are unchanged. Actual verification is recorded in BRAND_REFRESH_STATUS.md.

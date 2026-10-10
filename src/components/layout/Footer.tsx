@@ -14,7 +14,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="ground-footer brand-terra-surface border-t border-brand-cream/20">
+    <footer className="ground-footer brand-material border-t border-brand-cream/20">
       <Container className="grid gap-x-10 gap-y-12 py-16 break-words sm:py-20 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr_.8fr]">
         <div>
           
@@ -23,8 +23,8 @@ export function Footer() {
             <BrandLogo full />
           </div>
           <p className="sr-only">{siteConfig.businessName}</p>
-          <p className="mt-2 max-w-xs text-sm text-brand-cream">{tFooter("tagline")}</p>
-          <p className="mt-4 text-sm text-brand-cream">
+          <p className="ground-footer-brand-copy mt-2 max-w-xs text-sm text-brand-cream">{tFooter("tagline")}</p>
+          <p className="ground-footer-brand-copy mt-4 text-sm text-brand-cream">
             {tFooter("openDaily", { hours: `${restaurant.operatingHours.open}–${restaurant.operatingHours.close}` })}
           </p>
         </div>

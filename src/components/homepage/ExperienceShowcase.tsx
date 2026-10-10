@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { OfferFacts } from "@/components/domain/booking/OfferFacts";
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
@@ -32,8 +33,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const tExperiences = useTranslations("experiences");
   const tExperienceCard = useTranslations("experienceCard");
-  const tPricing = useTranslations("pricing");
-  const format = useFormatter();
 
   if (experiences.length === 0) {
     return null;
@@ -134,11 +133,10 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   {maxWeight ? (
                     <Badge variant="saddle">{tExperienceCard("maxWeight", { max: maxWeight })}</Badge>
                   ) : null}
-                  <span className={cn("text-sm", image ? "text-brand-cream" : "text-text-secondary")}>
-                    {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
-                  </span>
+
                 </div>
 
+                <div className="experience-offer-inverse"><OfferFacts experience={experience}/></div>
                 <Link
                   href={`/book?experience=${experience.id}`}
                   className={buttonVariants({
@@ -246,11 +244,10 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                             {tExperienceCard("maxWeight", { max: maxWeight })}
                           </Badge>
                         ) : null}
-                        <span className="text-sm text-text-secondary">
-                          {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
-                        </span>
+
                       </div>
 
+                      <OfferFacts experience={experience}/>
                       <Link
                         href={`/book?experience=${experience.id}`}
                         className={buttonVariants({

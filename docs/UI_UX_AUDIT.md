@@ -28,3 +28,18 @@ The duration-selector regression test uses the localized Start time label. No as
 BRAND_REFRESH_STATUS.md records actual checks. Browser receipt responses are intercepted locally; no real booking or provider delivery. Targeted visual/keyboard checks are not independent WCAG certification or native linguistic review.
 
 Remaining input: approved duration/price tiers/billing basis for each experience; confirmed package contents/prices; verified contacts and optional textual address/legal content. Unknown durations prevent a fabricated visit-end time.
+
+## Focused final brand polish — client feedback
+
+Continued from remote e01a0b931c452b1e6d10138c9d7fc26f4aaf4b69, all 188 blobs verified. No old archive source baseline; only identical photograph blobs recovered by hash. Booking, translations, canonical business facts and backend are unchanged in this pass.
+
+| Latest client finding | Resolution |
+| --- | --- |
+| Location is text-only | Lazy live Google listing embed, identifier verified from the client short link, editorial split and independent exact Google Maps CTA |
+| Footer wordmark appears rectangular | Full RGBA WebP/PNG; decoded alpha verified, zero-alpha borders/counters; no runtime SVG filter or terracotta matte |
+| Header cutout looks soft/low quality | Fresh original-resolution export, stable raster antialiasing and narrow retained source bevel; intrinsic 1270px for 188–250px display |
+| Material is too flat/unfaithful | Two procedural mineral scales with diffuse relief lighting and soft-light blend, tuned at normal and 3× browser scale |
+
+Existing seal remains an intentional circular crop of the original horse relief. Footer 232px lockup, 88px seal, 20px separation and 3px optical correction remain; Header grid/heights/navigation are preserved. Both wordmarks use the same production export and restrained shadows.
+
+Only official logo derivatives, shared material, Location panel and these documents change. Final current-pass test/browser results are recorded in BRAND_REFRESH_STATUS.md.

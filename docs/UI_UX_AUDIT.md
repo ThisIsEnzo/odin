@@ -59,3 +59,5 @@ The October 10 “on ground · KHAO MAI KAEO” photograph supersedes the prior 
 Updated Header, sticky/mobile menu, Footer, buttons, shared forms, homepage editorial colors, booking selected/editor/progress/summary/review/receipt colors and generated icon metadata. Small Header/menu navigation uses a darker text companion because body ink on the sampled terracotta did not reach 4.5:1. Existing photography, typography, Restaurant composition and layout hierarchy were retained.
 
 Preserved textual ON GROUND CAFE & FARM, internal identifiers, navigation order, repeated anchors, Booking V2/Your Visit, pending duration/pricing, snapshots, mock-data suppression, API/domain/DB/outbox/provider code. No tier, business fact or backend migration was added. See `BRAND_REFRESH_STATUS.md` for current measured QA.
+
+The final control pass replaces the default language-selector border with the semantic control boundary. Its actual contrast against the pale menu improves from 1.52:1 to 3.40:1. EN/RU/TH/ZH mobile selector focus and Review were checked at 375/390/430px; no locale or booking behavior changed.

@@ -85,3 +85,13 @@ Remaining existing release inputs: approved activity duration/price tiers/billin
 - `src/components/ui/Card.tsx`
 - `src/components/ui/Section.tsx`
 - `docs/BRAND_REFRESH_STATUS.md`
+
+## Final independent verification and control fix
+
+The completed brand-refresh commit `9f47f2b12ae08830c60806477140f54030229051` and its matching Draft PR #3 appeared while a separate session was preparing publication. Its exact GitHub tree and commit were recovered and verified; the published implementation was preserved. The only presentation follow-up changes the default language-selector class from a translucent ink border to the existing semantic control-border token.
+
+Independent verification of the published source: all 153 tests pass; typecheck/build pass; 271-key locale parity and diff checks pass. The domain/backend/configuration/data/migration/package files remain byte-identical to the base main SHA. The final one-class control update was built/typechecked and tested again.
+
+Additional final production-browser pass: **43 successful focused checkpoints**, EN/RU/TH/ZH locale controls and Review at 375/390/430, high-resolution Why/final CTA/form checks at 1440/1920, package plus extra, duplicate/remove/edit, one editor, clear added state, repeated anchors, Gallery, FAQ, Restaurant, mock-data safety and icon metadata. No document overflow, raw keys or page JavaScript errors in this run. Receipt and provider side effects remain mocked/absent. The original 304-check responsive verification above is retained as the preceding commit's handoff evidence; final focused verification covers the selector follow-up.
+
+Actual alpha-composited locale-control border contrast increases from **1.52:1 to 3.40:1** on the pale menu surface. Header navigation is 4.63:1; primary Booking CTA 5.33:1; Footer text 10.73:1; selected/progress 6.73:1; pending copy 6.54:1; form border against its fill 3.40:1; keyboard form focus against editor 5.89:1. Existing logo geometry, palette and all other presentation/behavior are preserved.

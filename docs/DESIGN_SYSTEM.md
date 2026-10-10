@@ -100,3 +100,7 @@ There are currently **no approved tiers**. Instead of fabricated buttons, each d
 `.visit-estimate` uses a divider, restrained label/amount and the visible final-price-manager notice. Currency uses next-intl number formatting; minute labels use localized messages. Review uses a two-column detail grid on small screens and four columns from 640px. No checkout/payment styling is introduced.
 
 The single shared primary navigation is Experiences → Packages → Restaurant → Gallery → Location. Unavailable About/Contact/Privacy/Terms destinations are absent. Mock contact/address/map destinations and numeric mock prices are not rendered. Restaurant links to visit planning, with no table-reservation claim. Skip navigation is localized.
+
+## Locale-control boundary follow-up
+
+Default language selectors now use the semantic `border` token (#9B8273), replacing a 20%-opacity ink outline. Compositing the former alpha color against the actual pale menu surface measured 1.52:1; the solid semantic border measures 3.40:1. Header/Footer contextual overrides remain. Locale values, routing and change handlers are unchanged.

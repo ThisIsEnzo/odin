@@ -48,12 +48,25 @@ export function buildBookingNotificationPayload(booking: StoredBookingRequest): 
   if (booking.estimate) {
     for (const line of booking.estimate.items) lines.push(`Estimate ${line.itemId}: ${line.amount === null ? "manager to confirm" : `${line.amount} THB`}${line.unitAmount === undefined ? "" : ` (${line.unitAmount} THB/${line.unit} × ${line.quantity})`}`);
     if (booking.estimate.promotions) {
-      const offer = booking.estimate.promotions;
-      lines.push(`Subtotal: ${offer.subtotalAmount === null ? "manager to confirm" : `${offer.subtotalAmount} THB`}`);
-      for (const applied of offer.appliedPromotions) lines.push(`Promotion ${applied.id}: ${applied.labels[booking.locale]} — ${applied.discountAmount === null ? "eligible; amount pending" : `-${applied.discountAmount} THB`}`);
-      lines.push(`Calculation: ${offer.calculationVersion}; config: ${offer.configurationVersion}`);
+      // Presentation only: use frozen results, never evaluate config/eligibility here.
+      const snapshot = booking.estimate.promotions;
+      const pending = snapshot.pricingStatus === 'PENDING' || snapshot.amountMinor === null;
+      lines.push(pending ? 'PRICING: Manager to confirm' : `Subtotal: ${snapshot.subtotalAmount} THB`);
+      for (const promotion of snapshot.appliedPromotions) {
+        const status = promotion.status ?? (promotion.discountMinor === null ? 'ELIGIBLE' : 'APPLIED');
+        const benefit = promotion.benefit.type === 'percentage'
+          ? `${promotion.benefit.basisPoints / 100}%`
+          : `${promotion.benefit.amountMinor / 100} THB fixed discount`;
+        lines.push(`${status === 'APPLIED' ? 'APPLIED PROMOTION' : 'PROMOTION MATCHED (ELIGIBLE)'}: ${promotion.labels.en} · ${benefit}`,
+          `Promotion ID: ${promotion.id}; scope: ${promotion.scope}`);
+        if (!pending && promotion.discountAmount !== null) lines.push(`Discount: −${promotion.discountAmount} THB`);
+        else if (status === 'ELIGIBLE') lines.push(`Manager note: Apply the eligible ${benefit} offer to the ${promotion.scope} scope when confirming the final quote; final discount amount requires confirmation.`);
+        else lines.push('Manager note: Retain this already-applied scoped offer when confirming remaining pricing. The whole-booking discount and total remain pending; do not apply twice.');
+      }
+      lines.push(`Calculation: ${snapshot.calculationVersion}; config: ${snapshot.configurationVersion}${snapshot.calculatedAt ? `; evaluated at: ${snapshot.calculatedAt}` : ''}`);
     }
-    lines.push(`Estimated total: ${booking.estimate.amount === null ? "manager to confirm" : `${booking.estimate.amount} THB`}`, "Final price will be confirmed by our manager after reviewing the request.");
+    const finalAmount = booking.estimate.promotions ? booking.estimate.promotions.amount : booking.estimate.amount;
+    lines.push(`Estimated total: ${finalAmount === null ? "manager to confirm" : `${finalAmount} THB`}`, "Final price and availability require manager confirmation. This estimate is not a confirmed customer charge.");
   }
   if (booking.notes) lines.push(`\nNotes: ${booking.notes}`);
   return {reference:booking.reference??booking.id,event:"booking.received",booking:structuredClone(booking),text:lines.join("\n")};

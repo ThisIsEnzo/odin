@@ -92,6 +92,6 @@ export function calculateRequestEstimate(draft: Pick<BookingRequestDraft, "activ
   const lines = items.filter(item => catalog.some(e => e.id === item.itemId && e.booking)).map(item => ({id:item.itemId, type:"activity" as const, activityId:item.itemId, amountMinor:item.amountMinor}));
   const promotions = calculatePromotions(lines, draft.visitDate, now, config);
   // Defensive callers must never obtain a partial total from an invalid/non-bookable selection.
-  if (lines.length !== items.length) {promotions.subtotalAmount = null; promotions.discountAmount = null; promotions.amount = null; promotions.subtotalMinor = null; promotions.discountMinor = null; promotions.amountMinor = null;}
+  if (lines.length !== items.length) {promotions.pricingStatus = 'PENDING'; promotions.subtotalAmount = null; promotions.discountAmount = null; promotions.amount = null; promotions.subtotalMinor = null; promotions.discountMinor = null; promotions.amountMinor = null;}
   return {version: 2, currency: "THB", items, amount: promotions.amount, promotions};
 }

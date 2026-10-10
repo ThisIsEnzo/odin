@@ -11,7 +11,7 @@ export function RequestPromotions({snapshot,locale,money,review=false}:{snapshot
     {review&&snapshot.subtotalAmount!==null&&<p className="request-help">{t('subtotal')}: {money(snapshot.subtotalAmount)}</p>}
     {snapshot.appliedPromotions.map(p=><p className="request-help" key={p.id}>
       {label(p)}{p.benefit.type==='percentage'?` · ${p.benefit.basisPoints/100}%`:''}
-      {' · '}{p.discountAmount===null?t('eligible'):review?`− ${money(p.discountAmount)}`:t('applied')}
+      {' · '}{(p.status==='ELIGIBLE'||p.discountAmount===null)?t('eligible'):review?`− ${money(p.discountAmount)}`:t('applied')}
     </p>)}
   </div>;
 }

@@ -37,7 +37,7 @@ it('persists promotion labels, exact amounts and outbox; same key replays before
  vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue([{durationMinutes:60,price:{amount:250,currency:'THB',unit:'vehicle'},quantityBasis:'unit'}]);
  const d={...draft(),activities:[{activityId:'atv',guestCount:5,unitCount:3,durationMinutes:60}]},key=crypto.randomUUID();
  const saved=await repo.create(d,{idempotencyKey:key});
- expect(saved.estimate).toMatchObject({version:2,amount:675,promotions:{subtotalMinor:75000,discountMinor:7500,amountMinor:67500,appliedPromotions:[{id:p.id,discountAmount:75,discountMinor:7500,labels:{en:'Test offer'}}]}});
+ expect(saved.estimate).toMatchObject({version:2,amount:675,promotions:{pricingStatus:'KNOWN',calculatedAt:saved.createdAt,subtotalMinor:75000,discountMinor:7500,amountMinor:67500,appliedPromotions:[{id:p.id,status:'APPLIED',discountAmount:75,discountMinor:7500,labels:{en:'Test offer'}}]}});
  const [event]=await db.select().from(schema.notificationOutbox).where(eq(schema.notificationOutbox.bookingId,saved.id));
  expect(event?.payload.booking.estimate).toEqual(saved.estimate);expect(event?.payload.text).toContain('test-frozen-discount');
  // Invalid live config must not affect historical idempotency or reads.
@@ -47,5 +47,18 @@ it('persists promotion labels, exact amounts and outbox; same key replays before
  const before=(await db.select().from(schema.bookings)).length;
  await expect(repo.create(d,{idempotencyKey:crypto.randomUUID()})).rejects.toThrow();
  expect(await db.select().from(schema.bookings)).toHaveLength(before);
+ vi.restoreAllMocks();
+});
+
+it('stores pending promotion status and benefit before preparing the transactional outbox',async()=>{
+ const {promotionConfig}=await import('@/data/odin/promotions');const {twoActivities}=await import('../fixtures/promotions');
+ vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([twoActivities]);
+ const key=crypto.randomUUID(),saved=await repo.create(draft(),{idempotencyKey:key});
+ expect(saved.estimate.promotions).toMatchObject({pricingStatus:'PENDING',calculatedAt:saved.createdAt,subtotalAmount:null,discountAmount:null,amount:null,appliedPromotions:[{id:'test-two',status:'ELIGIBLE',discountAmount:null,benefit:{type:'percentage',basisPoints:500}}]});
+ const persisted=await repo.getById(saved.id);const [event]=await db.select().from(schema.notificationOutbox).where(eq(schema.notificationOutbox.bookingId,saved.id));
+ expect(event?.payload.booking).toEqual(persisted);expect(event?.payload.text).toContain('PROMOTION MATCHED (ELIGIBLE): Test offer · 5%');expect(event?.payload.text).toContain('Apply the eligible 5% offer');
+ const plansBefore=await db.select().from(schema.notificationDeliveries).where(eq(schema.notificationDeliveries.outboxId,event!.id));
+ vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([]);
+ expect(await repo.create(draft(),{idempotencyKey:key})).toEqual(saved);expect(await db.select().from(schema.notificationDeliveries).where(eq(schema.notificationDeliveries.outboxId,event!.id))).toEqual(plansBefore);
  vi.restoreAllMocks();
 });

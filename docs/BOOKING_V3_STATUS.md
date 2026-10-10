@@ -47,3 +47,9 @@ V3 server estimates now include a version-two frozen promotion snapshot, exact m
 Production promotion config is empty: no client-approved offers, sample discounts, new packages or price tiers are activated. Synthetic examples live only in tests. Existing V2 records/migrations, outbox/provider transports, parent PR scope and stacked base remain unchanged. Full semantics are in `BOOKING_V3_SIMPLIFIED_FLOW.md`.
 
 Promotion-extension validation: 245 tests passed across 12 files, including 37 engine cases, forged-input/server-clock API cases, a PostgreSQL-engine frozen snapshot/outbox/invalid-config replay case and five additional multilingual React feedback/breakdown cases. TypeScript, production build and 323-key EN/RU/TH/ZH parity passed. Dedicated external PostgreSQL concurrency, production providers and pixel-level mobile/browser acceptance remain the review gaps described above.
+
+## Final server authority and notification clarification
+
+Requirements 92–100: promotion snapshots now explicitly preserve APPLIED/ELIGIBLE status, whole-pricing KNOWN/PENDING status and ISO calculation timestamp. V3 staff notifications render from the transactionally persisted booking read-back. Known quotes show the benefit and exact discount; pending quotes show the engine-selected benefit and manager instruction without fabricated whole totals. LINE/WhatsApp providers retain transport-only behavior, and original frozen results/delivery plans survive config changes and idempotent replay. Legacy snapshots remain readable without rewriting. No sample offer enabled.
+
+Validation for this clarification: 252 tests pass across 13 files, including six staff notification/transport-envelope cases and one additional PostgreSQL-engine pending snapshot/outbox/replay case. TypeScript, production build, translation parity and diff checks pass. The existing external PostgreSQL, live provider, browser-layout and inherited lint limitations remain unchanged.

@@ -37,7 +37,10 @@ export class PostgresBookingRepository implements BookingRepository {
    if(draft.schemaVersion===3){
     await tx.insert(s.bookingRequestActivities).values(draft.activities.map((activity,position)=>({id:randomUUID(),bookingId:id,position,...activity})));
    }else for(const [i,item] of draft.items.entries())await insertItem(item,i);
-   const booking:StoredBookingRequest={...structuredClone(draft),estimate,id,reference,status:'received',createdAt:createdAt.toISOString()};
+   // Render staff payload only after request + authoritative snapshot are stored.
+   // Read back inside the same transaction; outbox and delivery plans commit atomically.
+   const booking:StoredBookingRequest|null=draft.schemaVersion===3?await this.read(tx,id):{...structuredClone(draft),estimate,id,reference,status:'received',createdAt:createdAt.toISOString()};
+   if(!booking)throw new Error('Stored booking missing before outbox creation');
    const payload=buildBookingNotificationPayload(booking),outboxId=randomUUID();
    await tx.insert(s.notificationOutbox).values({id:outboxId,bookingId:id,eventType:payload.event,payload});
    const plans=planDeliveries(payload,this.targets);

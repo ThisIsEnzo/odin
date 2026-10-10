@@ -45,10 +45,12 @@ export const promotionConfigurationSchema = z.object({version:z.string().min(1),
 export interface PromotionLine {id:string;type:'activity'|'package';activityId?:string;packageId?:string;componentActivityIds?:readonly string[];amountMinor:number|null}
 export interface AppliedPromotion {
   id:string;labelKey?:string;labels:Record<Locale,string>;scope:Promotion['scope'];
+  status:'APPLIED'|'ELIGIBLE';
   benefit:Promotion['benefit'];discountAmount:number|null;discountMinor:number|null;lineIds:string[];
 }
 export interface PromotionSnapshot {
   calculationVersion:'promotions-v1';configurationVersion:string;submissionDate:string;
+  calculatedAt:string;pricingStatus:'KNOWN'|'PENDING';
   subtotalMinor:number|null;discountMinor:number|null;amountMinor:number|null;
   subtotalAmount:number|null;discountAmount:number|null;amount:number|null;appliedPromotions:AppliedPromotion[];
 }
@@ -127,7 +129,7 @@ function runPlan(plan:ValidPromotion[],lines:readonly PromotionLine[]) {
     }
     if(discount===0n)continue;
     if(discount!==null)saving+=discount;
-    applied.push({id:p.id,labels:{...p.labels},...(p.labelKey?{labelKey:p.labelKey}:{}),scope:p.scope,benefit:{...p.benefit},discountAmount:discount===null?null:safeNumber(discount)/100,discountMinor:discount===null?null:safeNumber(discount),lineIds:indices.map(i=>lines[i]!.id).sort()});
+    applied.push({id:p.id,status:discount===null?'ELIGIBLE':'APPLIED',labels:{...p.labels},...(p.labelKey?{labelKey:p.labelKey}:{}),scope:p.scope,benefit:{...p.benefit},discountAmount:discount===null?null:safeNumber(discount)/100,discountMinor:discount===null?null:safeNumber(discount),lineIds:indices.map(i=>lines[i]!.id).sort()});
   }
   const total=remaining.every(n=>n!==null)?remaining.reduce<bigint>((sum,n)=>sum+n!,0n):null;
   const pending=plan.filter(p=>applied.some(a=>a.id===p.id&&a.discountAmount===null));
@@ -170,5 +172,5 @@ export function calculatePromotions(lines:readonly PromotionLine[],visitDate:str
   function search(index:number,plan:ValidPromotion[]){if(index===offers.length){const result=runPlan(plan,lines);if(prefer(plan,result)){best=result;bestPlan=[...plan];}return;}search(index+1,plan);const p=offers[index]!;if(plan.every(q=>compatible(p,q)))search(index+1,[...plan,p]);}
   search(0,[]);
   const subtotal=lines.length&&lines.every(l=>l.amountMinor!==null)?lines.reduce((sum,l)=>sum+BigInt(l.amountMinor!),0n):null;
-  return {calculationVersion:'promotions-v1',configurationVersion:checked.version,submissionDate:businessDate(now),subtotalMinor:subtotal===null?null:safeNumber(subtotal),discountMinor:subtotal===null||best.total===null?null:safeNumber(subtotal-best.total),amountMinor:subtotal===null||best.total===null?null:safeNumber(best.total),subtotalAmount:subtotal===null?null:safeNumber(subtotal)/100,discountAmount:subtotal===null||best.total===null?null:safeNumber(subtotal-best.total)/100,amount:subtotal===null||best.total===null?null:safeNumber(best.total)/100,appliedPromotions:best.applied};
+  return {calculationVersion:'promotions-v1',configurationVersion:checked.version,submissionDate:businessDate(now),calculatedAt:now.toISOString(),pricingStatus:subtotal===null?'PENDING':'KNOWN',subtotalMinor:subtotal===null?null:safeNumber(subtotal),discountMinor:subtotal===null||best.total===null?null:safeNumber(subtotal-best.total),amountMinor:subtotal===null||best.total===null?null:safeNumber(best.total),subtotalAmount:subtotal===null?null:safeNumber(subtotal)/100,discountAmount:subtotal===null||best.total===null?null:safeNumber(subtotal-best.total)/100,amount:subtotal===null||best.total===null?null:safeNumber(best.total)/100,appliedPromotions:best.applied};
 }

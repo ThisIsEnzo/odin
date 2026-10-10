@@ -56,13 +56,17 @@ export interface DurationOption {
 export interface EstimateLine {
   itemId: string;
   amount: number | null;
+  /** Exact THB minor units on V3; legacy lines need not have this field. */
+  amountMinor?: number | null;
   durationMinutes?: number;
   unitAmount?: number;
   quantity?: number;
   unit?: PricingUnit;
 }
 export interface BookingEstimate {
-  version: 1;
+  version: 1 | 2;
+  /** Present on V3 estimates; legacy V1 snapshots remain readable unchanged. */
+  promotions?: import("@/lib/booking/promotions").PromotionSnapshot;
   currency: Currency;
   amount: number | null;
   items: EstimateLine[];

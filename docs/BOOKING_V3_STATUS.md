@@ -39,3 +39,11 @@ No dedicated real PostgreSQL test database is configured here. Real-PostgreSQL i
 Before application deployment: back up, apply additive migration in staging, run the dedicated DB suite, review mobile/desktop UI, then apply approved production migration and deploy frontend/API together. Public V2 clients receive validation failure rather than silent reinterpretation. Customer outbound delivery and approved activity/package pricing remain future configured work.
 
 Final ON GROUND wordmark/horse/material/Header/Footer/Location map and existing homepage architecture are preserved. No new dependency or production price tier is introduced. See BOOKING_RULES.md, DATA_MODEL.md, ARCHITECTURE.md, DESIGN_SYSTEM.md, UI_UX_AUDIT.md and PRODUCTION_BACKEND_SETUP.md.
+
+## Config-driven promotion extension
+
+V3 server estimates now include a version-two frozen promotion snapshot, exact minor-unit fields, config/calculation versions and translated offer labels. One canonical validated engine supports booking/activity/package scope, explicit package-count policy, combinations, Thailand visit/submission calendar conditions, active windows, percentages/fixed benefits and deterministic stackable/exclusive/best-only resolution. Shared previews provide restrained inline eligibility and Review breakdowns. PostgreSQL replay reads the stored result before evaluating mutable configuration, while retaining the concurrent unique-key conflict path.
+
+Production promotion config is empty: no client-approved offers, sample discounts, new packages or price tiers are activated. Synthetic examples live only in tests. Existing V2 records/migrations, outbox/provider transports, parent PR scope and stacked base remain unchanged. Full semantics are in `BOOKING_V3_SIMPLIFIED_FLOW.md`.
+
+Promotion-extension validation: 245 tests passed across 12 files, including 37 engine cases, forged-input/server-clock API cases, a PostgreSQL-engine frozen snapshot/outbox/invalid-config replay case and five additional multilingual React feedback/breakdown cases. TypeScript, production build and 323-key EN/RU/TH/ZH parity passed. Dedicated external PostgreSQL concurrency, production providers and pixel-level mobile/browser acceptance remain the review gaps described above.

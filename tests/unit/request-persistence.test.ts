@@ -27,3 +27,25 @@ it('persists global visit, V3 counts, no participants, estimate and identical tr
 it('replays V3 idempotently with original per-unit price even after catalog changes',async()=>{const tiers=[{durationMinutes:60,price:{amount:250,currency:'THB' as const,unit:'vehicle' as const},quantityBasis:'unit' as const}];vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue(tiers);const d={...draft(),activities:[{activityId:'atv',guestCount:5,unitCount:3,durationMinutes:60}]},key=crypto.randomUUID();const saved=await repo.create(d,{idempotencyKey:key});expect(saved.estimate.amount).toBe(750);vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue([{...tiers[0]!,price:{...tiers[0]!.price,amount:999}}]);expect(await repo.create(d,{idempotencyKey:key})).toEqual(saved);expect(await repo.getById(saved.id)).toEqual(saved);await expect(repo.create({...d,preferredStartTime:'11:00'},{idempotencyKey:key})).rejects.toBeInstanceOf(IdempotencyConflict);vi.restoreAllMocks();});
 it('rolls back the entire V3 request on a line constraint failure',async()=>{const d=draft();d.activities.push({...d.activities[0]!});const before=(await db.select().from(schema.bookings)).length;await expect(repo.create(d,{idempotencyKey:crypto.randomUUID()})).rejects.toThrow();expect(await db.select().from(schema.bookings)).toHaveLength(before);});
 it('DB constraints require positive counts and V3 global visit fields',async()=>{const d=draft();d.activities[0]!.guestCount=0;await expect(repo.create(d,{idempotencyKey:crypto.randomUUID()})).rejects.toThrow();await expect(db.insert(schema.bookings).values({id:crypto.randomUUID(),reference:'INVALID-V3',schemaVersion:3,locale:'en',customerName:'TEST',email:'qa@example.com',phone:'+66000000000',idempotencyKey:crypto.randomUUID(),requestHash:'fixture'})).rejects.toThrow();});
+
+
+it('persists promotion labels, exact amounts and outbox; same key replays before invalid config',async()=>{
+ const {promotionConfig}=await import('@/data/odin/promotions');
+ const {offer}=await import('../fixtures/promotions');
+ const p=offer('test-frozen-discount',{scope:'activity',targets:{activityIds:['atv']},benefit:{type:'percentage',basisPoints:1000}});
+ vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([p]);
+ vi.spyOn(experiences[2]!,'durationOptions','get').mockReturnValue([{durationMinutes:60,price:{amount:250,currency:'THB',unit:'vehicle'},quantityBasis:'unit'}]);
+ const d={...draft(),activities:[{activityId:'atv',guestCount:5,unitCount:3,durationMinutes:60}]},key=crypto.randomUUID();
+ const saved=await repo.create(d,{idempotencyKey:key});
+ expect(saved.estimate).toMatchObject({version:2,amount:675,promotions:{subtotalMinor:75000,discountMinor:7500,amountMinor:67500,appliedPromotions:[{id:p.id,discountAmount:75,discountMinor:7500,labels:{en:'Test offer'}}]}});
+ const [event]=await db.select().from(schema.notificationOutbox).where(eq(schema.notificationOutbox.bookingId,saved.id));
+ expect(event?.payload.booking.estimate).toEqual(saved.estimate);expect(event?.payload.text).toContain('test-frozen-discount');
+ // Invalid live config must not affect historical idempotency or reads.
+ vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([{...p,benefit:{type:'percentage',basisPoints:10001}}]);
+ expect(await repo.create(d,{idempotencyKey:key})).toEqual(saved);
+ expect(await repo.getById(saved.id)).toEqual(saved);
+ const before=(await db.select().from(schema.bookings)).length;
+ await expect(repo.create(d,{idempotencyKey:crypto.randomUUID()})).rejects.toThrow();
+ expect(await db.select().from(schema.bookings)).toHaveLength(before);
+ vi.restoreAllMocks();
+});

@@ -47,6 +47,12 @@ export function buildBookingNotificationPayload(booking: StoredBookingRequest): 
   });
   if (booking.estimate) {
     for (const line of booking.estimate.items) lines.push(`Estimate ${line.itemId}: ${line.amount === null ? "manager to confirm" : `${line.amount} THB`}${line.unitAmount === undefined ? "" : ` (${line.unitAmount} THB/${line.unit} × ${line.quantity})`}`);
+    if (booking.estimate.promotions) {
+      const offer = booking.estimate.promotions;
+      lines.push(`Subtotal: ${offer.subtotalAmount === null ? "manager to confirm" : `${offer.subtotalAmount} THB`}`);
+      for (const applied of offer.appliedPromotions) lines.push(`Promotion ${applied.id}: ${applied.labels[booking.locale]} — ${applied.discountAmount === null ? "eligible; amount pending" : `-${applied.discountAmount} THB`}`);
+      lines.push(`Calculation: ${offer.calculationVersion}; config: ${offer.configurationVersion}`);
+    }
     lines.push(`Estimated total: ${booking.estimate.amount === null ? "manager to confirm" : `${booking.estimate.amount} THB`}`, "Final price will be confirmed by our manager after reviewing the request.");
   }
   if (booking.notes) lines.push(`\nNotes: ${booking.notes}`);

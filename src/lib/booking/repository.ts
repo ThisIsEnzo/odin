@@ -22,13 +22,14 @@ export class InMemoryBookingRepository implements BookingRepository {
     const key=options?.idempotencyKey,hash=fingerprint(input);
     const existing=key?this.keys.get(key):undefined;
     if(existing){if(existing.hash!==hash)throw new IdempotencyConflict();return (await this.getById(existing.id))!;}
+    const createdAt = new Date();
     const request = {
       ...structuredClone(input),
-      estimate: input.schemaVersion === 3 ? calculateRequestEstimate(input) : calculateBookingEstimate(input.items),
+      estimate: input.schemaVersion === 3 ? calculateRequestEstimate(input, undefined, createdAt) : calculateBookingEstimate(input.items),
       id: crypto.randomUUID(),
       reference:bookingReference(),
       status: "received" as const, // BOOKING_RULES.md §8 — never anything else on creation
-      createdAt: new Date().toISOString(),
+      createdAt: createdAt.toISOString(),
     };
     this.store.set(request.id, request);
     if(key)this.keys.set(key,{hash,id:request.id});

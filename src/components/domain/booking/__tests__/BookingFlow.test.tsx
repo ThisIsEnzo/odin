@@ -38,3 +38,26 @@ describe('review submission and receipt',()=>{
  it('uses the active locale after a language change while preserving the draft',async()=>{const fetcher=vi.fn().mockResolvedValue(new Response(JSON.stringify({status:'received',id:'locale-test'}),{status:201}));vi.stubGlobal('fetch',fetcher);const mounted=render(<NextIntlClientProvider locale='en' messages={en}><BookingFlow locale='en' initialExperienceId='horse-riding' contextPackageId={null}/></NextIntlClientProvider>);fill();mounted.rerender(<NextIntlClientProvider locale='ru' messages={ru}><BookingFlow locale='ru' initialExperienceId='horse-riding' contextPackageId={null}/></NextIntlClientProvider>);fireEvent.click(screen.getByRole('button',{name:new RegExp(ru.booking.v3.review)}));fireEvent.click(screen.getByRole('button',{name:new RegExp(ru.booking.v3.send)}));await screen.findByText(ru.booking.success.title);expect(JSON.parse(fetcher.mock.calls[0]![1].body)).toMatchObject({locale:'ru',customer:{fullName:'Test Guest'},activities:[{activityId:'horse-riding',guestCount:1}]});});
  it('routes server capacity errors back to the intact single form',async()=>{vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify({fieldErrors:{'activities.0.unitCount':{key:'invalidUnitCount'}}}),{status:400})));setup();fill();add('ATV');review();fireEvent.click(screen.getByRole('button',{name:/Send booking request/}));await screen.findByRole('alert');expect(screen.getByLabelText('Full name')).toBeTruthy();expect(card('atv').className).toContain('is-included');expect(screen.getByRole('alert').textContent).toContain('ATV:');});
 });
+
+
+describe('configured promotion feedback and review',()=>{
+ it('shows immediate restrained eligibility, keeps unknown total pending, and hides feedback on removal',async()=>{
+  const {promotionConfig}=await import('@/data/odin/promotions');const {twoActivities}=await import('../../../../../tests/fixtures/promotions');
+  vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([twoActivities]);setup();fill();add('Horse Riding');expect(screen.queryByText(/Eligible offer/)).toBeNull();add('ATV');
+  expect(screen.getByText(/Test offer · 5% · Eligible offer/)).toBeTruthy();expect(document.querySelector('.request-package-note')?.getAttribute('role')).toBe('status');
+  review();expect(document.querySelector('.request-total')?.textContent).toContain('Manager to confirm');expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain('Eligible offer');
+  fireEvent.click(screen.getByRole('button',{name:/Edit request/}));fireEvent.click(screen.getByRole('button',{name:'Remove: ATV'}));expect(screen.queryByText(/Eligible offer/)).toBeNull();
+ });
+ it.each(['en','ru','th','zh'] as const)('renders known subtotal, discount and total with promotion labels in %s',async locale=>{
+  const {promotionConfig}=await import('@/data/odin/promotions');const {offer}=await import('../../../../../tests/fixtures/promotions');
+  vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([offer('test-ui',{benefit:{type:'percentage',basisPoints:1000}})]);
+  vi.spyOn(experiences[0]!,'durationOptions','get').mockReturnValue([{durationMinutes:60,price:{amount:100,currency:'THB',unit:'person'},quantityBasis:'participant'}]);
+  const error=vi.spyOn(console,'error');setup(locale,'horse-riding');const m=locales[locale].booking.v3;
+  for(const [label,value] of [[m.date,date],[m.time,'10:00'],[m.fullName,'Test Guest'],[m.email,'qa@example.com'],[m.phone,'+66000000000']])fireEvent.change(screen.getByLabelText(label!),{target:{value}});
+  fireEvent.click(screen.getByRole('button',{name:new RegExp(m.review)}));
+  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain(locales[locale].booking.promotions.subtotal);
+  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain('−');
+  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain(offer('test').labels[locale]);
+  expect(document.querySelector('.request-total')?.textContent).toContain('90');expect(error).not.toHaveBeenCalled();
+ });
+});

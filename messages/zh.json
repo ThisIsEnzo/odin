@@ -364,7 +364,7 @@
       "subtotal": "预估小计",
       "total": "预估总价",
       "pending": "由经理确认",
-      "managerNotice": "经理审核您的申请后，将与您确认最终价格。",
+      "managerNotice": "最终价格和可用安排将由经理确认。",
       "durationPending": "由经理确认",
       "missingTiers": "经理将在确认到访前与您商定体验时长和价格。",
       "durationHelp": "更改时长后，可能需要重新选择开始时间。",
@@ -425,6 +425,11 @@
     },
     "units": {
       "atv": "ATV 车辆"
+    },
+    "promotions": {
+      "subtotal": "优惠前小计",
+      "applied": "已应用优惠",
+      "eligible": "符合优惠条件 · 金额由经理确认"
     }
   }
 }

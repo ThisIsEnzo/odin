@@ -18,8 +18,11 @@ export class PostgresBookingRepository implements BookingRepository {
   const key=options?.idempotencyKey;if(!key||!validIdempotencyKey(key))throw new Error('Idempotency key required');
   const hash=fingerprint(draft);
   return this.db.transaction(async tx=>{
+   // Replay reads the frozen result before evaluating mutable price/promotion configuration.
+   const [replay]=await tx.select().from(s.bookings).where(eq(s.bookings.idempotencyKey,key));
+   if(replay){if(replay.requestHash!==hash)throw new IdempotencyConflict();return (await this.read(tx,replay.id))!;}
    const id=randomUUID(),reference=bookingReference(),createdAt=new Date();
-   const estimate=draft.schemaVersion===3?calculateRequestEstimate(draft):calculateBookingEstimate(draft.items);
+   const estimate=draft.schemaVersion===3?calculateRequestEstimate(draft,undefined,createdAt):calculateBookingEstimate(draft.items);
    const customerName=draft.schemaVersion===3?draft.customer.fullName:draft.customer.name;
    const legacyCustomer=draft.schemaVersion===2?draft.customer:undefined;
    const inserted=await tx.insert(s.bookings).values({id,reference,estimate,status:'received',schemaVersion:draft.schemaVersion,visitDate:draft.schemaVersion===3?draft.visitDate:null,preferredStartTime:draft.schemaVersion===3?draft.preferredStartTime:null,locale:draft.locale,customerName,email:draft.customer.email,phone:draft.customer.phone,preferredChannel:legacyCustomer?.preferredChannel,channelIdentity:legacyCustomer?.channelIdentity,notes:draft.notes,idempotencyKey:key,requestHash:hash,createdAt,updatedAt:createdAt}).onConflictDoNothing({target:s.bookings.idempotencyKey}).returning({id:s.bookings.id});

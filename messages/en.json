@@ -364,7 +364,7 @@
       "subtotal": "Estimated subtotal",
       "total": "Estimated total",
       "pending": "Manager to confirm",
-      "managerNotice": "The final price will be confirmed by our manager after reviewing your request.",
+      "managerNotice": "Final price and availability will be confirmed by our manager.",
       "durationPending": "Manager to confirm",
       "missingTiers": "Our manager will agree the duration and price with you before confirming your visit.",
       "durationHelp": "Changing duration may require a different start time.",
@@ -425,6 +425,11 @@
     },
     "units": {
       "atv": "ATVs"
+    },
+    "promotions": {
+      "subtotal": "Subtotal",
+      "applied": "Offer applied",
+      "eligible": "Eligible offer · amount to be confirmed"
     }
   }
 }

@@ -1,84 +1,30 @@
-# Final Phase 5 UX/UI audit
+# Final corrective UX/UI audit
 
-Baseline: GitHub `phase-5`, `bf87493a263313e9b40773f52196dc41a310898b`.
-The rendered baseline was inspected in Chromium before edits, including the complete homepage, mobile Booking, Russian tablet navigation and detailed Restaurant/Gallery views. Existing Phase 5 reports were checked against the current source; historical pass claims are not treated as current evidence.
+Baseline: existing Draft PR #3 at GitHub HEAD 6bf2421ee65f7e7518627584fbf094d4c05a4a52. All 183 blobs and the exact commit/tree were recovered. Baseline homepage/Booking were inspected in Chromium before editing, together with design/audit/status docs. Old archives supplied only photographs whose Git blob hashes matched GitHub, never source code.
 
-| Finding | Priority | Resolution |
-| --- | --- | --- |
-| Booking selection did not clearly distinguish highlighted choices from added items; full visit and additional activities were hard to understand | High | Photographic discovery with explicit add/added/edit states, one active editor, numbered itinerary, persistent desktop summary and mobile disclosure |
-| Packages and extra activities lacked a clear shared context | High | Package component summaries and independent extra-activity entries within one visit, preserving the actual package definitions |
-| Review felt like a generic form summary | Medium | Editorial itinerary with concise date/time/guest groups, quiet edit actions and request-received presentation |
-| Activity and customer fields used different heights, backgrounds, radii and error treatments | High | Shared `.form-control`: 48px minimum, 16px text, 2px corners, solid border, terracotta focus and red error state |
-| Customer details repeated the same visible heading twice | Medium | Existing inner heading visually hidden; flow heading and form labels retained |
-| Header language selector hidden at 1024–1279px while mobile menu was also unavailable | High | Desktop navigation now starts at 1280px; menu retains language access below that width |
-| Header/Footer logo padding shifted artwork off the shared content rail | Medium | Remove redundant inner horizontal padding while preserving asset proportions and surrounding spacing |
-| Terracotta Restaurant CTA had weak separation from the green panel; focus rings varied across dark surfaces | High | Shared inverse cream CTA and cream focus context on Hero, Experience photography, Restaurant and final CTA |
-| Menu controls, language control and some lightbox/hero controls were smaller than the intended touch target | Medium | Minimum 44px controls; FAQ summary minimum 44px; mobile footer links 44px with compact two-column navigation |
-| Packages disclaimer used low-opacity small text | Medium | Solid semantic secondary text color |
-| Why section's filled badge was inconsistent with editorial section labels | Low | Existing copy rendered as shared eyebrow |
-| Dead pre-rebrand logo rules retained an obsolete brown and duplicated layout foundations | Low | Verified unused rules removed; Container and Section consume shared rail/rhythm tokens |
-| Gallery dialog lacked explicit description handling | Low | Retain accessible title; explicitly omit unused description reference |
-
-## Intentional non-changes
-
-- Keep cinematic slideshow, existing photographs/crops, desktop experience selector, mobile accordion, package rows, Restaurant 3:2 composition, Gallery grid and mobile strip.
-- Preserve all source logo artwork; no generated/reinterpreted logo or photography.
-- The earlier green editorial palette was superseded by the official refresh below; the warm light canvas remains.
-- Preserve canonical request shape, domain rules, validators, participants, packages, times, idempotency, submission and public API semantics. Frontend presentation and editing composition were deliberately improved.
-- The initial design-only pass preserved backend/data. The later duration continuation below adds a migration, canonical estimate model and notification fields without changing business facts.
-- Existing empty reviews produce no fabricated testimonials.
-- Existing generic anchor implementation remains byte-identical.
-
-## Verification and remaining decisions
-
-See `PHASE_5_UI_FINAL_STATUS.md` for measured checks and release blockers. This is a practical visual/accessibility pass, not an independent WCAG certification or linguistic review.
-
-Client decisions still required by the existing data/docs: replace marked mock contact/address/package/restaurant facts with approved content; supply missing About, Contact, Privacy and Terms pages. No facts or legal copy were invented in this pass. Unavailable destinations are now removed by the continuation below; approved content is still needed before publishing those pages.
-
-## Duration / release-cleanup continuation
-
-| Finding | Severity | Implemented resolution |
-| --- | --- | --- |
-| No approved duration tiers; legacy prices are mock | High | Empty approved-tier arrays, canonical duration/pricing architecture and explicit pending UI; no extrapolation |
-| Visit had no estimate/provenance context | High | Item subtotals and overall estimate/pending in summary and Review, with manager-confirmation disclaimer |
-| Closing-time slots ignored selected activity length | High | Shared duration-aware slot filter and server validation; invalid late start clears on duration change |
-| Historical estimate could change with catalog | High | Server-owned immutable snapshot persisted atomically with booking/outbox |
-| Public Footer/map exposed mock phone, WhatsApp and address | High | Conditional rendering based on provenance flags; no mock contact links or directions |
-| About/Contact/Privacy/Terms links pointed to absent routes | High | Remove unavailable shared-nav destinations; no invented legal content |
-| Restaurant CTA implied unsupported reservations | High | Truthful localized visit-planning CTA |
-| Farm-to-table / wood-fired sauna claims lack canonical evidence | Medium | Neutral restaurant/sauna copy in all four locales |
-| Skip link was English-only | Medium | Localized accessible link in EN/RU/TH/ZH |
-| Navigation order did not match client requirement | Medium | Reorder the one shared source; Header, menu and Footer inherit it |
-
-Remaining client decisions: approved duration-price pairs and billing basis for Horse Riding, Pony Riding, ATV and Sauna; confirmed package contents/price/billing basis; verified contacts/address/directions; approved legal content. Existing pending package contents remain clearly described as illustrative. No replacements or business claims were invented.
-
-## NEW OFFICIAL BRAND REFRESH
-
-The October 10 “on ground · KHAO MAI KAEO” photograph supersedes the prior horse logo and #84250F/#F4D2A6/#253D32 visual treatment. The new original is retained intact; a proportional wordmark crop and source-lettering icons replace active old derivatives. The sampled palette is #B16545/#F0DCC2 with explicitly documented accessible derived controls and umber surfaces.
-
-Updated Header, sticky/mobile menu, Footer, buttons, shared forms, homepage editorial colors, booking selected/editor/progress/summary/review/receipt colors and generated icon metadata. Small Header/menu navigation uses a darker text companion because body ink on the sampled terracotta did not reach 4.5:1. Existing photography, typography, Restaurant composition and layout hierarchy were retained.
-
-Preserved textual ON GROUND CAFE & FARM, internal identifiers, navigation order, repeated anchors, Booking V2/Your Visit, pending duration/pricing, snapshots, mock-data suppression, API/domain/DB/outbox/provider code. No tier, business fact or backend migration was added. See `BRAND_REFRESH_STATUS.md` for current measured QA.
-
-The final control pass replaces the default language-selector border with the semantic control boundary. Its actual contrast against the pale menu improves from 1.52:1 to 3.40:1. EN/RU/TH/ZH mobile selector focus and Review were checked at 375/390/430px; no locale or booking behavior changed.
-
-
-## Client review: second official mark and material refinement
-
-This continuation starts from PR #3 HEAD `25ef01b85c7ab6ddee5059a0e391460ccb9dcce4`; prior successful Booking and layout work is preserved. The new horse relief complements the primary wordmark rather than replacing it.
-
-| Client finding | Resolution |
+| Client finding | Final implementation |
 | --- | --- |
-| Wordmark appeared pasted over the Header wall | A color-matted transparent derivative of the actual lettering removes the rectangular wall; original JPEG remains untouched |
-| New horse mark needed a distinct role | One dimensional Footer seal, plus source-derived favicon/app icons; Header/mobile retain a readable primary signature |
-| Flat terracotta lacked material quality | Reusable `.brand-terra-surface`: low-opacity procedural grain and diffuse tonal fields, limited to Header/menu/Footer |
-| Two photographed terracotta/cream families needed discipline | Sample both originals; canonical #AE583A/#F4E3CA with explicitly derived accessible material/action tones |
-| Small dark navigation and umber CTA felt generic | 15px cream navigation, restrained tracking/underline, inverse cream CTA and matching locale boundary |
-| Maximum-weight restrictions inherited error-red styling | Cream/earth metadata pills shared with opening hours; error red remains for actual errors |
-| Post-Hero stats strip was still present | Remove the strip; Hero now transitions directly to Experiences with existing section whitespace |
-| Location had no approved destination | Exact client Maps URL in canonical site config; editorial Khao Mai Kaeo label and localized external CTA; no iframe |
-| Contact details remain unconfirmed | Existing mock flags stay true; phone/WhatsApp/LINE/email/textual address remain hidden |
+| Footer too bright/terracotta-heavy | Deep #281B16 earth, cream typography and restrained mineral texture |
+| Seal/signature visually misaligned | Centered 232px column, 88px seal, 20px separation and 3px optical correction |
+| Transparent wordmark lacked depth | Exact uploaded title pixels in an SVG alpha matte, original cream/bevel RGB and restrained CSS shadow |
+| Horse needed production treatment | Exact logo-horse.jpg as CSS-cropped seal; extraction previews rejected for artwork drift |
+| Texture interpreted as bright color | One .brand-material with independent base, procedural grain and tonal variation |
+| Header/navigation utilitarian | Proportional signature, 16px nav, quieter locale selector, cream CTA and compact sticky state |
+| Rider weight resembled an error | Cream/earth/secondary metadata; error token only for errors |
+| Duration/price missing before adding | Shared explicit facts on homepage/discovery; confirmed offers or Manager to confirm |
+| Repeated times unexplained | Start time label, per-experience start explanation and Thailand local-time help |
+| Package opened multiple forms | One component editor, other components visible as itinerary rows; invalid component opens on validation |
+| Mobile itinerary hidden | Disclosure open by default with activity/date/start/duration/guests/weights/price/readiness |
+| Extras/retained visit unclear | Visible Add another experience; package and extra retained as separate numbered entries |
+| Misleading total risk | Canonical all-known-or-pending total, no double count and final-price manager notice |
+| Homepage/Booking inconsistent | Same palette, type, offer presentation, controls, spacing and material |
 
-Footer composition intentionally uses a small seal above the signature with generous spacing, not two equally prominent logos. Relief wall/shadows are retained in the seal; removing them would flatten the authoritative artwork. No horse stamps are added to editorial sections or Booking controls. Latin/Cyrillic Inter and Thai/Chinese Noto typography remain; no ornamental face or re-typeset wordmark.
+## Preserved and verified
 
-Booking receives updated semantic cream/surface colors only. Domain handlers, package-plus-extra composition, duration/price pending behavior, review/receipt semantics, database/API and providers remain unchanged. Final verification is recorded in BRAND_REFRESH_STATUS.md. Earlier QA counts above are historical evidence and are not combined with this continuation's checks.
+Cinematic Hero/direct Experiences transition, no statistics strip; established homepage sections/photographs; approved navigation/Maps; locale fonts; generic anchors; API payload/request semantics; catalog facts/pricing/validation/DB/migrations/idempotency/providers.
+
+The duration-selector regression test uses the localized Start time label. No assertion or behavioral coverage was removed. New tests protect pre-add facts/mock-price suppression, visible mobile itinerary/time help and one-component package editing/error routing.
+
+BRAND_REFRESH_STATUS.md records actual checks. Browser receipt responses are intercepted locally; no real booking or provider delivery. Targeted visual/keyboard checks are not independent WCAG certification or native linguistic review.
+
+Remaining input: approved duration/price tiers/billing basis for each experience; confirmed package contents/prices; verified contacts and optional textual address/legal content. Unknown durations prevent a fabricated visit-end time.

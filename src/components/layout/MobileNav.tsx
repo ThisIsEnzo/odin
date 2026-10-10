@@ -33,7 +33,7 @@ export function MobileNav() {
           aria-label={tCommon("mobileMenuLabel")} aria-describedby={undefined}
           className="ground-menu fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 xl:hidden"
         >
-          <div className="ground-menu-heading brand-terra-surface -mx-6 -mt-6 flex items-center justify-between px-6 py-5 sm:-mx-10 sm:-mt-10 sm:px-10">
+          <div className="ground-menu-heading brand-material -mx-6 -mt-6 flex items-center justify-between px-6 py-5 sm:-mx-10 sm:-mt-10 sm:px-10">
             <BrandLogo className="ground-menu-logo" />
             <Dialog.Title className="sr-only">
               {tCommon("menu")}

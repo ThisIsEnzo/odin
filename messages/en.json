@@ -252,7 +252,7 @@
     },
     "fields": {
       "date": "Date",
-      "time": "Time",
+      "time": "Start time",
       "timePlaceholder": "Choose a time",
       "guests": "Guests",
       "weight": "Rider weight (kg)",
@@ -295,8 +295,8 @@
       "choose": "Choose",
       "configure": "Plan your visit",
       "progress": "Booking progress",
-      "hours": "Available starts: {open}–{close} (closing time excluded)",
-      "chooseTime": "Choose a time",
+      "hours": "Opening hours: {open}–{close}",
+      "chooseTime": "Choose a start time",
       "weightHelp": "Weight for each rider · maximum {max} kg",
       "guestWeight": "Guest {number} — weight (kg)",
       "guest": "Guest {number}",
@@ -346,11 +346,13 @@
       "experience": "Experience",
       "editing": "Currently editing",
       "stage0": "Choose individual experiences or a package. Each addition becomes part of your visit.",
-      "stage1": "Set the date, time and guests for each experience.",
+      "stage1": "Choose a start time and guests for each experience. Activities in the same visit can start at different times.",
       "stage2": "Let us know how to reach you about your visit.",
       "stage3": "Check your visit before sending your request.",
       "reviewCta": "Review request",
-      "detailsCta": "Continue to your details"
+      "detailsCta": "Continue to your details",
+      "timeHelp": "When would you like this experience to begin? Times are local to Thailand.",
+      "maxWeight": "Maximum rider weight {max} kg"
     },
     "pricing": {
       "duration": "Duration",
@@ -359,8 +361,8 @@
       "total": "Estimated total",
       "pending": "Manager to confirm",
       "managerNotice": "The final price will be confirmed by our manager after reviewing your request.",
-      "durationPending": "Duration to be agreed",
-      "missingTiers": "Duration options and prices are awaiting approval. You can request a visit; our manager will agree the duration and price with you.",
+      "durationPending": "Manager to confirm",
+      "missingTiers": "Our manager will agree the duration and price with you before confirming your visit.",
       "durationHelp": "Changing duration may require a different start time.",
       "included": "Included in package",
       "unit": {
@@ -371,7 +373,9 @@
         "couple": "per couple",
         "activity": "per activity",
         "group": "per group"
-      }
+      },
+      "price": "Price",
+      "from": "From {amount}"
     }
   }
 }

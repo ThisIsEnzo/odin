@@ -9,13 +9,13 @@ export const inputClass="form-control";
 export function ActivityEditor({activity,path,onChange,error,included=false}:{activity:ActivityBookingItem;path:string;onChange:(a:ActivityBookingItem)=>void;error:(path:string)=>string|undefined;included?:boolean}) {
   const t=useTranslations("booking");
   const exp=experiences.find(e=>e.id===activity.experienceId)!;
-  function feedback(name:string) {const text=error(`${path}.${name}`);return text?<p id={`${activity.id}-${name}-error`} className="mt-2 text-sm text-red-800" role="alert">{text}</p>:null;}
+  function feedback(name:string) {const text=error(`${path}.${name}`);return text?<p id={`${activity.id}-${name}-error`} className="mt-2 text-sm text-error" role="alert">{text}</p>:null;}
   const attrs=(name:string)=>({"aria-invalid":!!error(`${path}.${name}`),"aria-describedby":error(`${path}.${name}`)?`${activity.id}-${name}-error`:undefined});
   return <div className="mt-5 space-y-5">
     <p className="text-sm text-surface-dark">{t("v2.hours",exp.operatingHours)}</p>
     <div className="grid min-w-0 gap-5 sm:grid-cols-2">
       <div className="min-w-0"><label htmlFor={`${activity.id}-date`}>{t("fields.date")}</label><input id={`${activity.id}-date`} type="date" min={todayIsoDate()} max={maxIsoDate()} value={activity.date} onChange={e=>onChange({...activity,date:e.target.value})} className={inputClass} {...attrs("date")}/>{feedback("date")}</div>
-      <div><label htmlFor={`${activity.id}-time`}>{t("fields.time")}</label><select id={`${activity.id}-time`} value={activity.time} onChange={e=>onChange({...activity,time:e.target.value})} className={inputClass} {...attrs("time")}><option value="">{t("v2.chooseTime")}</option>{getAvailableTimeSlots(exp,activity.durationMinutes).map(time=><option key={time}>{time}</option>)}</select>{feedback("time")}</div>
+      <div><label htmlFor={`${activity.id}-time`}>{t("fields.time")}</label><select id={`${activity.id}-time`} value={activity.time} onChange={e=>onChange({...activity,time:e.target.value})} className={inputClass} {...attrs("time")} aria-describedby={`${activity.id}-time-help${error(`${path}.time`) ? ` ${activity.id}-time-error` : ""}`}><option value="">{t("v2.chooseTime")}</option>{getAvailableTimeSlots(exp,activity.durationMinutes).map(time=><option key={time}>{time}</option>)}</select><p id={`${activity.id}-time-help`} className="visit-field-help">{t("ux.timeHelp")}</p>{feedback("time")}</div>
     </div>
     <DurationSelector experience={exp} value={activity.durationMinutes} id={activity.id} included={included} error={error(`${path}.durationMinutes`)} onChange={durationMinutes=>onChange({...activity,durationMinutes,time:getAvailableTimeSlots(exp,durationMinutes).includes(activity.time)?activity.time:""})}/>
     <div><label htmlFor={`${activity.id}-count`}>{t("fields.guests")}</label><input id={`${activity.id}-count`} type="number" inputMode="numeric" min={1} max={200} value={activity.participants.length||""} onChange={e=>{

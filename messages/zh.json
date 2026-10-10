@@ -252,7 +252,7 @@
     },
     "fields": {
       "date": "日期",
-      "time": "时间",
+      "time": "开始时间",
       "timePlaceholder": "请选择时间",
       "guests": "人数",
       "weight": "骑乘者体重（公斤）",
@@ -295,8 +295,8 @@
       "choose": "选择",
       "configure": "安排行程",
       "progress": "申请步骤",
-      "hours": "可开始时间：{open}–{close}（不含结束时间）",
-      "chooseTime": "选择时间",
+      "hours": "营业时间：{open}–{close}",
+      "chooseTime": "选择开始时间",
       "weightHelp": "每位骑乘者的体重 · 上限 {max} 公斤",
       "guestWeight": "参与者 {number} — 体重（公斤）",
       "guest": "参与者 {number}",
@@ -346,11 +346,13 @@
       "experience": "体验",
       "editing": "正在编辑",
       "stage0": "选择单项体验或套餐。每次添加都会成为行程的一部分。",
-      "stage1": "为每项体验安排日期、时间和人数。",
+      "stage1": "为每项体验选择开始时间和人数。同一次到访中的不同体验可以在不同时间开始。",
       "stage2": "请留下联系方式，以便我们与您沟通行程。",
       "stage3": "发送申请前，请核对您的行程。",
       "reviewCta": "核对申请",
-      "detailsCta": "填写联系方式"
+      "detailsCta": "填写联系方式",
+      "timeHelp": "您希望几点开始这项体验？所示时间均为泰国当地时间。",
+      "maxWeight": "骑手体重上限 {max} 公斤"
     },
     "pricing": {
       "duration": "时长",
@@ -359,8 +361,8 @@
       "total": "预估总价",
       "pending": "由经理确认",
       "managerNotice": "经理审核您的申请后，将与您确认最终价格。",
-      "durationPending": "时长待协商",
-      "missingTiers": "体验时长和价格尚待确认。您可以先提交到访申请，经理会与您协商时长和价格。",
+      "durationPending": "由经理确认",
+      "missingTiers": "经理将在确认到访前与您商定体验时长和价格。",
       "durationHelp": "更改时长后，可能需要重新选择开始时间。",
       "included": "套餐已包含",
       "unit": {
@@ -371,7 +373,9 @@
         "couple": "每对",
         "activity": "每项体验",
         "group": "每组"
-      }
+      },
+      "price": "价格",
+      "from": "{amount} 起"
     }
   }
 }

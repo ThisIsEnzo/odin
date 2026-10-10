@@ -51,21 +51,17 @@ Shared 1280px rail; gutters 20/32/48px at mobile/640/1024px. Section rhythm rema
 
 Interactive controls, including Footer links, have 44px minimum target height. Booking fields have 48px minimum height, 16px text, semantic borders, visible contextual focus and associated labels/errors. Reduced-motion rules, native controls/disclosure and Radix keyboard menu are retained. Targeted QA is not independent accessibility certification.
 
-## Offer information
+## Booking V3 — hospitality request
 
-OfferFacts is shared by homepage experiences and Booking discovery. Every experience shows Duration and Price before adding. Confirmed duration tiers show localized minutes and a minimum THB offer with billing unit. Legacy numeric prices appear only when provenance confirms them. Packages have a distinct Package label, component list, price row and illustrative-content notice.
+One calm content column with visit/contact fields at the top, catalog-driven editorial experience cards, one optional note and Review request. No progress wizard, sticky cart/sidebar or per-activity time/weight fields. Wide desktop uses a two-column card grid (1024px+), with independently sized cards; mobile/tablet uses one column. Review is the only second screen, followed by Request received.
 
-Current canonical data has no approved tiers and all prices/packages are mock. Duration and price therefore show localized Manager to confirm. Slot interval never becomes activity duration. No price, duration or billing quantity is fabricated.
+Cards use existing activity photographs, square frames, brand borders and cream/canvas surfaces. An included badge with check, stronger border and expanded configuration make selection explicit. Remove resets the card. Weight maxima are noticeable sand/cream information, never red warnings. Guest/unit steppers and duration buttons use 48px touch targets; inputs use 52px height and 16px text. Controls wrap naturally without a carousel or overlay. Focus and linked error summaries support keyboard correction.
 
-## Visit planning
+Visit date and preferred arrival time appear once. Copy explains Thailand local time and manager-confirmed internal timing. Horse/Pony require no entered weights. Generic capacity-unit controls support five guests with three/four/five ATVs. Duration controls render approved tiers only; absent tiers display Manager to confirm. Current all-empty tiers and mock prices remain pending.
 
-Discover → add → configure → save → collapsed itinerary. Added/editing/ready/details-needed states remain explicit. One item editor is open at a time. Within a package, VisitItemEditor opens exactly one component form; other components remain visible as itinerary rows. Component selectors expose expanded state; validation opens the component needing details.
+Review groups visit, contact, numbered experiences, notes and estimated total as editorial sections. Edit request restores the full form unchanged. Numeric total appears only when every line is known; otherwise the total is pending. Final-price and request-to-book semantics remain visible. Receipt thanks the visitor in EN/RU/TH/ZH and shows the server reference without asserting availability/payment confirmation or outbound message delivery.
 
-Date and Start time belong to each activity. Stage help explains different starts within one visit; field help states Thailand local time. Opening hours are labelled as opening hours, without technical slot-generation copy. Duration-aware slots and request payload are unchanged.
-
-Desktop has a sticky Your visit summary. Mobile uses a native disclosure open by default. Entries show name, date, labelled start time, labelled duration/pending, guests, supplied weights, subtotal and readiness. Add another experience is visible and returns to discovery without dropping prior entries. Package and extra are separate numbered items.
-
-Canonical estimates are reused: numeric total only if every required line is known; otherwise Manager to confirm. Package components are never double charged. Final-price manager disclaimer remains beside the estimate. Review shows itinerary/contact details; Request received preserves request semantics and focuses its heading. No invented visit-end time when duration is unknown.
+Homepage OfferFacts and the brand/material system remain intact. Mock package CTAs now say Plan a visit and open the activity form; no nested package editor or fabricated package composition is implied. Actual automated checks and the outstanding browser-visual review are recorded in BOOKING_V3_STATUS.md.
 
 ## Location and technical boundary
 
@@ -75,4 +71,4 @@ Location places editorial copy beside a 38%/62% map column at desktop, stacked c
 
 Unconfirmed phone, WhatsApp, LINE, email and textual address remain suppressed.
 
-Backend, catalog facts, pricing, slots, validation, API, PostgreSQL, Drizzle/migrations, idempotency, outbox and providers are unchanged. Actual verification is recorded in BRAND_REFRESH_STATUS.md.
+The brand PR’s final identity/material/location are preserved in this stacked Booking PR. V3 changes public request validation/persistence/model and staff text as documented in BOOKING_V3_STATUS.md; outbox transports and retry architecture remain unchanged. BRAND_REFRESH_STATUS.md records historical brand verification, not new Booking visual QA.

@@ -8,12 +8,14 @@ import type { Experience } from "@/types/domain";
  * MOCK: price and restrictions.minAge / maxAge on every entry (flagged
  * per-item in `mock`). See /docs/MOCK_DATA.md §3–4.
  *
- * requiresWeight drives the conditional booking field (Phase 4) — weight is
- * asked for horse-riding and pony-riding only, per CLAUDE.md §11.
+ * requiresWeight is retained only for historical V2 validation. Public V3
+ * requests show canonical weight restrictions as information, never inputs.
  */
 export const experiences: Experience[] = [
   {
     id: "horse-riding",
+    booking: { model: "per_person" },
+    bookingImage: "/images/experiences/odin-horse.jpg",
     slug: "horse-riding",
     translationNamespace: "experiences.horseRiding",
     operatingHours: { open: "07:00", close: "18:00" },
@@ -31,6 +33,8 @@ export const experiences: Experience[] = [
   },
   {
     id: "pony-riding",
+    booking: { model: "per_person" },
+    bookingImage: "/images/experiences/odin-pony.jpg",
     slug: "pony-riding",
     translationNamespace: "experiences.ponyRiding",
     operatingHours: { open: "07:00", close: "18:00" },
@@ -48,6 +52,8 @@ export const experiences: Experience[] = [
   },
   {
     id: "atv",
+    booking: { model: "capacity_unit", maxGuestsPerUnit: 2, unitTranslationKey: "booking.units.atv" },
+    bookingImage: "/images/experiences/odin-atv.jpg",
     slug: "atv",
     translationNamespace: "experiences.atv",
     operatingHours: { open: "07:00", close: "20:00" },
@@ -65,6 +71,8 @@ export const experiences: Experience[] = [
   },
   {
     id: "sauna",
+    booking: { model: "group" },
+    bookingImage: "/images/experiences/odin-sauna.jpg",
     slug: "sauna",
     translationNamespace: "experiences.sauna",
     operatingHours: { open: "08:00", close: "21:00" },
@@ -87,3 +95,8 @@ export function getExperienceBySlug(slug: string): Experience | undefined {
 }
 
 export const experienceSlugs = experiences.map((experience) => experience.slug);
+
+/** Restaurant and unconfigured services never become duration cards. */
+export function bookableExperiences(catalog: Experience[] = experiences): Experience[] {
+  return catalog.filter(e => e.booking !== undefined);
+}

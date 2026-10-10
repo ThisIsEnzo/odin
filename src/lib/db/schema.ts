@@ -8,11 +8,21 @@ export const bookings=pgTable('bookings',{
  id:uuid('id').primaryKey(),reference:text('reference').notNull().unique(),status:text('status').notNull().default('received'),
  estimate:jsonb('estimate').$type<BookingEstimate>(),
  schemaVersion:integer('schema_version').notNull().default(2),locale:text('locale').notNull(),
+ visitDate:text('visit_date'),preferredStartTime:text('preferred_start_time'),
  customerName:text('customer_name').notNull(),email:text('email').notNull(),phone:text('phone').notNull(),
  preferredChannel:text('preferred_channel'),channelIdentity:text('channel_identity'),notes:text('notes'),
  idempotencyKey:uuid('idempotency_key').notNull().unique(),requestHash:text('request_hash').notNull(),
  createdAt:stamp('created_at').notNull().defaultNow(),updatedAt:stamp('updated_at').notNull().defaultNow(),
-},t=>[check('booking_status',sql`${t.status} in ('received','confirmed','declined','cancelled')`),check('booking_version',sql`${t.schemaVersion}=2`),check('booking_locale',sql`${t.locale} in ('en','ru','th','zh')`)]);
+},t=>[check('booking_status',sql`${t.status} in ('received','confirmed','declined','cancelled')`),check('booking_version',sql`${t.schemaVersion} in (2,3)`),check('booking_v3_visit',sql`${t.schemaVersion}<>3 or (${t.visitDate} is not null and ${t.preferredStartTime} is not null)`),check('booking_locale',sql`${t.locale} in ('en','ru','th','zh')`)]);
+
+/** Count-based V3 lines; old item/participant tables and their semantics remain intact. */
+export const bookingRequestActivities=pgTable('booking_request_activities',{
+ id:uuid('id').primaryKey(),bookingId:uuid('booking_id').notNull().references(()=>bookings.id,{onDelete:'cascade'}),
+ activityId:text('activity_id').notNull(),position:integer('position').notNull(),
+ guestCount:integer('guest_count').notNull(),durationMinutes:integer('duration_minutes'),unitCount:integer('unit_count'),
+},t=>[uniqueIndex('request_activity').on(t.bookingId,t.activityId),uniqueIndex('request_activity_order').on(t.bookingId,t.position),
+ check('request_activity_counts',sql`${t.guestCount}>0 and (${t.unitCount} is null or (${t.unitCount}>0 and ${t.unitCount}<=${t.guestCount}))`),
+ check('request_activity_duration',sql`${t.durationMinutes} is null or ${t.durationMinutes}>0`),check('request_activity_position',sql`${t.position}>=0`)]);
 export const bookingItems=pgTable('booking_items',{
  id:uuid('id').primaryKey(),bookingId:uuid('booking_id').notNull().references(()=>bookings.id,{onDelete:'cascade'}),
  domainId:text('domain_id').notNull(),parentId:uuid('parent_id'),position:integer('position').notNull(),

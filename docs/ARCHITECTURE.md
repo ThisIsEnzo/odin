@@ -1,43 +1,28 @@
 # ODIN — Architecture
 
-Current implementation: Phase 5C infrastructure on the supplied Phase 5B Booking V2 project. Earlier greenfield proposals are superseded by the actual modules described here.
+Current implementation: Booking V3 on the existing PostgreSQL/Drizzle transactional outbox infrastructure. V2 remains explicitly readable as historical data.
 
-## Application
+## Application and public booking
 
-Next.js App Router, React/TypeScript, Tailwind and next-intl. Locale prefixes EN/RU/TH/ZH remain unchanged. Homepage/layout components, styling and assets retain Phase 5A.1. Canonical business facts remain in `src/data/odin`, display copy in `messages`. The booking route is a thin initializer for canonical `?experience=` and `?package=` links. Both parameters together add the package and a standalone experience deliberately; invalid IDs are ignored by initialization and rejected at the API boundary.
+Next.js App Router, React/TypeScript, Tailwind and next-intl retain the final ON GROUND brand parent. Public booking is V3: one form → Review → Send request → Received. The form holds global visit date/preferred arrival, contact, catalog-driven activity cards and one optional note. No wizard, cart/sidebar, individual start times, participant weights or nested package editor remains in the public UI.
 
-## Booking layers
+`booking/request.ts` owns the V3 schema, generic capacity bounds, selection helpers and estimate calculation. React and the API share it; the server always verifies against its canonical catalog. `RequestActivityCard` renders generic behavior metadata, so a fifth bookable activity needs no BookingFlow edit. The thin book route still initializes valid activity deep links. Existing valid package deep links show context only; homepage package CTAs lead to a plain activity form because package rules remain mock.
 
-| Layer | Responsibility |
-| --- | --- |
-| types/domain.ts | Versioned request, activity/package union, participants, option definitions/selections |
-| booking/itinerary.ts | Stable-ID creation, independent edit/remove/duplicate, package initialization |
-| booking/rules.ts | Central business validation and data-driven scheduling helpers |
-| validation/booking.schema.ts | Structural validation; delegates all V2 business rules |
-| domain/booking/BookingFlow.tsx | Choose → configure → contact → review → received |
-| ActivityEditor.tsx | Per-activity schedule and per-participant inputs |
-| BookingOptions.tsx | Catalog-driven future option controls; currently hidden |
-| api/booking/route.ts | Server validation, bounded request, dependency wiring |
-| booking/api.ts + runtime.ts | V2 validation, idempotent repository creation and immediate outbox attempt |
-| booking/repository.ts + postgres-repository.ts | Repository contract, explicit dev memory and transactional PostgreSQL |
-| booking/notify.ts | One complete operational payload, fanout and delivery outcomes |
-| booking/providers/* | Official provider transport only |
+`types/domain.ts` keeps V2 historical types and adds V3 plus explicit version unions. `validation/booking.schema.ts`, itinerary/rules and V2 estimates remain compatibility/domain tools; they are not the active public POST shape. Retired wizard React components are removed. See BOOKING_RULES.md and DATA_MODEL.md for policy/version details.
 
-Review groups activities by date and retains package context. Each activity can be edited without clearing others. Only one top-level item's editor is open at once; package components are configured explicitly. Contact is collected once. Error summaries identify activity and rider. No guest names, invented prices, durations, add-ons or total charges are introduced.
+## Persistence and submission
 
-## Production persistence and submission
+The active `/api/booking` validates V3 and the UUID Idempotency-Key, strips client price data and delegates to the existing runtime/repository boundary. V3 uses global booking columns and a separate count-based activity table, not synthetic participant records. The additive `0002` migration preserves existing applied migrations and all V2 records. Reads discriminate explicitly by schemaVersion. Full name maps to the existing customer_name column.
 
-`src/lib/db/schema.ts` defines six normalized PostgreSQL tables with Drizzle ORM. `PostgresBookingRepository` retains the BookingRepository abstraction and reconstructs the canonical Booking V2 aggregate. Internal UUIDs, public references and frontend item IDs are separate. The public reference is ODIN plus 128 random bits with a unique DB constraint.
+The existing transaction computes a canonical estimate and commits booking, ordered activity counts, immutable snapshot, one outbox event and frozen delivery plans. Same key/content returns the original aggregate/reference/price; conflicting content returns 409. Unique PostgreSQL keys retain concurrent protection. The client guards double clicks and retains the key for unchanged retries. Receipt requires committed acceptance; configuration/persistence errors return safe 503. Notification failure after commit cannot reverse acceptance.
 
-The API validates V2 and the Idempotency-Key UUID header. The repository hashes a canonical representation of the validated draft and inserts under a unique key inside a transaction. An identical replay returns the original result; changed content returns 409. Concurrent submissions rely on the PostgreSQL unique constraint, not a process-local check. Client retries retain their key while submitted content is unchanged; editing changes the key. A remount/new form begins a new intent.
+The server's estimate is authoritative. An explicit participant/unit/booking basis determines quantity; no mock rates or per-person/per-vehicle assumptions are promoted. Any pending line makes the total pending. Global preferred arrival is not an individual slot or schedule, so old closing/duration sequence assumptions do not gate V3. V2 interpretation remains intact.
 
-The transaction writes booking, ordered items/components, ordered participants/options, one canonical outbox event and frozen provider/recipient/part deliveries. Any failure rolls everything back. The response is received only after commit; one immediate delivery part is attempted best-effort, with a scheduled processor completing remaining work. Notification or processing failures cannot turn committed acceptance into a booking error. Missing production configuration returns a safe 503, never a memory success.
-
-`runtime.ts` selects PostgreSQL by default and rejects memory/console in production. Explicit development memory remains for frontend work and isolated tests. `backend:check` is the documented pre-start validation gate; build-time module loading does not open the DB. There is no hosting-provider SDK, automatic migration on startup, inventory lock or new status transition.
+`runtime.ts` still chooses PostgreSQL by default and disallows memory/console in production. No automatic migration on startup, payment, inventory lock, instant confirmation, account or hosting-provider rewrite is introduced.
 
 ## Notification layers
 
-- Canonical interpretation: `booking/notify.ts`, reused from Phase 5B. Full snapshot plus operational text, no outgoing internal IDs.
+- Canonical interpretation: `booking/notify.ts`, with version-aware snapshots/text. V3 includes visit preference, contacts, activity guest/unit counts, duration, informational riding maxima, notes and estimate. Historical V2 interpretation remains available.
 - Planning: `outbox/plan.ts`, immutable per-recipient/per-part transport envelopes; no credentials in persisted plans.
 - Transport: `outbox/transport.ts` and shared `providers/http.ts`, official endpoints, current server-only tokens, bounded timeout and sanitized failure categories.
 - Processing: `outbox/processor.ts`, durable state, DB locking, retries and per-part acceptance IDs.
@@ -53,6 +38,8 @@ No webhook is necessary for outgoing LINE; this phase exposes none. WhatsApp del
 
 ## Verification and remaining boundaries
 
-See PHASE_5C_STATUS.md for actual results. Real PostgreSQL integration tests are provided and fail closed without a dedicated test DB. Unit tests use mocked transports. No live provider success is claimed without credentials and recipient confirmation. New Drizzle/pg/tsx dependencies require an updated lockfile; npm ci dry-run validates it. The inherited ESLint configuration remains out of scope. Homepage/layout/business data and locale content remain unchanged.
+See BOOKING_V3_STATUS.md for this stacked PR’s actual results and remaining review gaps. Historical infrastructure results remain in PHASE_5C_STATUS.md. Real PostgreSQL integration tests are provided and fail closed without a dedicated test DB. Unit tests use mocked transports. No live provider success is claimed without credentials and recipient confirmation. New Drizzle/pg/tsx dependencies require an updated lockfile; npm ci dry-run validates it. The inherited ESLint configuration remains out of scope. Homepage/layout/brand assets remain unchanged apart from truthful package CTA behavior/copy. Catalog gains booking metadata without changing restrictions/hours/mock prices; localized V3 copy is supplied across four locales.
 
 No CRM, admin, customer authentication, payments, availability engine or instant confirmation. Before launch complete real DB/migration/concurrency/restart verification, account setup and live provider tests, existing browser QA, scheduler operations, upstream rate limiting and data-retention policy.
+
+Only staff LINE/WhatsApp delivery is configured. Customer outbound message delivery is not yet configured; the browser receipt is the customer thank-you. No email/SMS/customer WhatsApp send is simulated.

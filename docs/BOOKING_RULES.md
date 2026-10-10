@@ -1,60 +1,56 @@
-# ODIN — Booking Rules
+# ON GROUND — Booking request rules
 
-Current: Phase 5C. Booking means a request received, never availability reserved or automatically confirmed.
+The public flow is Booking V3: one form → Review → Send booking request → Request received. A request never reserves availability or confirms a booking/payment.
 
-## Confirmed facts
+## Visit and contact
 
-| Service | Opening inclusive | Closing exclusive for activity starts | Maximum weight |
+One `visitDate` and one `preferredStartTime` apply to the complete visit. Times are Thailand local time. The manager confirms the actual sequence and activity start times. The preference must be valid `HH:mm`; it is not a slot, and no activity interval, duration-end or summed-duration closing check applies. There is no confirmed global arrival-hours policy to invent. Canonical activity operating hours remain intact for staff/historical interpretation.
+
+Date validation checks a real calendar date, today or later in Asia/Bangkok, the existing 90-day engineering window, canonical closed weekdays and blackout dates. The window is an engineering limit, not a newly confirmed business fact. Full name, valid email and phone are required once. Public V3 has no channel/provider configuration, per-activity notes or individual guest identities. One optional request note is limited to 500 characters.
+
+## Catalog-driven activities
+
+`Experience.booking` determines bookability and generic behavior. `bookableExperiences()` drives the cards and the server verifies selections against the same canonical catalog. Restaurant is outside this catalog. `ExperienceId` is a string with runtime catalog membership checks; a future fifth activity needs metadata and localized content, not a `BookingFlow.tsx` edit.
+
+| Activity | Behavior | Capacity | Canonical information |
 | --- | --- | --- | --- |
-| Horse Riding | 07:00 | 18:00 | 90 kg per rider |
-| Pony Riding | 07:00 | 18:00 | 60 kg per rider |
-| ATV | 07:00 | 20:00 | Not requested |
-| Sauna | 08:00 | 21:00 | Not requested |
-| Restaurant | 07:00 | 23:00 | Not applicable |
+| Horse Riding | per_person | Guest count | Maximum rider weight 90 kg |
+| Pony Riding | per_person | Guest count | Maximum rider weight 60 kg |
+| ATV | capacity_unit | Guest count + unit count; max 2 guests/unit | Vehicle allocation confirmed by staff |
+| Sauna | group | Guest count | Duration/price pending |
 
-These remain unchanged in canonical data. No age validation is introduced; existing age values remain mock informational data. Prices and package contents also remain mock.
+Behavior determines controls, **not a pricing basis**. Sauna's group selection records the requested group size; it asserts no per-group/per-person rate. Prices remain dependent on approved tier metadata only. Existing mock age limits are not promoted into public validation.
 
-## One rules layer
+V3 has no weight field or weight-required validation. `restrictions.maxWeightKg` remains canonical, visible as premium information and included in staff notifications. `requiresWeight` remains only for historical V1/V2 interpretation; retired wizard components have been removed.
 
-`booking/rules.ts` owns V2 `validateVisit`, restriction checks, slot generation, calendar/date policy, package composition, option applicability and contact-channel availability. It returns paths such as `items.0.components.1.participants.1.weightKg`, keys and interpolation metadata. React displays translated errors; Zod delegates business checks through superRefine; the API validates again. No hours or weight thresholds live in UI or providers.
+Each selected activity appears once with `guestCount >= 1`. For `capacity_unit`, `unitBounds()` enforces `ceil(guestCount/maxGuestsPerUnit) <= unitCount <= guestCount` on both client and server. Five guests may select 3, 4 or 5 ATVs. Guest edits preserve a chosen unit count whenever still valid, otherwise clamp it to valid bounds. Non-unit activities reject a supplied unit count. No seating allocation is collected. Technical limits: 200 guests/units and 50 selected activities, not asserted inventory capacity.
 
-The legacy `validateBookingRequest` helper remains for existing primitive tests/consumers; the active API exclusively accepts the V2 schema. V1's shared-weight helper is not a migration path.
+## Duration and pricing
 
-- A visit needs at least one item, and each activity at least one participant.
-- Every riding participant needs a finite positive weight; maxima are inclusive and data-driven through `requiresWeight` and `restrictions`.
-- ATV/Sauna do not collect or accept irrelevant weights.
-- Calendar dates must be real, today or later in Asia/Bangkok, up to the existing 90-day engineering window. This window is not a newly confirmed business fact.
-- Slots derive from opening time and the configured interval. Closing itself is excluded. The interval is not an activity duration or proof of availability.
-- Package components must match the canonical catalog exactly; standalone extras remain allowed.
-- Item/component/participant IDs are unique within the request.
-- Options must exist, apply to the target, be unique on that target and satisfy configured integer quantities.
-- Customer name, email and phone are required once. Notes are optional, max 500 characters.
-- Preferred channels require non-mock configured contact data; LINE/WhatsApp require explicit customer identity.
+All four live `durationOptions` arrays remain empty. V3 therefore permits omission and displays Manager to confirm. Arbitrary supplied minutes are rejected. When canonical approved tiers are supplied, duration becomes required and must match an exact positive integer tier. No slot interval or legacy mock amount supplies a duration or price.
 
-## Structural and abuse boundaries
+Approved `DurationOption.quantityBasis` is explicit:
 
-Zod owns shape, enums, bounded strings and array sizes. Technical limits: 50 top-level items, 50 components per package, 200 participants per activity, 50 selected options. These are payload/UI protection limits, not business capacities. The route rejects raw bodies over 256,000 characters and filled honeypots. Server idempotency is now implemented. Distributed rate limiting and an upstream request-size cap remain deployment requirements.
+| Basis | Estimate quantity |
+| --- | --- |
+| participant | guestCount |
+| unit | unitCount, only for capacity_unit |
+| booking | 1 |
 
-## Submission and failures
+`unit` supports per-vehicle ATV pricing and future units; `participant` supports per-person pricing. Never derive one basis from `price.unit` or mock data. Monetary arithmetic uses rounded minor units. Unknown tiers, amounts, currency or quantity basis leave a pending line. The total is numeric only if every selected line is known; otherwise it is Manager to confirm, never a partial grand total. All numeric prices are estimates, accompanied by the manager's final-price disclaimer.
 
-Validate V2 + UUID Idempotency-Key → atomically persist booking/children/canonical outbox/delivery plans → attempt one part → return HTTP 201 `{status:'received', id, reference}`.
+The server validates the public V3 schema, strips unknown client prices/estimates/participant data and computes its own estimate. Repositories freeze the estimate in the existing transaction. Replay/readback never reprices an accepted request against changed catalog data.
 
-A unique idempotency key and canonical request hash protect same-intent retries: same key/content returns the original result, incompatible reuse returns 409. The client retains the key for unchanged content after a network failure; edits create a new key. Separate form sessions/remounts are separate intents. IDs, reference and status are generated server-side, never accepted from client status fields.
+## Packages and historical compatibility
 
-Persistence or required configuration failure returns safe 503; it must not report received. Any transaction failure rolls back the entire aggregate/outbox. Notification failure after commit cannot erase the request or change API acceptance. Failed parts remain retryable or dead for operator review, while successful channel parts remain sent.
+Current package contents/prices are mock. Public V3 is activity-first with no nested package editor. Homepage package CTAs now say Plan a visit and lead to an empty activity form. Existing valid `?package=` links show an explanatory note, without selecting or fabricating components/prices. The visitor can mention package interest in the single notes field. Confirmed package rules are a separate future product decision.
 
-No business hours, weight thresholds, status semantics, prices, packages or options changed. No inventory locking, payment, customer account or instant confirmation. See ARCHITECTURE.md and PRODUCTION_BACKEND_SETUP.md for retry, concurrency and production configuration details.
+V2 draft, item/component/participant types, schema, rules, estimates and repository reads remain for historical compatibility. Old per-activity timing/weight semantics are not silently changed. The active `/api/booking` accepts V3 only; V2/V1 public submissions are rejected. No automatic conversion of historical records is performed.
 
-## Duration and estimated pricing — final continuation
+## Submission and notifications
 
-`Experience.durationOptions` is the canonical, approved duration-price catalog. A tier contains integer `durationMinutes`, THB `price` (amount and unit), and explicit `quantityBasis` (`participant` or `booking`). **All four live catalogs currently contain empty arrays.** Repository data, master handoff and supplied archives contain no approved duration-price pairs. Legacy mock activity prices are not reused, interpolated or associated with slot intervals.
+Review validates all visit/contact/catalog/capacity/duration inputs. Edit returns to the one form with everything preserved. Send requires a UUID Idempotency-Key. Same validated content/key returns the original reference; incompatible reuse is 409. The client keeps the key after a failed unchanged send and changes it after edits. A local submitting guard prevents double clicks.
 
-With approved tiers, selection is required and the shared server/client validator accepts only an exact tier with a finite nonnegative canonical THB price. Without tiers, a request may omit duration and remains a manager-assisted inquiry; arbitrary numeric duration is rejected. Zod strips untrusted price/estimate fields. Repositories calculate their own estimate from canonical data, never client arithmetic.
+The existing transaction stores request, activity counts, estimate, canonical outbox and frozen delivery plans. Persistence/configuration failure remains safe 503, never receipt. Notification failure after commit cannot erase acceptance. Staff text includes global date/preferred arrival, contact, each activity's guests/duration/units, weight restriction information, notes and estimate/pending total. LINE/WhatsApp transports, retries, locks, credentials and idempotency behavior are unchanged.
 
-Start slots remain on the existing interval grid, opening inclusive and closing exclusive for starts. If a duration is selected, `start + duration <= close` must also hold. Finishing exactly at closing is allowed; starting then is not. A duration change clears a now-invalid start. No duration is inferred from `bookingIntervalMinutes`.
-
-`calculateActivityEstimate` and `calculateBookingEstimate` centralize calculations. Participant multiplication occurs only for an explicit participant basis. Booking-based tiers charge once, so guests are not silently treated as vehicles. Monetary addition uses rounded minor units. Unknown tiers, unsupported option pricing, missing quantity semantics or any unknown line produce a pending overall amount (`null`), never zero or a partial numeric grand total.
-
-A confirmed package additionally needs an explicit `estimateBasis`: `package` charges once; `participant` requires the same nonzero headcount across components. Mock or unspecified-basis packages remain pending. Component standalone prices are never added to package price. A package plus extra sums the package line and standalone extra only. Restaurant has no duration tier and no invented price.
-
-Displayed prices are estimates. EN/RU/TH/ZH place the manager-confirmation disclaimer beside the visit/review total. Request receipt remains received, not confirmed or payment due; the receipt screen intentionally omits pricing rather than recomputing it after submission.
+Only staff outbound channels are configured. Customer outbound message delivery is not yet configured. The localized browser receipt thanks the visitor and explains that the manager will confirm availability, timing and final price; it displays the API reference. No email/SMS/customer WhatsApp delivery is claimed.

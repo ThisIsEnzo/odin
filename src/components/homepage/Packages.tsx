@@ -83,7 +83,7 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
           ) : null}
           
           <Link
-            href={`/book?package=${pkg.slug}`}
+            href="/book"
             className={buttonVariants({ variant: "secondary", size: "sm", className: "mt-2" })}
           >
             {tPackages("cta")}

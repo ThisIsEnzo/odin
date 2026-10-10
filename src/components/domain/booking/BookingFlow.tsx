@@ -1,128 +1,129 @@
 "use client";
-import {DurationText, ItemEstimate, VisitEstimate} from "./Estimate";
-import {useRef,useState} from "react";
+import {useRef, useState} from "react";
 import {useTranslations} from "next-intl";
-import {experiences} from "@/data/odin/experiences";
-import {packages} from "@/data/odin/packages";
-import {bookingOptions} from "@/data/odin/booking-options";
-import {siteConfig} from "@/data/odin/site";
-import type {ActivityBookingItem,BookingItem,BookingCustomer,ExperienceId,Locale} from "@/types/domain";
-import {activitiesOf,createActivity,createPackage,duplicateItem,initializeVisit,removeItem,updateActivity} from "@/lib/booking/itinerary";
-import {availableContactChannels} from "@/lib/booking/rules";
-import {bookingSchema,visitSchema,customerSchema,collectFieldErrors,type FieldErrorEntry} from "@/lib/validation/booking.schema";
+import {bookableExperiences} from "@/data/odin/experiences";
+import type {BookingActivitySelection, BookingRequestDraft, ExperienceId, Locale} from "@/types/domain";
+import {bookingRequestSchema, calculateRequestEstimate, createSelection} from "@/lib/booking/request";
+import {maxBookingDate, thailandToday} from "@/lib/booking/rules";
+import {collectFieldErrors, type FieldErrorEntry} from "@/lib/validation/booking.schema";
 import {buttonVariants} from "@/components/ui/Button";
-import {CustomerStep} from "./steps/CustomerStep";
 import {RequestReceived} from "./RequestReceived";
-import {inputClass} from "./ActivityEditor";
-import {VisitItemEditor} from "./VisitItemEditor";
-import {ExperiencePicker} from "./ExperiencePicker";
-import {VisitSummary, visitDate} from "./VisitSummary";
+import {RequestActivityCard} from "./RequestActivityCard";
 
-export interface BookingFlowProps {locale:Locale;initialExperienceId:ExperienceId|null;contextPackageId:string|null}
-export function BookingFlow({locale,initialExperienceId,contextPackageId}:BookingFlowProps) {
-  const t=useTranslations("booking"), all=useTranslations(), te=useTranslations("booking.errors");
-  const [items,setItems]=useState<BookingItem[]>(()=>initializeVisit(initialExperienceId,contextPackageId));
-  const [step,setStep]=useState(0), [editing,setEditing]=useState<string|null>(null);
-  const [customer,setCustomer]=useState<BookingCustomer>({name:"",email:"",phone:""});
-  const [notes,setNotes]=useState(""),[company,setCompany]=useState("");
-  const [errors,setErrors]=useState<Record<string,FieldErrorEntry>>({}),[failure,setFailure]=useState("");
-  const [notice,setNotice]=useState("");
-  const [busy,setBusy]=useState(false),[received,setReceived]=useState<string|null>(null);
-  const submitting=useRef(false), heading=useRef<HTMLHeadingElement>(null),errorBox=useRef<HTMLDivElement>(null);
-  const nameOf=(a:ActivityBookingItem)=>all(`${experiences.find(e=>e.id===a.experienceId)!.translationNamespace}.title`);
-  const itemName=(item:BookingItem)=>item.type==="activity"?nameOf(item):all(`${packages.find(p=>p.id===item.packageId)!.translationNamespace}.title`);
-  const error=(path:string)=>{const e=errors[path];return e?te.has(e.key)?te(e.key,e.params as Record<string,string|number>):te("invalidSubmission"):undefined;};
-  const titles=[t("v2.choose"),t("v2.configure"),t("steps.details"),t("steps.review")];
-  const defaultDate=items.flatMap(activitiesOf).find(a=>a.date)?.date??"";
-  function go(next:number) {setStep(next);setNotice("");setErrors({});setFailure("");requestAnimationFrame(()=>heading.current?.focus());}
-  function focusErrors(){requestAnimationFrame(()=>errorBox.current?.focus());}
-  function changeActivity(a:ActivityBookingItem){setItems(old=>updateActivity(old,a));setErrors({});}
-  function add(item:BookingItem){setItems(old=>[...old,item]);setEditing(item.id);go(1);setNotice(t("ux.addedName",{name:itemName(item)}));}
-  function editItem(id:string){setEditing(id);go(1);}
-  function itemReady(item:BookingItem){return visitSchema.safeParse([item]).success;}
-  function validateItems(onlyId?:string) {
-    const r=visitSchema.safeParse(items);
-    if(r.success)return true;
-    const relevant=r.error.issues.filter(i=>!onlyId||items[Number(i.path[0])]?.id===onlyId);
-    if(!relevant.length)return true;
-    setErrors(collectFieldErrors(relevant.map(i=>({...i,path:["items",...i.path]}))));
-    setEditing(items[Number(relevant[0]?.path[0])]?.id??null);focusErrors();return false;
+export interface BookingFlowProps {locale: Locale; initialExperienceId: ExperienceId | null; contextPackageId: string | null}
+export function BookingFlow({locale, initialExperienceId, contextPackageId}: BookingFlowProps) {
+  const t = useTranslations("booking.v3"), all = useTranslations(), p = useTranslations("booking.pricing"), te = useTranslations("booking.errors");
+  const catalog = bookableExperiences();
+  const [draft, setDraft] = useState<BookingRequestDraft>(() => ({schemaVersion: 3, visitDate: "", preferredStartTime: "", customer: {fullName: "", email: "", phone: ""}, locale,
+    activities: catalog.filter(e => e.id === initialExperienceId).map(createSelection), notes: ""}));
+  const [review, setReview] = useState(false), [received, setReceived] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, FieldErrorEntry>>({}), [failure, setFailure] = useState("");
+  const [company, setCompany] = useState(""), [busy, setBusy] = useState(false), [notice, setNotice] = useState("");
+  const submitting = useRef(false), attempt = useRef<{body: string; key: string} | null>(null);
+  const heading = useRef<HTMLHeadingElement>(null), errorBox = useRef<HTMLDivElement>(null);
+  const estimate = calculateRequestEstimate(draft);
+  const money = (amount: number | null) => amount === null ? p("pending") : new Intl.NumberFormat(locale, {style: "currency", currency: "THB", maximumFractionDigits: 2}).format(amount);
+  const duration = (minutes?: number) => minutes === undefined ? p("pending") : p("minutes", {count: minutes});
+  const date = (value: string) => new Intl.DateTimeFormat(locale, {day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Bangkok"}).format(new Date(`${value}T12:00:00+07:00`));
+  const message = (path: string) => {const e = errors[path]; return e ? te.has(e.key) ? te(e.key, e.params as Record<string, string | number>) : te("invalidSubmission") : undefined;};
+  function change(value: Partial<BookingRequestDraft>) {setDraft(old => ({...old, ...value})); setErrors({}); setFailure("");}
+  function select(activityId: string, selection?: BookingActivitySelection) {
+    const previous = draft.activities.find(a => a.activityId === activityId);
+    change({activities: catalog.flatMap(e => {const chosen = e.id === activityId ? selection : draft.activities.find(a => a.activityId === e.id); return chosen ? [chosen] : [];})});
+    if (!previous || !selection) setNotice(t(selection ? "added" : "removed", {name: all(`${catalog.find(e => e.id === activityId)!.translationNamespace}.title`)}));
   }
-  function next() {
-    if(step===0){if(!items.length){setErrors({items:{key:"emptyVisit"}});focusErrors();return;}go(1);setEditing(items[0]?.id??null);}
-    else if(step===1){if(validateItems())go(2);}
-    else if(step===2){const r=customerSchema.safeParse(customer);if(!r.success){setErrors(collectFieldErrors(r.error.issues.map(i=>({...i,path:["customer",...i.path]}))));focusErrors();return;}go(3);}
+  function showErrors(value: Record<string, FieldErrorEntry>) {setErrors(value); setReview(false); requestAnimationFrame(() => errorBox.current?.focus());}
+  function goReview() {
+    const result = bookingRequestSchema.safeParse({...draft, locale, company});
+    if (!result.success) {showErrors(collectFieldErrors(result.error.issues)); return;}
+    const {company: ignored, ...clean} = result.data; void ignored;
+    setDraft(clean); setReview(true); setErrors({}); setFailure(""); requestAnimationFrame(() => heading.current?.focus());
   }
-  function routeErrors(e:Record<string,FieldErrorEntry>){const first=Object.keys(e)[0]??"";if(first.startsWith("items")){setStep(1);setEditing(items[Number(first.split(".")[1])]?.id??null);}else setStep(2);setErrors(e);focusErrors();}
-  const attempt=useRef<{body:string;key:string}|null>(null);
-  async function submit(){
-    if(submitting.current)return;
-    const parsed=bookingSchema.safeParse({schemaVersion:2,items,customer,notes,locale,company});
-    if(!parsed.success){routeErrors(collectFieldErrors(parsed.error.issues));return;}
-    submitting.current=true;setBusy(true);setFailure("");
-    const requestBody=JSON.stringify(parsed.data);
-    if(attempt.current?.body!==requestBody)attempt.current={body:requestBody,key:crypto.randomUUID()};
-    try{const res=await fetch("/api/booking",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":attempt.current!.key},body:requestBody});const body=await res.json();
-      if(res.status===201&&body.status==="received"&&typeof body.id==="string")setReceived(typeof body.reference==="string"?body.reference:body.id);
-      else if(res.status===400&&body.fieldErrors)routeErrors(body.fieldErrors);
+  function edit() {setReview(false); setFailure(""); requestAnimationFrame(() => heading.current?.focus());}
+  async function submit() {
+    if (submitting.current) return;
+    const result = bookingRequestSchema.safeParse({...draft, locale, company});
+    if (!result.success) {showErrors(collectFieldErrors(result.error.issues)); return;}
+    const body = JSON.stringify(result.data);
+    if (attempt.current?.body !== body) attempt.current = {body, key: crypto.randomUUID()};
+    submitting.current = true; setBusy(true); setFailure("");
+    try {
+      const res = await fetch("/api/booking", {method: "POST", headers: {"Content-Type": "application/json", "Idempotency-Key": attempt.current!.key}, body});
+      const response = await res.json();
+      if (res.status === 201 && response.status === "received" && typeof response.id === "string") setReceived(typeof response.reference === "string" ? response.reference : response.id);
+      else if (res.status === 400 && response.fieldErrors) showErrors(response.fieldErrors);
       else setFailure(te("networkFailed"));
-    }catch{setFailure(te("networkFailed"));}finally{submitting.current=false;setBusy(false);}
+    } catch {setFailure(te("networkFailed"));}
+    finally {submitting.current = false; setBusy(false);}
   }
-  function describeError(path:string){const parts=path.split(".");if(parts[0]!=="items")return "";const item=items[Number(parts[1])];if(!item)return "";const a=item.type==="activity"?item:item.components[Number(parts[3])];const pi=parts.indexOf("participants");return `${a?nameOf(a):itemName(item)}${pi>=0&&parts[pi+1]!==undefined?` — ${t("v2.guest",{number:Number(parts[pi+1])+1})}`:""}: `;}
-  function optionsSummary(item:BookingItem){return item.options.map(o=><p key={o.optionId}>{all(`${bookingOptions.find(d=>d.id===o.optionId)!.translationNamespace}.name`)} × {o.quantity}</p>);}
-  if(received)return <RequestReceived bookingId={received}/>;
-  return <div className="booking-surface min-w-0">
-    <div className="visit-heading">
-      <p className="eyebrow text-brand-primary">{t("pageTitle")}</p>
-      <h1>{t("v2.title")}</h1>
-      <p>{t("v2.intro")}</p>
+  function errorTarget(path: string) {
+    if (path.startsWith("activities.")) return `activity-${draft.activities[Number(path.split(".")[1])]?.activityId ?? "choices"}`;
+    return path === "activities" ? "request-choices" : `request-${path.replace("customer.", "")}`;
+  }
+  function errorLabel(path: string) {
+    if (!path.startsWith("activities.")) return "";
+    const activity = catalog.find(e => e.id === draft.activities[Number(path.split(".")[1])]?.activityId);
+    return activity ? `${all(`${activity.translationNamespace}.title`)}: ` : "";
+  }
+  const input = (field: "visitDate" | "preferredStartTime" | "fullName" | "email" | "phone", label: string, type: string, autocomplete?: string) => {
+    const contact = field !== "visitDate" && field !== "preferredStartTime", path = contact ? `customer.${field}` : field;
+    const value = contact ? draft.customer[field as keyof BookingRequestDraft["customer"]] : draft[field as "visitDate" | "preferredStartTime"];
+    return <div className="request-field"><label htmlFor={`request-${field}`}>{label}</label><input id={`request-${field}`} name={field} className="request-input" type={type} required value={value} autoComplete={autocomplete}
+      maxLength={field === "fullName" ? 120 : field === "email" ? 254 : field === "phone" ? 30 : undefined}
+      min={field === "visitDate" ? thailandToday() : undefined} max={field === "visitDate" ? maxBookingDate() : undefined}
+      aria-invalid={!!message(path)} aria-describedby={message(path) ? `request-${field}-error` : field === "preferredStartTime" ? "request-time-help" : undefined}
+      onChange={e => contact ? change({customer: {...draft.customer, [field]: e.target.value}}) : change({[field]: e.target.value})}/>
+      {message(path) && <p className="request-field-error" id={`request-${field}-error`}>{message(path)}</p>}
+    </div>;
+  };
+  if (received) return <RequestReceived bookingId={received}/>;
+  return <div className="booking-surface request-flow">
+    <div className="request-heading"><p className="eyebrow text-brand-primary">ON GROUND · KHAO MAI KAEO</p>
+      <h1 ref={heading} tabIndex={-1}>{t(review ? "reviewTitle" : "title")}</h1><p>{t(review ? "reviewIntro" : "intro")}</p>
     </div>
-    <ol aria-label={t("v2.progress")} className="visit-progress">{titles.map((title,i)=><li key={title} aria-current={step===i?"step":undefined} className={i<step?"is-past":""}><span aria-hidden="true">{i<step?"✓":`0${i+1}`}</span><span>{title}</span></li>)}</ol>
-    <fieldset disabled={busy} className="visit-layout">
-      <VisitSummary items={items} locale={locale} nameOf={nameOf} itemName={itemName} onEdit={editItem} onAdd={()=>go(0)}/>
-      <div className="visit-main">
-        <div className="visit-stage-heading"><h2 ref={heading} tabIndex={-1}>{titles[step]}</h2><p>{t(`ux.stage${step}`)}</p></div>
-        <p role="status" aria-live="polite" className={notice?"visit-notice":"sr-only"}>{notice}</p>
-        {Object.keys(errors).length>0&&<div ref={errorBox} tabIndex={-1} role="alert" className="visit-errors"><p className="font-semibold">{t("v2.fixErrors")}</p><ul>{Object.keys(errors).map(path=><li key={path}>{describeError(path)}{error(path)}</li>)}</ul></div>}
-        {step===0&&<ExperiencePicker items={items} onActivity={id=>add(createActivity(id,defaultDate))} onPackage={id=>add(createPackage(id,defaultDate))} onEdit={editItem}/>}
-        {step===1&&<div className="visit-itinerary">
-          {items.length===0&&<p className="visit-empty">{t("ux.empty")}</p>}
-          {items.map((item,i)=><article key={item.id} data-visit-item={item.id} className={`visit-entry ${editing===item.id?"is-editing":""}`}>
-            <div className="visit-entry-heading">
-              <span className="visit-number" aria-hidden="true">{String(i+1).padStart(2,"0")}</span>
-              <div className="min-w-0"><p className="visit-kind">{item.type==="package"?t("ux.package"):t("ux.experience")}</p><h3>{itemName(item)}</h3><p className="visit-readiness">{editing===item.id?t("ux.editing"):itemReady(item)?t("ux.ready"):t("ux.needsDetails")}</p></div>
-            </div>
-            <div className="visit-entry-actions">{["edit","duplicate","remove"].map(action=><button key={action} type="button" aria-label={`${t(`v2.${action}`)}: ${itemName(item)}`} aria-expanded={action==="edit"?editing===item.id:undefined} aria-controls={action==="edit"?`editor-${item.id}`:undefined} className={`visit-quiet-action ${action==="remove"?"visit-remove":""}`} onClick={()=>{
-              if(action==="edit")setEditing(editing===item.id?null:item.id);
-              if(action==="duplicate"){const copy=duplicateItem(item);setItems(old=>[...old,copy]);setEditing(copy.id);setErrors({});setNotice(t("ux.addedName",{name:itemName(copy)}));}
-              if(action==="remove"){setItems(old=>removeItem(old,item.id));if(editing===item.id)setEditing(null);setErrors({});setNotice("");}
-            }}>{t(`v2.${action}`)}</button>)}</div>
-            {item.type==="package"&&<p className="visit-package-note">{t("v2.packageNotice")}</p>}
-            <div id={`editor-${item.id}`}>
-              {editing===item.id?<div className="visit-editor"><VisitItemEditor item={item} index={i} locale={locale} nameOf={nameOf} onActivity={changeActivity} error={error} errors={errors} onOptions={options=>setItems(old=>old.map(v=>v.id===item.id?{...item,options}:v))}/><button type="button" className={buttonVariants({variant:"outline",className:"mt-6"})} onClick={()=>{if(validateItems(item.id)){setEditing(null);setErrors({});setNotice("");}}}>{t("v2.done")} <span aria-hidden="true">✓</span></button></div>:activitiesOf(item).map(a=><div className="visit-collapsed" key={a.id}>{item.type==="package"&&<p className="font-medium">{nameOf(a)}</p>}<p>{a.date?visitDate(a.date,locale):t("v2.datePending")} · {t("fields.time")}: {a.time||t("v2.timePending")} · {t("pricing.duration")}: <DurationText minutes={a.durationMinutes}/> · {t("v2.guestCount",{count:a.participants.length})}</p>{a.participants.some(p=>p.weightKg!==undefined)&&<p className="text-sm text-text-secondary">{a.participants.filter(p=>p.weightKg!==undefined).map(p=>`${p.weightKg} kg`).join(" · ")}</p>}</div>)}
-            </div>
-            {(editing!==item.id||item.type==="package")&&<ItemEstimate item={item}/>}
-            {item.type==="package"&&packages.find(p=>p.id===item.packageId)?.includesRestaurant&&<p className="visit-package-note">{t("v2.restaurantNotice")}</p>}
-          </article>)}
-          <button type="button" className="visit-add-another" onClick={()=>go(0)}><span aria-hidden="true">+</span>{t("ux.addAnother")}</button>
-        </div>}
-        {step===2&&<div><CustomerStep {...customer} notes={notes} company={company} onChange={(field,value)=>{if(field==="notes")setNotes(value);else if(field==="company")setCompany(value);else setCustomer(c=>({...c,[field]:value}));setErrors({});}} fieldErrorText={field=>error(`customer.${field}`)}/>
-          {availableContactChannels(siteConfig).length>0&&<div className="mt-6"><label htmlFor="contact-channel">{t("v2.contactPreference")}</label><select id="contact-channel" className={inputClass} value={customer.preferredChannel??""} onChange={e=>setCustomer({...customer,preferredChannel:(e.target.value||undefined) as BookingCustomer["preferredChannel"],channelIdentity:undefined})}><option value="">{t("v2.noPreference")}</option>{availableContactChannels(siteConfig).map(c=><option value={c} key={c}>{t(`v2.channels.${c}`)}</option>)}</select>{(customer.preferredChannel==="line"||customer.preferredChannel==="whatsapp")&&<label className="mt-4 block">{t("v2.contactIdentity")}<input className={inputClass} value={customer.channelIdentity??""} onChange={e=>setCustomer({...customer,channelIdentity:e.target.value})}/></label>}</div>}
-        </div>}
-        {step===3&&<div className="visit-review">
-          <p className="visit-review-note">{t("v2.reviewNotice")}</p>
-          {items.map((item,i)=><section key={item.id} className="visit-review-entry"><div className="visit-entry-heading"><span className="visit-number" aria-hidden="true">{String(i+1).padStart(2,"0")}</span><div><p className="visit-kind">{item.type==="package"?t("ux.package"):t("ux.experience")}</p><h3>{itemName(item)}</h3></div></div>
-            {activitiesOf(item).map(a=><div className="visit-review-activity" key={a.id}>{item.type==="package"&&<h4>{nameOf(a)}</h4>}<dl><div><dt>{t("fields.date")}</dt><dd>{visitDate(a.date,locale)}</dd></div><div><dt>{t("fields.time")}</dt><dd>{a.time}</dd></div><div><dt>{t("pricing.duration")}</dt><dd><DurationText minutes={a.durationMinutes}/></dd></div><div><dt>{t("fields.guests")}</dt><dd>{a.participants.length}</dd></div></dl>{a.participants.some(p=>p.weightKg!==undefined)&&<p className="visit-weight-summary">{a.participants.map((p,i)=>`${t("v2.guest",{number:i+1})}: ${p.weightKg} kg`).join(" · ")}</p>}{optionsSummary(a)}</div>)}
-            {item.type==="package"&&<><p className="visit-package-note">{t("v2.packageNotice")}</p>{packages.find(p=>p.id===item.packageId)?.includesRestaurant&&<p className="visit-package-note">{t("v2.restaurantNotice")}</p>}{optionsSummary(item)}</>}
-            <ItemEstimate item={item}/>
-            <button type="button" className="visit-quiet-action" onClick={()=>editItem(item.id)}>{t("v2.edit")}</button>
-          </section>)}
-          <VisitEstimate items={items}/>
-          <section className="visit-review-entry"><h3>{t("steps.details")}</h3><p className="mt-4 break-words">{customer.name}<br/>{customer.email}<br/>{customer.phone}</p>{customer.preferredChannel&&<p>{t(`v2.channels.${customer.preferredChannel}`)}: {customer.channelIdentity??(customer.preferredChannel==="email"?customer.email:customer.phone)}</p>}{notes&&<div className="mt-5"><p className="visit-kind">{t("fields.notes")}</p><p className="whitespace-pre-wrap break-words">{notes}</p></div>}<button type="button" className="visit-quiet-action" onClick={()=>go(2)}>{t("v2.edit")}</button></section>
-        </div>}
-        {failure&&<p className="visit-errors" role="alert">{failure}</p>}
-        <div className="visit-stage-actions">{step>0&&<button type="button" className="visit-quiet-action" onClick={()=>go(step-1)}>← {t("actions.back")}</button>}<button type="button" aria-busy={busy} className={buttonVariants({variant:"primary",size:"lg",className:"ml-auto"})} onClick={step===3?submit:next}>{busy?t("actions.submitting"):step===3?t("actions.submit"):step===2?t("ux.reviewCta"):step===1?t("ux.detailsCta"):t("actions.next")}<span aria-hidden="true">→</span></button></div>
-      </div>
-    </fieldset>
+    {Object.keys(errors).length > 0 && <div ref={errorBox} tabIndex={-1} role="alert" className="request-errors"><p>{t("fixErrors")}</p><ul>{Object.keys(errors).map(path => <li key={path}><a href={`#${errorTarget(path)}`}>{errorLabel(path)}{message(path)}</a></li>)}</ul></div>}
+    <p role="status" aria-live="polite" className="sr-only">{notice}</p>
+    {!review ? <form noValidate onSubmit={e => {e.preventDefault(); goReview();}}>
+      <fieldset disabled={busy} className="request-form-fields">
+        <section className="request-section" aria-labelledby="request-visit-title"><div className="request-section-heading"><span aria-hidden="true">01</span><h2 id="request-visit-title">{t("visitTitle")}</h2></div>
+          <div className="request-visit-fields">{input("visitDate", t("date"), "date")}{input("preferredStartTime", t("time"), "time")}</div>
+          <p className="request-help" id="request-time-help">{t("timeHelp")}</p>
+          <div className="request-contact-fields">{input("fullName", t("fullName"), "text", "name")}{input("email", t("email"), "email", "email")}{input("phone", t("phone"), "tel", "tel")}</div>
+        </section>
+        <section className="request-section" id="request-choices" tabIndex={-1} aria-labelledby="request-choices-title"><div className="request-section-heading"><span aria-hidden="true">02</span><h2 id="request-choices-title">{t("choicesTitle")}</h2></div>
+          <p className="request-help">{t("choicesHelp")}</p>{contextPackageId && <p className="request-package-note">{t("packageNote")}</p>}
+          {message("activities") && <p className="request-field-error">{message("activities")}</p>}
+          <div className="request-card-grid">{catalog.map(activity => {
+            const index = draft.activities.findIndex(a => a.activityId === activity.id), selection = draft.activities[index];
+            return <RequestActivityCard key={activity.id} activity={activity} selection={selection} onChange={value => select(activity.id, value)}
+              error={field => message(`activities.${index}.${field}`)} price={money(estimate.items.find(item => item.itemId === activity.id)?.amount ?? null)}/>;
+          })}</div>
+        </section>
+        <section className="request-section request-notes"><label htmlFor="request-notes">{t("notes")}</label><span>{t("optional")}</span>
+          <textarea className="request-input" id="request-notes" name="notes" rows={4} maxLength={500} value={draft.notes ?? ""} aria-invalid={!!message("notes")} onChange={e => change({notes: e.target.value})}/>
+          {message("notes") && <p className="request-field-error">{message("notes")}</p>}
+        </section>
+        <div className="sr-only" aria-hidden="true"><label htmlFor="request-company">Company</label><input id="request-company" name="company" tabIndex={-1} autoComplete="off" value={company} onChange={e => setCompany(e.target.value)}/></div>
+        <div className="request-actions"><p>{draft.activities.length ? t("selectionCount", {count: draft.activities.length}) : t("noneSelected")}</p><button type="submit" className={buttonVariants({variant: "primary", size: "lg"})}>{t("review")} <span aria-hidden="true">→</span></button></div>
+        <p className="request-disclaimer">{t("requestNotice")}</p>
+      </fieldset>
+    </form> : <div className="request-review">
+      <section className="request-section"><h2>{t("visitTitle")}</h2><dl className="request-review-details"><div><dt>{t("date")}</dt><dd>{date(draft.visitDate)}</dd></div><div><dt>{t("time")}</dt><dd>{draft.preferredStartTime}</dd></div></dl><p className="request-help">{t("timeHelp")}</p></section>
+      <section className="request-section"><h2>{t("contactTitle")}</h2><dl className="request-review-details"><div><dt>{t("fullName")}</dt><dd>{draft.customer.fullName}</dd></div><div><dt>{t("email")}</dt><dd>{draft.customer.email}</dd></div><div><dt>{t("phone")}</dt><dd>{draft.customer.phone}</dd></div></dl></section>
+      <section className="request-section"><h2>{t("experiencesTitle")}</h2>{draft.activities.map((selection, index) => {
+        const activity = catalog.find(e => e.id === selection.activityId)!;
+        return <article className="request-review-activity" key={activity.id}><span className="request-review-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><div><h3>{all(`${activity.translationNamespace}.title`)}</h3>
+          <p>{t("guestSummary", {count: selection.guestCount})} · {duration(selection.durationMinutes)}</p>
+          {activity.booking?.model === "capacity_unit" && <p>{all(activity.booking.unitTranslationKey)}: {selection.unitCount} · {t("capacityHelp", {max: activity.booking.maxGuestsPerUnit})}</p>}
+          {activity.restrictions.maxWeightKg !== undefined && <p className="request-review-restriction">{t("maxWeight")}: {activity.restrictions.maxWeightKg} {t("kg")}</p>}
+          <p className="request-line-price">{p("subtotal")}: {money(estimate.items[index]?.amount ?? null)}</p>
+        </div></article>;
+      })}</section>
+      {draft.notes && <section className="request-section"><h2>{t("notesTitle")}</h2><p className="request-review-notes">{draft.notes}</p></section>}
+      <div className="request-total"><span>{p("total")}</span><strong>{money(estimate.amount)}</strong><p>{p("managerNotice")}</p></div>
+      {failure && <p role="alert" className="request-errors">{failure}</p>}
+      <div className="request-actions"><button type="button" disabled={busy} className="request-edit" onClick={edit}>← {t("edit")}</button><button type="button" disabled={busy} aria-busy={busy} onClick={submit} className={buttonVariants({variant: "primary", size: "lg"})}>{busy ? t("sending") : t("send")} <span aria-hidden="true">→</span></button></div>
+      <p className="request-disclaimer">{t("requestNotice")}</p>
+    </div>}
   </div>;
 }

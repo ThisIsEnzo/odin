@@ -134,7 +134,7 @@
     "intro": "几种将 ON GROUND 体验项目组合成一天行程的方式。",
     "includesRestaurant": "含餐厅用餐",
     "mockNote": "套餐内容和价格仅为示例，尚待确认。",
-    "cta": "咨询该套餐",
+    "cta": "安排到访",
     "familyDay": {
       "title": "家庭日",
       "description": "适合全家人的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
@@ -238,7 +238,11 @@
       "contactIdentityRequired": "请输入您的 LINE ID 或 WhatsApp 号码。",
       "requestTooLarge": "申请超出表单技术大小限制，请分成较小的申请。",
       "notesTooLong": "备注不得超过500个字符。",
-      "invalidDuration": "请选择已确认的体验时长。"
+      "invalidDuration": "请选择已确认的体验时长。",
+      "chooseExperience": "请至少选择一项体验。",
+      "duplicateActivity": "此体验已加入申请。",
+      "invalidUnitCount": "请选择足够的车辆，每位参加者最多一辆。",
+      "unexpectedUnitCount": "此体验无需填写车辆数量。"
     },
     "pageTitle": "预订您的体验",
     "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
@@ -283,8 +287,8 @@
     },
     "success": {
       "badge": "已收到请求",
-      "title": "已收到您的预约请求",
-      "body": "感谢您的申请。我们已收到您的预约请求，团队将核实是否可以预约，并会与您联系确认。",
+      "title": "谢谢！我们已收到您的预订申请。",
+      "body": "我们的经理将与您联系，确认可用名额、具体时间及最终价格。",
       "reference": "参考编号：{id}",
       "backHome": "返回首页",
       "viewExperiences": "探索更多体验项目"
@@ -376,6 +380,51 @@
       },
       "price": "价格",
       "from": "{amount} 起"
+    },
+    "v3": {
+      "title": "安排您的到访",
+      "intro": "选择日期，填写来访信息，再挑选心仪的体验。其余细节由我们的经理为您协调。",
+      "visitTitle": "您的到访",
+      "date": "到访日期",
+      "time": "希望到达的时间",
+      "timeHelp": "时间均为泰国当地时间。各项活动的具体时间将由我们的经理与您确认。",
+      "fullName": "姓名",
+      "email": "电子邮箱",
+      "phone": "电话",
+      "contactTitle": "您的联系信息",
+      "choicesTitle": "选择您的体验",
+      "choicesHelp": "添加您想参加的活动。如尚无已确认的选项，经理将与您协商时长和价格。",
+      "add": "添加体验",
+      "remove": "移除",
+      "included": "已加入申请",
+      "guests": "参加人数",
+      "maxWeight": "骑乘者体重上限",
+      "kg": "公斤",
+      "capacityHelp": "每辆车最多可乘坐 {max} 人",
+      "capacitySummary": "{guests} 位参加者 · {label}：{units}",
+      "increase": "增加{label}：{name}",
+      "decrease": "减少{label}：{name}",
+      "notes": "还有什么需要我们了解的吗？",
+      "optional": "选填",
+      "notesTitle": "备注",
+      "review": "查看申请",
+      "reviewTitle": "确认您的申请信息",
+      "reviewIntro": "发送给我们的团队之前，请核对以下信息。",
+      "experiencesTitle": "您的体验",
+      "edit": "修改申请",
+      "send": "发送预订申请",
+      "sending": "正在发送申请…",
+      "selectionCount": "已选择 {count} 项体验",
+      "noneSelected": "请至少选择一项体验",
+      "guestSummary": "{count} 位参加者",
+      "requestNotice": "这是预订申请。可用名额、具体时间及最终价格将由我们的经理与您确认。",
+      "fixErrors": "请检查以下信息",
+      "added": "已将{name}加入申请。",
+      "removed": "已将{name}从申请中移除。",
+      "packageNote": "套餐详情仍待确认。请在下方选择单项体验，如对某个套餐感兴趣，可在备注中说明。"
+    },
+    "units": {
+      "atv": "ATV 车辆"
     }
   }
 }

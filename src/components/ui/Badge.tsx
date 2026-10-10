@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 export type BadgeVariant = "moss" | "saddle" | "dusk" | "terracotta" | "outline";
 
 const variants: Record<BadgeVariant, string> = {
-  moss: "bg-surface-dark text-canvas",
-  saddle: "bg-error text-canvas",
+  moss: "bg-brand-cream text-ink",
+  saddle: "bg-brand-cream text-ink",
   dusk: "bg-brand-cream text-ink",
   // PHASE 4 FINALIZATION — new brand accent (see globals.css). Additive
   // only: existing variants/usages are unchanged, this is available for a

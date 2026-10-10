@@ -1,4 +1,5 @@
 import { BrandLogo } from "./BrandLogo";
+import { BrandSeal } from "./BrandSeal";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
@@ -13,20 +14,23 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="ground-footer border-t border-brand-cream/20">
+    <footer className="ground-footer brand-terra-surface border-t border-brand-cream/20">
       <Container className="grid gap-x-10 gap-y-12 py-16 break-words sm:py-20 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr_.8fr]">
         <div>
           
-          <BrandLogo full className="mb-6" />
+          <div className="ground-footer-lockup mb-6">
+            <BrandSeal />
+            <BrandLogo full />
+          </div>
           <p className="sr-only">{siteConfig.businessName}</p>
-          <p className="mt-2 max-w-xs text-sm text-brand-cream/90">{tFooter("tagline")}</p>
-          <p className="mt-4 text-sm text-brand-cream/90">
+          <p className="mt-2 max-w-xs text-sm text-brand-cream">{tFooter("tagline")}</p>
+          <p className="mt-4 text-sm text-brand-cream">
             {tFooter("openDaily", { hours: `${restaurant.operatingHours.open}–${restaurant.operatingHours.close}` })}
           </p>
         </div>
 
         <nav aria-label={tFooter("navigationHeading")}>
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream/85">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream">
             {tFooter("navigationHeading")}
           </p>
           <ul className="mt-3 grid grid-cols-2 gap-x-4 sm:block sm:space-y-2">
@@ -41,7 +45,7 @@ export function Footer() {
         </nav>
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream/85">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream">
             {tFooter("contactHeading")}
           </p>
           <ul className="mt-3 space-y-2 text-sm text-brand-cream">
@@ -57,12 +61,12 @@ export function Footer() {
 
         <div className="flex flex-col gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream/85">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream">
               {tFooter("languageHeading")}
             </p>
-            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-brand-cream [&_select]:border-brand-cream/40 [&_select:focus-visible]:outline-brand-cream [&_option]:bg-surface-dark" />
+            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-brand-cream [&_select]:border-brand-cream [&_select:focus-visible]:outline-brand-cream [&_option]:bg-surface-dark" />
           </div>
-          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-brand-cream/90">
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-brand-cream">
             {legalNavItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-canvas">
@@ -76,7 +80,7 @@ export function Footer() {
 
       <div className="border-t border-brand-cream/20 py-4">
         <Container>
-          <p className="text-xs text-brand-cream/85">
+          <p className="text-xs text-brand-cream">
             © {year} {siteConfig.businessName}. {tFooter("rightsReserved")}
           </p>
         </Container>

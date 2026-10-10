@@ -4,7 +4,6 @@ import { Section } from "@/components/ui/Section";
 import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { experiences } from "@/data/odin/experiences";
-import { siteConfig } from "@/data/odin/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { HeroSlideshow } from "@/components/homepage/HeroSlideshow";
 import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
@@ -36,12 +35,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <p className="mt-6 max-w-md text-xs text-white/75">{t("heroNote")}</p>
       </Container>
     </section>
-    <div className="border-b border-ink/15 bg-canvas">
-      <Container className="flex flex-wrap justify-between gap-4 py-6 text-sm text-ink/70">
-        <span>{t("statDistance", {distance:siteConfig.locationDistanceFromPattaya})}</span>
-        <span>{t("statExperiences", {count:experiences.length})}</span>
-      </Container>
-    </div>
     <Section id="experiences" className="lg:py-28">
       <Container>
         <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">

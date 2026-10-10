@@ -124,8 +124,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
 
                 <div className="mt-6 flex flex-wrap items-center gap-2">
                   <Badge
-                    variant="outline"
-                    className={image ? "border-canvas/40 bg-transparent text-canvas" : undefined}
+                    variant="dusk"
                   >
                     {tExperienceCard("hours", {
                       open: experience.operatingHours.open,
@@ -135,7 +134,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   {maxWeight ? (
                     <Badge variant="saddle">{tExperienceCard("maxWeight", { max: maxWeight })}</Badge>
                   ) : null}
-                  <span className={cn("text-sm", image ? "text-canvas/80" : "text-ink/60")}>
+                  <span className={cn("text-sm", image ? "text-brand-cream" : "text-text-secondary")}>
                     {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
                   </span>
                 </div>
@@ -236,7 +235,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                       </p>
 
                       <div className="mt-4 flex flex-wrap items-center gap-2">
-                        <Badge variant="outline">
+                        <Badge variant="dusk">
                           {tExperienceCard("hours", {
                             open: experience.operatingHours.open,
                             close: experience.operatingHours.close,
@@ -247,7 +246,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                             {tExperienceCard("maxWeight", { max: maxWeight })}
                           </Badge>
                         ) : null}
-                        <span className="text-sm text-ink/60">
+                        <span className="text-sm text-text-secondary">
                           {experience.mock.price.isMock ? tExperienceCard("pricePending") : <>{tExperienceCard("priceFrom", {amount:format.number(experience.price.amount),currency:experience.price.currency})} {tPricing(`unit.${experience.price.unit}`)}</>}
                         </span>
                       </div>

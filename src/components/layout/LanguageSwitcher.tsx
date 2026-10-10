@@ -30,7 +30,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         className={cn(
           "rounded-button border border-ink/20 bg-transparent",
           "min-h-11 px-3 py-2 text-ink",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
         )}
       >
         {routing.locales.map((code) => (

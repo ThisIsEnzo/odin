@@ -14,7 +14,7 @@ export function WhyOdin() {
       <Container className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-16">
         <Reveal variant="left">
           <div>
-            <p className="eyebrow mb-4 text-terracotta">
+            <p className="eyebrow mb-4 text-brand-primary">
               {t("kicker")}
             </p>
             <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl">
@@ -30,15 +30,15 @@ export function WhyOdin() {
         <Reveal variant="right" delayMs={80}>
           <div className="grid gap-8">
             <div className="border-t border-ink/20 pt-5">
-              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-terracotta">01</span>{t("pillarRide.title")}</h3>
+              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-brand-primary">01</span>{t("pillarRide.title")}</h3>
               <p className="mt-1.5 text-sm text-ink/70">{t("pillarRide.description")}</p>
             </div>
             <div className="border-t border-ink/20 pt-5">
-              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-terracotta">02</span>{t("pillarRest.title")}</h3>
+              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-brand-primary">02</span>{t("pillarRest.title")}</h3>
               <p className="mt-1.5 text-sm text-ink/70">{t("pillarRest.description")}</p>
             </div>
             <div className="border-t border-ink/20 pt-5">
-              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-terracotta">03</span>{t("pillarTable.title")}</h3>
+              <h3 className="font-display text-2xl text-ink"><span aria-hidden="true" className="mr-4 text-xs text-brand-primary">03</span>{t("pillarTable.title")}</h3>
               <p className="mt-1.5 text-sm text-ink/70">{t("pillarTable.description")}</p>
             </div>
           </div>

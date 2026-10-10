@@ -73,7 +73,7 @@ export function BookingFlow({locale,initialExperienceId,contextPackageId}:Bookin
   if(received)return <RequestReceived bookingId={received}/>;
   return <div className="booking-surface min-w-0">
     <div className="visit-heading">
-      <p className="eyebrow text-terracotta">{t("pageTitle")}</p>
+      <p className="eyebrow text-brand-primary">{t("pageTitle")}</p>
       <h1>{t("v2.title")}</h1>
       <p>{t("v2.intro")}</p>
     </div>

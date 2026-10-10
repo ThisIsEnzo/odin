@@ -46,7 +46,7 @@ export function ExperiencePicker({items, onActivity, onPackage, onEdit}: {
       })}
     </div>
     <section className="discovery-packages" aria-labelledby="visit-packages-title">
-      <p className="eyebrow text-terracotta">{t("ux.together")}</p>
+      <p className="eyebrow text-brand-primary">{t("ux.together")}</p>
       <h3 id="visit-packages-title">{t("v2.packages")}</h3>
       <p className="text-sm text-text-secondary mt-3">{t("v2.packageNotice")}</p>
       {packages.map(p => {

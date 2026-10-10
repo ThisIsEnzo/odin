@@ -28,7 +28,7 @@ export function ExperienceStep({ selectedId, contextPackageId, onSelect }: Exper
       <h2 className="font-display text-xl text-ink sm:text-2xl">{t("steps.experience")}</h2>
 
       {contextPackage && (
-        <p className="mt-3 rounded-card border border-dusk/30 bg-dusk/10 p-4 text-sm text-ink/80">
+        <p className="mt-3 rounded-card border border-brand-cream/30 bg-brand-cream/10 p-4 text-sm text-ink/80">
           {t("packageContext", { packageName: tPackages(`${toCamelCase(contextPackage.id)}.title`) })}
         </p>
       )}
@@ -45,10 +45,10 @@ export function ExperienceStep({ selectedId, contextPackageId, onSelect }: Exper
               aria-pressed={isSelected}
               className={cn(
                 "rounded-card border p-5 text-left transition-colors",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
                 isSelected
-                  ? "border-moss bg-moss/10"
-                  : "border-moss/15 bg-white/60 hover:border-moss/40",
+                  ? "border-surface-dark bg-surface-dark/10"
+                  : "border-surface-dark/15 bg-white/60 hover:border-surface-dark/40",
               )}
             >
               <span className="font-display text-lg text-ink">{tExperiences(`${namespace}.title`)}</span>
@@ -59,7 +59,7 @@ export function ExperienceStep({ selectedId, contextPackageId, onSelect }: Exper
                 {experience.operatingHours.open}–{experience.operatingHours.close}
               </span>
               {isSelected && (
-                <span className="mt-3 inline-block text-xs font-semibold text-moss">
+                <span className="mt-3 inline-block text-xs font-semibold text-surface-dark">
                   {t("actions.selected")}
                 </span>
               )}

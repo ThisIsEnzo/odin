@@ -47,12 +47,12 @@ export function ScheduleStep({
             aria-describedby={dateError ? "booking-date-error" : undefined}
             className={cn(
               "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-              dateError ? "border-saddle" : "border-ink/20",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
+              dateError ? "border-error" : "border-ink/20",
             )}
           />
           {dateError && (
-            <p id="booking-date-error" role="alert" className="mt-1.5 text-sm text-saddle">
+            <p id="booking-date-error" role="alert" className="mt-1.5 text-sm text-error">
               {dateError}
             </p>
           )}
@@ -70,8 +70,8 @@ export function ScheduleStep({
             aria-describedby={timeError ? "booking-time-error" : undefined}
             className={cn(
               "mt-2 w-full rounded-button border bg-transparent px-3 py-2.5 text-ink",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss",
-              timeError ? "border-saddle" : "border-ink/20",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
+              timeError ? "border-error" : "border-ink/20",
             )}
           >
             <option value="" disabled>
@@ -84,7 +84,7 @@ export function ScheduleStep({
             ))}
           </select>
           {timeError && (
-            <p id="booking-time-error" role="alert" className="mt-1.5 text-sm text-saddle">
+            <p id="booking-time-error" role="alert" className="mt-1.5 text-sm text-error">
               {timeError}
             </p>
           )}

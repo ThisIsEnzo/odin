@@ -21,7 +21,7 @@ export function MobileNav() {
         <button
           type="button"
           aria-label={tCommon("openMenu")}
-          className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-button p-2 text-cream-brand hover:bg-cream-brand/10 xl:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
+          className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-button p-2 text-text-on-accent hover:bg-brand-cream/20 xl:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
         >
           <Menu aria-hidden="true" className="h-6 w-6" />
         </button>
@@ -42,7 +42,7 @@ export function MobileNav() {
               <button
                 type="button"
                 aria-label={tCommon("closeMenu")}
-                className="min-h-11 min-w-11 rounded-button p-2 text-cream-brand hover:bg-cream-brand/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-brand"
+                className="min-h-11 min-w-11 rounded-button p-2 text-text-on-accent hover:bg-brand-cream/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
               >
                 <X aria-hidden="true" className="h-6 w-6" />
               </button>
@@ -55,7 +55,7 @@ export function MobileNav() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-ink/15 py-4 text-2xl font-medium tracking-tight text-ink hover:text-terracotta"
+                className="border-b border-ink/15 py-4 text-2xl font-medium tracking-tight text-ink hover:text-brand-primary"
               >
                 {t(item.translationKey)}
               </Link>

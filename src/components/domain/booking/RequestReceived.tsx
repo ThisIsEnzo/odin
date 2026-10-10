@@ -21,7 +21,7 @@ export function RequestReceived({ bookingId }: RequestReceivedProps) {
 
   return (
     <div className="booking-surface mx-auto max-w-2xl py-12 text-center">
-      <p className="eyebrow text-terracotta mb-6">
+      <p className="eyebrow text-brand-primary mb-6">
         {t("success.badge")}
       </p>
       <h1 ref={heading} tabIndex={-1}>{t("success.title")}</h1>

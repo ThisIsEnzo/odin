@@ -11,12 +11,12 @@ export function FinalCta() {
   const home = useTranslations("home");
 
   return (
-    <section className="surface-inverse relative isolate bg-moss py-28 text-canvas sm:py-40">
+    <section className="surface-inverse relative isolate bg-surface-dark py-28 text-canvas sm:py-40">
       <Image src="/images/hero/odin-hero-2.jpg" alt="" fill sizes="100vw" className="-z-20 object-cover" />
-      <div className="absolute inset-0 -z-10 bg-moss-dark/65" />
+      <div className="absolute inset-0 -z-10 bg-surface-deep/65" />
       <Reveal>
         <Container className="text-center">
-          <p className="eyebrow mb-6 text-cream-brand">{home("heroKicker")}</p>
+          <p className="eyebrow mb-6 text-brand-cream">{home("heroKicker")}</p>
           <h2 className="mx-auto max-w-[18ch] font-display text-3xl leading-tight sm:text-4xl">{t("heading")}</h2>
           <p className="mt-4 text-canvas/80">{t("body")}</p>
 

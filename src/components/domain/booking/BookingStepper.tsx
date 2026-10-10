@@ -29,8 +29,8 @@ export function BookingStepper({ steps, currentIndex }: BookingStepperProps) {
               aria-current={isCurrent ? "step" : undefined}
               className={cn(
                 "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                isCurrent && "bg-moss text-canvas",
-                isComplete && !isCurrent && "bg-moss/20 text-moss",
+                isCurrent && "bg-surface-dark text-canvas",
+                isComplete && !isCurrent && "bg-surface-dark/20 text-surface-dark",
                 !isCurrent && !isComplete && "bg-ink/10 text-ink/50",
               )}
             >

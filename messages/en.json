@@ -183,7 +183,7 @@
   },
   "location": {
     "heading": "Location",
-    "body": "ON GROUND is set in the countryside {distance} from Pattaya.",
+    "body": "In the countryside of Khao Mai Kaeo, ON GROUND brings riding, outdoor experiences and relaxed meals together in one destination.",
     "distanceBadge": "{distance} from Pattaya",
     "mapPlaceholder": "Map preview coming soon",
     "openInMaps": "Open in Google Maps",
@@ -379,7 +379,8 @@
         "group": "per group"
       },
       "price": "Price",
-      "from": "From {amount}"
+      "from": "From {amount}",
+      "startsFrom": "Starts from"
     },
     "v3": {
       "title": "Plan your visit",

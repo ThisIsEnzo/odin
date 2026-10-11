@@ -38,7 +38,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="ground-nav-link border-b border-transparent px-3 py-3 text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
+              className="ground-nav-link"
             >
               {t(item.translationKey)}
             </Link>
@@ -46,7 +46,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden xl:inline-flex [&_select]:text-text-on-accent [&_select]:border-brand-cream [&_option]:bg-canvas [&_option]:text-ink" />
+          <LanguageSwitcher className="hidden xl:inline-flex" />
           <Link
             href={bookNowItem.href}
             className={buttonVariants({ variant: "primary", size: "sm", className: "ground-header-cta" })}

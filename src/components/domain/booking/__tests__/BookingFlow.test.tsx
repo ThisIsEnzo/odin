@@ -44,8 +44,8 @@ describe('configured promotion feedback and review',()=>{
  it('shows immediate restrained eligibility, keeps unknown total pending, and hides feedback on removal',async()=>{
   const {promotionConfig}=await import('@/data/odin/promotions');const {twoActivities}=await import('../../../../../tests/fixtures/promotions');
   vi.spyOn(promotionConfig,'promotions','get').mockReturnValue([twoActivities]);setup();fill();add('Horse Riding');expect(screen.queryByText(/Eligible offer/)).toBeNull();add('ATV');
-  expect(screen.getByText(/Test offer · 5% · Eligible offer/)).toBeTruthy();expect(document.querySelector('.request-package-note')?.getAttribute('role')).toBe('status');
-  review();expect(document.querySelector('.request-total')?.textContent).toContain('Manager to confirm');expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain('Eligible offer');
+  const offerBlock=document.querySelector('.request-promotions')! as HTMLElement;expect(offerBlock.textContent).toContain('Test offer');expect(within(offerBlock).getByText('5%')).toBeTruthy();expect(offerBlock.textContent).toContain('Eligible offer');expect(offerBlock.getAttribute('role')).toBe('status');expect(offerBlock.querySelector('.request-discount')).toBeNull();
+  review();expect(document.querySelector('.request-total')?.textContent).toContain('Manager to confirm');expect(document.querySelector('.request-promotions')?.textContent).toContain('Eligible offer');
   fireEvent.click(screen.getByRole('button',{name:/Edit request/}));fireEvent.click(screen.getByRole('button',{name:'Remove: ATV'}));expect(screen.queryByText(/Eligible offer/)).toBeNull();
  });
  it.each(['en','ru','th','zh'] as const)('renders known subtotal, discount and total with promotion labels in %s',async locale=>{
@@ -55,9 +55,9 @@ describe('configured promotion feedback and review',()=>{
   const error=vi.spyOn(console,'error');setup(locale,'horse-riding');const m=locales[locale].booking.v3;
   for(const [label,value] of [[m.date,date],[m.time,'10:00'],[m.fullName,'Test Guest'],[m.email,'qa@example.com'],[m.phone,'+66000000000']])fireEvent.change(screen.getByLabelText(label!),{target:{value}});
   fireEvent.click(screen.getByRole('button',{name:new RegExp(m.review)}));
-  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain(locales[locale].booking.promotions.subtotal);
-  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain('−');
-  expect(document.querySelector('.request-promotion-breakdown')?.textContent).toContain(offer('test').labels[locale]);
+  expect(document.querySelector('.request-subtotal')?.textContent).toContain(locales[locale].booking.promotions.subtotal);expect(document.querySelector('.request-subtotal')?.textContent).toContain('100');
+  expect(document.querySelector('.request-promotions')?.textContent).toContain('−');
+  expect(document.querySelector('.request-promotions')?.textContent).toContain(offer('test').labels[locale]);
   expect(document.querySelector('.request-total')?.textContent).toContain('90');expect(error).not.toHaveBeenCalled();
  });
 });

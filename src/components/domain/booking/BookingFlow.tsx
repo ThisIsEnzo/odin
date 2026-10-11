@@ -7,7 +7,7 @@ import {bookingRequestSchema, calculateRequestEstimate, createSelection} from "@
 import {maxBookingDate, thailandToday} from "@/lib/booking/rules";
 import {collectFieldErrors, type FieldErrorEntry} from "@/lib/validation/booking.schema";
 import {buttonVariants} from "@/components/ui/Button";
-import {RequestPromotions} from "./RequestPromotions";
+import {RequestEstimate} from "./RequestEstimate";
 import {RequestReceived} from "./RequestReceived";
 import {RequestActivityCard} from "./RequestActivityCard";
 
@@ -99,7 +99,7 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
             return <RequestActivityCard key={activity.id} activity={activity} selection={selection} onChange={value => select(activity.id, value)}
               error={field => message(`activities.${index}.${field}`)} price={money(estimate.items.find(item => item.itemId === activity.id)?.amount ?? null)}/>;
           })}</div>
-          <RequestPromotions snapshot={estimate.promotions} locale={locale} money={money}/>
+          {draft.activities.length > 0 && <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} locale={locale} money={money}/>}
         </section>
         <section className="request-section request-notes"><label htmlFor="request-notes">{t("notes")}</label><span>{t("optional")}</span>
           <textarea className="request-input" id="request-notes" name="notes" rows={4} maxLength={500} value={draft.notes ?? ""} aria-invalid={!!message("notes")} onChange={e => change({notes: e.target.value})}/>
@@ -118,12 +118,11 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
           <p>{t("guestSummary", {count: selection.guestCount})} · {duration(selection.durationMinutes)}</p>
           {activity.booking?.model === "capacity_unit" && <p>{all(activity.booking.unitTranslationKey)}: {selection.unitCount} · {t("capacityHelp", {max: activity.booking.maxGuestsPerUnit})}</p>}
           {activity.restrictions.maxWeightKg !== undefined && <p className="request-review-restriction">{t("maxWeight")}: {activity.restrictions.maxWeightKg} {t("kg")}</p>}
-          <p className="request-line-price">{p("subtotal")}: {money(estimate.items[index]?.amount ?? null)}</p>
+          <p className="request-line-price"><span>{p("subtotal")}</span><strong>{money(estimate.items[index]?.amount ?? null)}</strong></p>
         </div></article>;
       })}</section>
       {draft.notes && <section className="request-section"><h2>{t("notesTitle")}</h2><p className="request-review-notes">{draft.notes}</p></section>}
-      <RequestPromotions snapshot={estimate.promotions} locale={locale} money={money} review/>
-      <div className="request-total"><span>{p("total")}</span><strong>{money(estimate.amount)}</strong><p>{p("managerNotice")}</p></div>
+      <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} locale={locale} money={money} review/>
       {failure && <p role="alert" className="request-errors">{failure}</p>}
       <div className="request-actions"><button type="button" disabled={busy} className="request-edit" onClick={edit}>← {t("edit")}</button><button type="button" disabled={busy} aria-busy={busy} onClick={submit} className={buttonVariants({variant: "primary", size: "lg"})}>{busy ? t("sending") : t("send")} <span aria-hidden="true">→</span></button></div>
       <p className="request-disclaimer">{t("requestNotice")}</p>

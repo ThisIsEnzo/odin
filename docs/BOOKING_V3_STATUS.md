@@ -53,3 +53,63 @@ Promotion-extension validation: 245 tests passed across 12 files, including 37 e
 Requirements 92–100: promotion snapshots now explicitly preserve APPLIED/ELIGIBLE status, whole-pricing KNOWN/PENDING status and ISO calculation timestamp. V3 staff notifications render from the transactionally persisted booking read-back. Known quotes show the benefit and exact discount; pending quotes show the engine-selected benefit and manager instruction without fabricated whole totals. LINE/WhatsApp providers retain transport-only behavior, and original frozen results/delivery plans survive config changes and idempotent replay. Legacy snapshots remain readable without rewriting. No sample offer enabled.
 
 Validation for this clarification: 252 tests pass across 13 files, including six staff notification/transport-envelope cases and one additional PostgreSQL-engine pending snapshot/outbox/replay case. TypeScript, production build, translation parity and diff checks pass. The existing external PostgreSQL, live provider, browser-layout and inherited lint limitations remain unchanged.
+
+
+## Final navigation and pricing UI QA — 2026-10-12
+
+Recovered directly from GitHub HEAD `fd34f1c5a59f87828a9c65f865994866649c3cf1`;
+no prior archive or uncommitted implementation was used. PR #4 currently targets
+`main` and is Ready for Review. Existing merge conflicts were not changed.
+
+- Header navigation uses deliberate spacing, a tonal hover/press background and
+  no click underline. Keyboard focus retains a visible 2px outline. A semantic
+  dark-on-terracotta text token improves contrast without changing the logo,
+  terracotta plaster surface or official artwork.
+- Header, mobile menu and Footer share one native select with a bottom rule and
+  chevron. Chromium treats native selects as focus-visible after pointer clicks;
+  explicit pointer/keyboard state removes only the pointer outline. Keyboard
+  interaction restores the visible outline. Native popups remain OS controlled.
+- Confirmed offer prices have a separate Starts from label, large number and unit.
+  Mobile commercial facts stack to avoid splitting currency amounts. Mock catalog
+  prices remain Manager to confirm; no price or promotion was approved here.
+- Booking form and Review share a presentation-only estimate with subtotal,
+  configured offer status/percentage, known discount and prominent estimated total
+  followed by the manager disclaimer. Eligible unknown-price offers have no
+  fabricated deduction. Gold offer tokens are restrained and high contrast.
+  Canonical preview and backend-authoritative calculation are unchanged.
+- Location copy in EN/RU/TH/ZH adds Khao Mai Kaeo countryside/activity/dining
+  context instead of repeating 20 km. The duplicate external button was removed;
+  the verified iframe and canonical Maps config URL are unchanged. The supplied
+  client screenshot shows the iframe's Open in Maps action. Google iframe
+  interaction was unavailable locally, so its mobile/keyboard behavior is not
+  independently certified by this QA.
+
+Validation: 252 tests in 13 files, typecheck, `npm run build`, 324-key translation
+parity and diff whitespace check pass. Existing UI assertions now check the
+separate semantic subtotal/offer/discount elements and ensure eligible offers
+have no numeric deduction. The build script explicitly uses Next's supported
+webpack compiler: default Turbopack failed in its existing Google font resolver
+(`next/font/google queries have exactly one entry`). No font/dependency change.
+Inherited ESLint FlatCompat circular-config serialization failure remains.
+
+Clean Chromium 153 with a fresh context and extensions disabled checked all
+375/390/430/768/1024/1280/1440 widths in all four locales. Homepage, menu,
+Header/Footer controls, Booking and Review have no horizontal overflow; mouse
+navigation has no underline; pointer select has no outline; keyboard navigation
+and both selects retain a 2px focus indicator. Real presentation components were
+also rendered with isolated known/pending 10% test fixtures at 390/1440 in all
+four locales. These fixtures are not production config and were not committed.
+No booking was sent.
+
+Hydration: no application hydration warning or page exception in clean development
+or production Chromium; no `data-sharkid` attribute and no source occurrence.
+Controlled server-HTML insertion retained the attribute but did not reproduce the
+client's warning in this runtime. The screenshot is consistent with external DOM
+mutation, commonly a browser extension, but the specific extension and exact
+original cause are not confirmed. No suppression/attribute-stripping workaround.
+
+Recovery limitation: 13 photography binaries exceed the connector's contents
+limit. All available recovered files were Git-blob hash checked; the unavailable
+photos are preserved unchanged through the original remote base tree. Screenshots
+verify typography/layout/official logo assets, not complete photography rendering.
+Google Maps content and physical devices/Safari/Firefox were not certified.

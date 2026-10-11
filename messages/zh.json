@@ -183,7 +183,7 @@
   },
   "location": {
     "heading": "位置",
-    "body": "ON GROUND 位于乡村地区，距芭堤雅 {distance}。",
+    "body": "ON GROUND 位于考迈乔的乡间，将骑马、户外体验与悠闲用餐汇聚于一处。",
     "distanceBadge": "距芭堤雅 {distance}",
     "mapPlaceholder": "地图预览即将推出",
     "openInMaps": "在 Google 地图中打开",
@@ -379,7 +379,8 @@
         "group": "每组"
       },
       "price": "价格",
-      "from": "{amount} 起"
+      "from": "{amount} 起",
+      "startsFrom": "起价"
     },
     "v3": {
       "title": "安排您的到访",

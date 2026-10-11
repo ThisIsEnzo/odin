@@ -7,11 +7,14 @@ export function RequestPromotions({snapshot,locale,money,review=false}:{snapshot
   const t=useTranslations('booking.promotions'),all=useTranslations();
   if(!snapshot?.appliedPromotions.length)return null;
   function label(p:AppliedPromotion){return p.labelKey&&all.has(p.labelKey)?all(p.labelKey):p.labels[locale];}
-  return <div className={review?'request-promotion-breakdown':'request-package-note'} role={review?undefined:'status'} aria-live={review?undefined:'polite'}>
-    {review&&snapshot.subtotalAmount!==null&&<p className="request-help">{t('subtotal')}: {money(snapshot.subtotalAmount)}</p>}
-    {snapshot.appliedPromotions.map(p=><p className="request-help" key={p.id}>
-      {label(p)}{p.benefit.type==='percentage'?` · ${p.benefit.basisPoints/100}%`:''}
-      {' · '}{(p.status==='ELIGIBLE'||p.discountAmount===null)?t('eligible'):review?`− ${money(p.discountAmount)}`:t('applied')}
-    </p>)}
+  return <div className="request-promotions" role={review?undefined:'status'} aria-live={review?undefined:'polite'}>
+    {snapshot.appliedPromotions.map(p=><div className="request-promotion" key={p.id}>
+      <div><p className="request-promotion-label">{label(p)}</p>
+        <p className="request-promotion-status">{p.status==='ELIGIBLE'||p.discountAmount===null?t('eligible'):t('applied')}</p></div>
+      <div className="request-promotion-benefit">
+        {p.benefit.type==='percentage'&&<span className="promotion-tag">{p.benefit.basisPoints/100}%</span>}
+        {p.status==='APPLIED'&&p.discountAmount!==null&&<span className="request-discount">− {money(p.discountAmount)}</span>}
+      </div>
+    </div>)}
   </div>;
 }

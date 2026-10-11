@@ -64,7 +64,7 @@ export function Footer() {
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-cream">
               {tFooter("languageHeading")}
             </p>
-            <LanguageSwitcher className="mt-3 [color-scheme:dark] [&_select]:text-brand-cream [&_select]:border-brand-cream [&_select:focus-visible]:outline-brand-cream [&_option]:bg-surface-dark" />
+            <LanguageSwitcher className="mt-3" />
           </div>
           <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-brand-cream">
             {legalNavItems.map((item) => (

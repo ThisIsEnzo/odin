@@ -118,8 +118,8 @@ body {
   transform: translateY(0) scale(1);
 }
 
-.reveal-left.reveal-visible,
-.reveal-right.reveal-visible {
+.reveal.reveal-left.reveal-visible,
+.reveal.reveal-right.reveal-visible {
   transform: translateX(0);
 }
 

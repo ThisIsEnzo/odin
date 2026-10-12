@@ -151,3 +151,32 @@ on light/dark chrome-like surfaces; alpha corners are transparent with smooth
 intermediate coverage. Native browser tab-strip chrome itself was not visually
 inspectable in this headless environment; no claim of a headful tab screenshot.
 Previous full-photography/iframe and inherited lint/PR-conflict limits still apply.
+
+
+## Why ON GROUND mobile rail correction — 2026-10-12
+
+Based on remote `7193ab62b91eb98fd28e2adf38c89d6d174a079b` and the supplied
+iPhone 16 Pro Max full-page screenshot. Normal-motion browser reproduction at
+430/440px confirmed heading/body x=4px and feature group x=36px while the shared
+Container/Experiences/Packages/FAQ rail was x=20px. The mobile directional reveal
+rule appeared after the equally specific finished-state rule, retaining -16/+16px
+translations even after `.reveal-visible`. Earlier reduced-motion QA bypassed it.
+
+The finished directional state now has sufficient specificity to reset its
+translation at every breakpoint. Why still uses the global Container/page-gutter
+system; no compensating margin or custom width was added. Its mobile grid is
+explicitly one column with min-width-zero children and full available text measure.
+Feature rows use one consistent number/content grid: number on the section rail,
+title and description on the same deliberate content rail. Existing section
+padding/gaps and desktop two-column geometry remain; desktop feature description
+alignment follows its title as part of the same verified row correction.
+
+Normal-motion Chromium checked 375/390/430/440/768/1024/1440 in EN/RU/TH/ZH
+(28 cases). Heading/body rails match adjacent sections within 0.5px, finished
+transforms are zero, feature columns are consistent and no horizontal overflow
+occurs. At mobile widths: main/number rail=20px, feature-text rail=56px. Screenshots
+at all widths were captured; 440px iPhone-width and representative mobile/tablet/
+desktop renders were visually reviewed against the client's reference.
+252 tests, typecheck, production build, 324-key parity and diff check pass.
+Existing photography/iframe, headless browser chrome, lint and PR-conflict limits
+remain unchanged. No pricing, booking, backend, translation or brand data changed.

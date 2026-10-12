@@ -39,39 +39,55 @@ export type MockFlag = {
   note?: string;
 };
 
-export type ExperienceId = "horse-riding" | "pony-riding" | "atv" | "sauna";
+/** Catalog membership is checked at runtime, so adding an activity needs no UI enum edit. */
+export type ExperienceId = string;
+
+export type BookingBehavior =
+  | { model: "per_person" | "group" }
+  | { model: "capacity_unit"; maxGuestsPerUnit: number; unitTranslationKey: string };
 
 /** Only confirmed tiers belong here; slot intervals are not durations. */
 export interface DurationOption {
   durationMinutes: number;
   price: Money;
   /** Explicit billing quantity: never infer vehicles/groups from guest count. */
-  quantityBasis: "participant" | "booking";
+  quantityBasis: "participant" | "booking" | "unit" | "occupancy" | "pending";
+  sharedPrice?: Money;
 }
 export interface EstimateLine {
   itemId: string;
   amount: number | null;
+  /** Exact THB minor units on V3; legacy lines need not have this field. */
+  amountMinor?: number | null;
   durationMinutes?: number;
+  occupancy?: {solo: number; shared: number; soloAmount: number; sharedAmount: number};
   unitAmount?: number;
   quantity?: number;
   unit?: PricingUnit;
 }
 export interface BookingEstimate {
-  version: 1;
+  version: 1 | 2;
+  /** Present on V3 estimates; legacy V1 snapshots remain readable unchanged. */
+  promotions?: import("@/lib/booking/promotions").PromotionSnapshot;
   currency: Currency;
   amount: number | null;
   items: EstimateLine[];
+  packages?: PackageEstimateLine[];
+  packageDiscounts?: import("@/lib/booking/promotions").AppliedPromotion[];
 }
 export interface Experience {
   id: ExperienceId;
   slug: string;
   translationNamespace: string;
+  /** Public request behavior, independent of price basis. Absent = not bookable. */
+  booking?: BookingBehavior;
+  bookingImage?: string;
   operatingHours: OperatingHours;
   restrictions: ExperienceRestrictions;
   price: Money;
   /** Configurable per experience — never hardcode an interval in UI. */
   bookingIntervalMinutes: number;
-  /** Drives the conditional weight field in the booking flow (Phase 4). */
+  /** Historical V2 rider validation only. Public V3 never collects weights. */
   requiresWeight: boolean;
   /** Only set after business confirmation; never inferred from slot interval. */
   durationMinutes?: number;
@@ -83,7 +99,15 @@ export interface Experience {
   };
 }
 
+export interface PackageComponent { activityId: ExperienceId; guestCount: number; unitCount?: number; durationMinutes?: number }
+export interface BookingPackageSelection { packageId: string; components: BookingActivitySelection[] }
+export interface PackageEstimateLine extends EstimateLine { packageId: string; translationNamespace: string; pricingMode: "fixed" | "sum_components"; components: (BookingActivitySelection & {amount: number | null})[] }
 export interface Package {
+  components?: PackageComponent[];
+  pricingMode?: "fixed" | "sum_components";
+  discountPercent?: number | null;
+  discountStacking?: "STACKABLE" | "EXCLUSIVE" | "BEST_ONLY";
+  discountStackingGroup?: string;
   id: string;
   slug: string;
   translationNamespace: string;
@@ -188,6 +212,33 @@ export interface BookingRequest extends BookingDraft {
   status: "received" | "confirmed" | "declined" | "cancelled";
   createdAt: string;
 }
+
+/** V2 remains unchanged for historical records. V3 has no participant identities/weights. */
+export interface BookingActivitySelection {
+  activityId: ExperienceId;
+  guestCount: number;
+  durationMinutes?: number;
+  unitCount?: number;
+}
+export interface BookingRequestDraft {
+  schemaVersion: 3;
+  visitDate: string;
+  preferredStartTime: string;
+  customer: { fullName: string; email: string; phone: string };
+  activities: BookingActivitySelection[];
+  packages?: BookingPackageSelection[];
+  notes?: string;
+  locale: Locale;
+}
+export interface BookingRequestV3 extends BookingRequestDraft {
+  estimate: BookingEstimate;
+  id: string;
+  reference: string;
+  status: BookingRequest["status"];
+  createdAt: string;
+}
+export type StoredBookingRequest = BookingRequest | BookingRequestV3;
+export type SupportedBookingDraft = BookingDraft | BookingRequestDraft;
 
 export interface SiteConfig {
   businessName: string;

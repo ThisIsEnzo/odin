@@ -1,3 +1,4 @@
+/** Historical V2 schema. The active public API uses booking/request.ts (V3). */
 import { z } from "zod";
 import { experiences } from "@/data/odin/experiences";
 import { packages } from "@/data/odin/packages";

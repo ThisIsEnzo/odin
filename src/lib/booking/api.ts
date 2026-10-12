@@ -1,12 +1,13 @@
 import {NextResponse} from 'next/server';
-import {bookingSchema,collectFieldErrors} from '../validation/booking.schema';
+import {bookingRequestSchema} from './request';
+import {collectFieldErrors} from '../validation/booking.schema';
 import {IdempotencyConflict,validIdempotencyKey} from './idempotency';
 import {ConfigurationError} from './config';
 import type {BookingRuntime} from './runtime';
 export function createBookingHandler(runtime:()=>BookingRuntime){return async(req:Request)=>{
  let body:unknown;
  try{const raw=await req.text();if(raw.length>256000)return NextResponse.json({error:'request_too_large'},{status:413});body=JSON.parse(raw);}catch{return NextResponse.json({error:'invalid_body'},{status:400});}
- const parsed=bookingSchema.safeParse(body);
+ const parsed=bookingRequestSchema.safeParse(body);
  if(!parsed.success)return NextResponse.json({error:'validation_failed',fieldErrors:collectFieldErrors(parsed.error.issues)},{status:400});
  const key=req.headers.get('Idempotency-Key')??'';
  if(!validIdempotencyKey(key))return NextResponse.json({error:'invalid_idempotency_key'},{status:400});

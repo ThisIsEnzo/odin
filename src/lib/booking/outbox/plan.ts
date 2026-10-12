@@ -6,7 +6,7 @@ export type NotificationTarget={provider:ProviderName;target:string;phoneNumberI
 export type DeliveryPlan={provider:ProviderName;target:string;part:number;body:Record<string,unknown>;phoneNumberId?:string;apiVersion?:string};
 export function planDeliveries(payload:BookingNotificationPayload,targets:NotificationTarget[]):DeliveryPlan[] {
  return targets.flatMap(t=>{
-  if(t.provider==='console')return [{provider:t.provider,target:t.target,part:0,body:{reference:payload.reference,items:payload.booking.items.length}}];
+  if(t.provider==='console')return [{provider:t.provider,target:t.target,part:0,body:{reference:payload.reference,items:payload.booking.schemaVersion===3?payload.booking.activities.length:payload.booking.items.length}}];
   const pieces=chunks(t.provider==='line'?payload.text:payload.text.replace(/\s+/g,' '),t.provider==='line'?4500:700);
   return pieces.map((text,i):DeliveryPlan=>({provider:t.provider,target:t.target,part:i,...(t.provider==='whatsapp'?{phoneNumberId:t.phoneNumberId,apiVersion:t.apiVersion}:{}),body:t.provider==='line'
    ?{to:t.target,messages:[{type:'text',text:`${payload.reference} [${i+1}/${pieces.length}]\n${text}`}]}

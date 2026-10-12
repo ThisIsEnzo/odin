@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "骑马。探索。放松。用餐。",
-    "openDaily": "餐厅每日营业 {hours}",
+    "openDaily": "每日营业 · {hours}",
     "navigationHeading": "浏览",
     "contactHeading": "联系方式",
     "languageHeading": "语言",
@@ -124,30 +124,34 @@
   "restaurant": {
     "title": "餐厅",
     "description": "餐厅营业时间见下方，菜单详情即将公布。",
-    "hoursLabel": "营业时间",
+    "hoursLabel": "每日营业",
     "avgSpendLabel": "人均消费",
     "menuComingSoon": "完整菜单详情即将公布。",
     "cta": "规划您的行程"
   },
   "packages": {
     "heading": "套餐",
-    "intro": "几种将 ON GROUND 体验项目组合成一天行程的方式。",
+    "intro": "选择乡野体验套餐。套餐价格与活动安排由经理确认。",
     "includesRestaurant": "含餐厅用餐",
-    "mockNote": "套餐内容和价格仅为示例，尚待确认。",
-    "cta": "咨询该套餐",
+    "mockNote": "套餐价格与安排由经理确认。",
+    "cta": "选择套餐",
     "familyDay": {
       "title": "家庭日",
       "description": "适合全家人的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
     },
     "adventureDay": {
-      "title": "探险日",
-      "description": "越野车探索之后，在我们餐厅享用美食。"
+      "title": "冒险一日游",
+      "description": "骑ATV和骑马，探索乡野风光。"
     },
     "coupleEscape": {
-      "title": "情侣度假",
-      "description": "骑马、桑拿，以及一顿双人晚餐。"
+      "title": "双人度假",
+      "description": "两位骑手的骑马体验，加桑拿。桑拿人数及安排由经理确认。"
     },
-    "pricePending": "由经理确认"
+    "pricePending": "由经理确认",
+    "allInclusive": {
+      "title": "全包套餐",
+      "description": "一次乡野之旅，体验骑马、ATV与桑拿。"
+    }
   },
   "gallery": {
     "heading": "图库",
@@ -183,7 +187,7 @@
   },
   "location": {
     "heading": "位置",
-    "body": "ON GROUND 位于乡村地区，距芭堤雅 {distance}。",
+    "body": "ON GROUND 位于考迈乔的乡间，将骑马、户外体验与悠闲用餐汇聚于一处。",
     "distanceBadge": "距芭堤雅 {distance}",
     "mapPlaceholder": "地图预览即将推出",
     "openInMaps": "在 Google 地图中打开",
@@ -238,7 +242,11 @@
       "contactIdentityRequired": "请输入您的 LINE ID 或 WhatsApp 号码。",
       "requestTooLarge": "申请超出表单技术大小限制，请分成较小的申请。",
       "notesTooLong": "备注不得超过500个字符。",
-      "invalidDuration": "请选择已确认的体验时长。"
+      "invalidDuration": "请选择已确认的体验时长。",
+      "chooseExperience": "请至少选择一项体验。",
+      "duplicateActivity": "此体验已加入申请。",
+      "invalidUnitCount": "请选择足够的车辆，每位参加者最多一辆。",
+      "unexpectedUnitCount": "此体验无需填写车辆数量。"
     },
     "pageTitle": "预订您的体验",
     "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
@@ -283,8 +291,8 @@
     },
     "success": {
       "badge": "已收到请求",
-      "title": "已收到您的预约请求",
-      "body": "感谢您的申请。我们已收到您的预约请求，团队将核实是否可以预约，并会与您联系确认。",
+      "title": "谢谢！我们已收到您的预订申请。",
+      "body": "我们的经理将与您联系，确认可用名额、具体时间及最终价格。",
       "reference": "参考编号：{id}",
       "backHome": "返回首页",
       "viewExperiences": "探索更多体验项目"
@@ -360,7 +368,7 @@
       "subtotal": "预估小计",
       "total": "预估总价",
       "pending": "由经理确认",
-      "managerNotice": "经理审核您的申请后，将与您确认最终价格。",
+      "managerNotice": "最终价格和可用安排将由经理确认。",
       "durationPending": "由经理确认",
       "missingTiers": "经理将在确认到访前与您商定体验时长和价格。",
       "durationHelp": "更改时长后，可能需要重新选择开始时间。",
@@ -375,7 +383,63 @@
         "group": "每组"
       },
       "price": "价格",
-      "from": "{amount} 起"
+      "from": "{amount} 起",
+      "startsFrom": "起价"
+    },
+    "v3": {
+      "title": "安排您的到访",
+      "intro": "选择日期，填写来访信息，再挑选心仪的体验。其余细节由我们的经理为您协调。",
+      "visitTitle": "您的到访",
+      "date": "到访日期",
+      "time": "希望到达的时间",
+      "timeHelp": "时间均为泰国当地时间。各项活动的具体时间将由我们的经理与您确认。",
+      "fullName": "姓名",
+      "email": "电子邮箱",
+      "phone": "电话",
+      "contactTitle": "您的联系信息",
+      "choicesTitle": "选择您的体验",
+      "choicesHelp": "添加您想参加的活动。如尚无已确认的选项，经理将与您协商时长和价格。",
+      "add": "添加体验",
+      "remove": "移除",
+      "included": "已加入申请",
+      "guests": "参加人数",
+      "maxWeight": "骑乘者体重上限",
+      "kg": "公斤",
+      "capacityHelp": "每辆车最多可乘坐 {max} 人",
+      "capacitySummary": "{guests} 位参加者 · {label}：{units}",
+      "increase": "增加{label}：{name}",
+      "decrease": "减少{label}：{name}",
+      "notes": "还有什么需要我们了解的吗？",
+      "optional": "选填",
+      "notesTitle": "备注",
+      "review": "查看申请",
+      "reviewTitle": "确认您的申请信息",
+      "reviewIntro": "发送给我们的团队之前，请核对以下信息。",
+      "experiencesTitle": "您的体验",
+      "edit": "修改申请",
+      "send": "发送预订申请",
+      "sending": "正在发送申请…",
+      "selectionCount": "已选择 {count} 个项目",
+      "noneSelected": "请至少选择一项体验",
+      "guestSummary": "{count} 位参加者",
+      "requestNotice": "这是预订申请。可用名额、具体时间及最终价格将由我们的经理与您确认。",
+      "fixErrors": "请检查以下信息",
+      "added": "已将{name}加入申请。",
+      "removed": "已将{name}从申请中移除。",
+      "packageNote": "套餐详情仍待确认。请在下方选择单项体验，如对某个套餐感兴趣，可在备注中说明。"
+    },
+    "units": {
+      "atv": "ATV 车辆"
+    },
+    "promotions": {
+      "subtotal": "优惠前小计",
+      "applied": "已应用优惠",
+      "eligible": "符合优惠条件 · 金额由经理确认"
+    },
+    "packages": {
+      "subtotal": "套餐小计",
+      "shared": "双人同乘",
+      "solo": "单人驾驶"
     }
   }
 }

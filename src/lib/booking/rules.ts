@@ -232,8 +232,8 @@ export function validateBookingRequest(
 }
 
 
-// Booking V2 is the active validation entry point. V1 above remains a pure
-// compatibility helper for existing primitive rule consumers/tests.
+// Historical V2 validation. Public V3 request policy lives in request.ts.
+// V1 above remains a pure compatibility helper for existing consumers/tests.
 export const MAX_BOOKING_WINDOW_DAYS = 90; // Existing engineering default, not a capacity claim.
 export function thailandToday(now = new Date()): string {
   return new Date(now.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);

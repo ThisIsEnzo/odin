@@ -1,3 +1,30 @@
+# ON GROUND — Current booking audit
+
+## V3 stacked booking redesign
+
+Parent: brand/on-ground-khao-mai-kaeo-refresh at 9729ac0d52357b0ec3da49aa64bb046eb273e14d, Draft PR #3 open/unmerged. New branch booking/simplified-request-flow targets that parent. Brand PR scope is unchanged.
+
+| Previous friction | V3 behavior |
+| --- | --- |
+| SaaS-like multi-step itinerary builder | One entry form, one Review screen, then Received |
+| Repeated activity date/time | Global visit date/preferred arrival; manager coordinates timing |
+| Per-rider weights | No weight fields; 90/60 kg maximum information retained |
+| Subtle selection/editor complexity | Included badge, expanded controls, clear Add/Remove |
+| One ATV implicitly equals one guest | Generic capacity units: 5 guests may use 3/4/5 ATVs |
+| Nested mock packages | Activity-first; truthful homepage Plan a visit CTA |
+| Unknown tariffs risk partial totals | Pending duration/price and all-known-or-pending total |
+| Staff need operational request details | Versioned outbox text with global preference and counts |
+
+Automated: 200 tests passing, TypeScript/build passing, 320 locale keys in parity, diff check passing. React tests cover single-page structure, add/remove/reset, capacity bounds, approved-tier behavior, preserved Edit, four locales, future fifth card, received reference, retry intent and server error routing. PostgreSQL-engine tests cover additive migration over a pre-existing V2 record and V3 round-trip/snapshot/outbox/rollback.
+
+Browser automation is unavailable in this managed environment. Responsive CSS specifies one column below 1024px, wrapping controls, 48px steppers and 52px inputs; **visual/no-overflow/focus geometry at 375/390/430px is pending actual browser review**. jsdom does not verify pixel layout. No new screenshot, accessibility certification or performance score is claimed. Large unchanged photos are retained in the remote tree; the connector returned empty contents for files over 1 MB, so the local Git worktree omits those photos. No ZIPs were used.
+
+Customer outbound thank-you delivery is not configured; the localized on-screen receipt is implemented. No real booking/provider send, live DB migration, merge or deployment is performed. See BOOKING_V3_STATUS.md for release requirements.
+
+## Historical brand audit (before V3)
+
+The following records the parent work only. Its itinerary/UI details and browser evidence do not describe the new V3 flow.
+
 # Final corrective UX/UI audit
 
 Baseline: existing Draft PR #3 at GitHub HEAD 6bf2421ee65f7e7518627584fbf094d4c05a4a52. All 183 blobs and the exact commit/tree were recovered. Baseline homepage/Booking were inspected in Chromium before editing, together with design/audit/status docs. Old archives supplied only photographs whose Git blob hashes matched GitHub, never source code.

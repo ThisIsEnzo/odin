@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 const localeLabels: Record<(typeof routing.locales)[number], string> = {
   en: "English",
@@ -17,21 +19,24 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+  // Chromium treats native selects as focus-visible even after a pointer click.
+  // Keep the keyboard indicator while avoiding a persistent pointer focus box.
+  const [pointerFocus, setPointerFocus] = useState(false);
 
   return (
-    <label className={cn("inline-flex items-center gap-2 text-sm", className)}>
+    <label className={cn("language-control inline-flex items-center text-sm", className)}>
       <span className="sr-only">{t("languageSwitcherLabel")}</span>
       <select
         value={locale}
+        data-pointer-focus={pointerFocus || undefined}
+        onPointerDown={() => setPointerFocus(true)}
+        onKeyDown={() => setPointerFocus(false)}
+        onBlur={() => setPointerFocus(false)}
         onChange={(event) => {
           const nextLocale = event.target.value as (typeof routing.locales)[number];
           router.replace(pathname, { locale: nextLocale });
         }}
-        className={cn(
-          "rounded-button border border-border bg-transparent",
-          "min-h-11 px-3 py-2 text-ink",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
-        )}
+        className="language-select"
       >
         {routing.locales.map((code) => (
           <option key={code} value={code}>
@@ -39,6 +44,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           </option>
         ))}
       </select>
+      <ChevronDown aria-hidden="true" className="language-chevron" />
     </label>
   );
 }

@@ -59,7 +59,7 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
             {pkg.includedExperienceIds.map((experienceId) => (
               <li key={experienceId}>
                 <Badge variant="outline">
-                  {tExperiences(`${toCamelCase(experienceId)}.title`)}
+                  {tExperiences(`${toCamelCase(experienceId)}.title`)}{(pkg.components?.find(c => c.activityId === experienceId)?.guestCount ?? 1) > 1 ? ` × ${pkg.components!.find(c => c.activityId === experienceId)!.guestCount}` : ""}
                 </Badge>
               </li>
             ))}
@@ -83,7 +83,7 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
           ) : null}
           
           <Link
-            href={`/book?package=${pkg.slug}`}
+            href={`/book?package=${encodeURIComponent(pkg.id)}`}
             className={buttonVariants({ variant: "secondary", size: "sm", className: "mt-2" })}
           >
             {tPackages("cta")}

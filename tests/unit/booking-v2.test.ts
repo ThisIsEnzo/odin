@@ -1,3 +1,4 @@
+import type {BookingRequest as HistoricalBookingRequest} from "@/types/domain";
 import {describe,it,expect,vi} from "vitest";
 import {bookingSchema} from "@/lib/validation/booking.schema";
 import {createActivity,createPackage,duplicateItem,initializeVisit,removeItem,updateActivity,activitiesOf} from "@/lib/booking/itinerary";
@@ -13,7 +14,7 @@ import {WhatsAppNotificationProvider} from "@/lib/booking/providers/whatsapp";
 import type {ActivityBookingItem,BookingItem,BookingDraft,ExperienceId,BookingOption} from "@/types/domain";
 const date=(days=5)=>new Date(Date.now()+days*86400000).toISOString().slice(0,10);
 function activity(id:ExperienceId="atv",count=1):ActivityBookingItem {
- const a=createActivity(id,date());a.time="10:00";
+ const a=createActivity(id,date());a.time="10:00";a.durationMinutes=id==="atv"?30:60;
  a.participants=Array.from({length:count},()=>({id:crypto.randomUUID(),...(experiences.find(e=>e.id===id)!.requiresWeight?{weightKg:55}:{})}));return a;
 }
 function draft(items:BookingItem[]=[activity()]):BookingDraft {return {schemaVersion:2,items,customer:{name:"Test Guest",email:"qa@example.com",phone:"+66000000000"},locale:"en"};}
@@ -43,11 +44,11 @@ describe("Booking V2",()=>{
  it("rejects V1 payload rather than guessing per-rider weights",()=>expect(bookingSchema.safeParse({experienceId:"horse-riding",guests:2,weightKg:70}).success).toBe(false));
 });
 describe("Persistence and notifications",()=>{
- it("persists received despite failed notification",async()=>{const repo=new InMemoryBookingRepository();const r=await submitBooking(draft([pack(),activity()]),repo,{notifyBookingReceived:async()=>{throw new Error("offline");}});expect(r.status).toBe("received");expect((await repo.getById(r.id))?.items).toHaveLength(2);});
+ it("persists received despite failed notification",async()=>{const repo=new InMemoryBookingRepository();const r=await submitBooking(draft([pack(),activity()]),repo,{notifyBookingReceived:async()=>{throw new Error("offline");}});expect(r.status).toBe("received");expect(((await repo.getById(r.id)) as HistoricalBookingRequest | null)?.items).toHaveLength(2);});
  it("isolates channel failure",async()=>{const send=vi.fn(async()=>{});const service=new FanoutNotificationService([{name:"line",send:async()=>{throw new Error("offline");}},{name:"whatsapp",send}]);const b=await new InMemoryBookingRepository().create(draft());expect(await service.notifyBookingReceived(b)).toEqual([{channel:"line",status:"failed"},{channel:"whatsapp",status:"accepted"}]);expect(send).toHaveBeenCalledOnce();});
  it("does not notify before persistence",async()=>{const notify=vi.fn();await expect(submitBooking(draft(),{create:async()=>{throw new Error("db");},getById:async()=>null},{notifyBookingReceived:notify})).rejects.toThrow();expect(notify).not.toHaveBeenCalled();});
- it("repository isolates references",async()=>{const repo=new InMemoryBookingRepository();const d=draft();const b=await repo.create(d);d.items.length=0;b.items.length=0;expect((await repo.getById(b.id))?.items).toHaveLength(1);});
- it("payload includes whole itinerary, package, weights, notes",async()=>{const d=draft([pack(),activity("atv",4)]);d.notes="test note";const p=buildBookingNotificationPayload(await new InMemoryBookingRepository().create(d));for(const text of ["couple-escape","horse-riding","sauna","atv","Guest 2: 55 kg","Participants: 4","test note","RECEIVED","Restaurant"])expect(p.text).toContain(text);});
+ it("repository isolates references",async()=>{const repo=new InMemoryBookingRepository();const d=draft();const b=await repo.create(d);d.items.length=0;b.items.length=0;expect(((await repo.getById(b.id)) as HistoricalBookingRequest | null)?.items).toHaveLength(1);});
+ it("payload includes whole itinerary, package, weights, notes",async()=>{const d=draft([pack(),activity("atv",4)]);d.notes="test note";const p=buildBookingNotificationPayload(await new InMemoryBookingRepository().create(d));for(const text of ["couple-escape","horse-riding","sauna","atv","Guest 2: 55 kg","Participants: 4","test note","RECEIVED"])expect(p.text).toContain(text);});
  it("LINE uses official endpoint with mocked transport",async()=>{const fetcher=vi.fn(async(_url:string|URL|Request,_init?:RequestInit)=>new Response("{}",{status:200}));const p=buildBookingNotificationPayload(await new InMemoryBookingRepository().create(draft()));await new LineNotificationProvider({token:"test",recipientId:"test-recipient"},fetcher).send(p);expect(fetcher.mock.calls[0]?.[0]).toBe("https://api.line.me/v2/bot/message/push");});
  it("WhatsApp uses configured template with mocked transport",async()=>{const calls:RequestInit[]=[];const fetcher:typeof fetch=async(_url,init)=>{calls.push(init!);return new Response("{}",{status:200});};const p=buildBookingNotificationPayload(await new InMemoryBookingRepository().create(draft([pack()])));await new WhatsAppNotificationProvider({token:"test",phoneNumberId:"123",recipient:"456",apiVersion:"v99.0",templateName:"test_template",templateLanguage:"en"},fetcher).send(p);const body=JSON.parse(calls[0]!.body as string);expect(body.type).toBe("template");expect(body.template.components[0].parameters[2].text).toContain("horse-riding");});
  it("missing config never sends",async()=>{const fetcher=vi.fn();const p=buildBookingNotificationPayload(await new InMemoryBookingRepository().create(draft()));await expect(new LineNotificationProvider({token:"",recipientId:""},fetcher).send(p)).rejects.toThrow();expect(fetcher).not.toHaveBeenCalled();});

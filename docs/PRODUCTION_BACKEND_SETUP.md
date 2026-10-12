@@ -43,6 +43,8 @@ Frontend-only development can explicitly use `BOOKING_STORAGE=memory` and `BOOKI
 
 Source schema: `src/lib/db/schema.ts`. Committed SQL and Drizzle metadata: `drizzle/`.
 
+Booking V3 requires the new additive `0002_deep_wonder_man.sql` before deploying this branch. It adds global visit fields, permits schemaVersion 3 and creates count-based activity rows. Existing V2 tables/weights and applied migrations are preserved. The current public API accepts V3 only; deploy the frontend/API together after the migration. No production migration has been applied by this PR. Customer outbound message delivery remains unconfigured; staff channels and browser receipt are the implemented behavior.
+
 ```sh
 npm run db:generate  # development: generate reviewed SQL after schema changes
 npm run db:migrate  # apply committed migrations; safe to rerun

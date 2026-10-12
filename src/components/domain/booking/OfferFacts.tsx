@@ -13,6 +13,6 @@ export function OfferFacts({ experience, pack }: { experience?: Experience; pack
   const durations = [...new Set(tiers.map(tier => tier.durationMinutes))].sort((a, b) => a - b);
   return <dl className="offer-facts">
     {experience && <div><dt>{t("duration")}</dt><dd>{durations.length ? durations.map(count => t("minutes", { count })).join(" / ") : experience.durationMinutes ? t("minutes", { count: experience.durationMinutes }) : t("pending")}</dd></div>}
-    <div><dt>{t("price")}</dt><dd>{price ? <>{t("from", { amount: format.number(price.amount, { style: "currency", currency: "THB", maximumFractionDigits: 2 }) })}<small>{t(`unit.${price.unit}`)}</small></> : t("pending")}</dd></div>
+    <div className={`offer-price ${price ? "is-known" : "is-pending"}`}><dt>{t(price ? "startsFrom" : "price")}</dt><dd>{price ? <><span className="offer-price-value">{format.number(price.amount, { style: "currency", currency: "THB", maximumFractionDigits: 2 })}</span><small>{t(`unit.${price.unit}`)}</small></> : <span className="offer-price-value">{t("pending")}</span>}</dd></div>
   </dl>;
 }

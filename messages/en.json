@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "Ride. Explore. Relax. Eat.",
-    "openDaily": "Restaurant open daily {hours}",
+    "openDaily": "Open daily · {hours}",
     "navigationHeading": "Explore",
     "contactHeading": "Contact",
     "languageHeading": "Language",
@@ -124,30 +124,34 @@
   "restaurant": {
     "title": "Restaurant",
     "description": "Restaurant hours are shown below. Menu details are coming soon.",
-    "hoursLabel": "Open",
+    "hoursLabel": "Open daily",
     "avgSpendLabel": "Average spend",
     "menuComingSoon": "Full menu details coming soon.",
     "cta": "Plan your visit"
   },
   "packages": {
     "heading": "Packages",
-    "intro": "A few ways to combine ON GROUND's experiences into a single day.",
+    "intro": "Choose a countryside package. Package prices and activity arrangements will be confirmed by our manager.",
     "includesRestaurant": "Includes restaurant",
-    "mockNote": "Package contents and prices are illustrative and need confirmation.",
-    "cta": "Request this package",
+    "mockNote": "Package price and arrangements require manager confirmation.",
+    "cta": "Choose package",
     "familyDay": {
       "title": "Family Day",
       "description": "A relaxed day for the whole family: pony riding, time on the farm, and a meal at our restaurant."
     },
     "adventureDay": {
       "title": "Adventure Day",
-      "description": "Off-road ATV exploring followed by a meal at our restaurant."
+      "description": "Explore the countryside with ATV and Horse Riding."
     },
     "coupleEscape": {
       "title": "Couple Escape",
-      "description": "Horse riding, sauna, and dinner for two."
+      "description": "Horse Riding for two riders, plus Sauna. Sauna guest arrangements will be confirmed by our manager."
     },
-    "pricePending": "Manager to confirm"
+    "pricePending": "Manager to confirm",
+    "allInclusive": {
+      "title": "All Inclusive",
+      "description": "Horse Riding, ATV and Sauna in one countryside visit."
+    }
   },
   "gallery": {
     "heading": "Gallery",
@@ -183,7 +187,7 @@
   },
   "location": {
     "heading": "Location",
-    "body": "ON GROUND is set in the countryside {distance} from Pattaya.",
+    "body": "In the countryside of Khao Mai Kaeo, ON GROUND brings riding, outdoor experiences and relaxed meals together in one destination.",
     "distanceBadge": "{distance} from Pattaya",
     "mapPlaceholder": "Map preview coming soon",
     "openInMaps": "Open in Google Maps",
@@ -238,7 +242,11 @@
       "contactIdentityRequired": "Enter your LINE ID or WhatsApp number.",
       "requestTooLarge": "This request exceeds the form size limit. Please split it into smaller requests.",
       "notesTooLong": "Notes must be 500 characters or fewer.",
-      "invalidDuration": "Choose an approved duration."
+      "invalidDuration": "Choose an approved duration.",
+      "chooseExperience": "Please choose at least one experience.",
+      "duplicateActivity": "This experience is already included.",
+      "invalidUnitCount": "Choose enough vehicles for your guests, up to one per guest.",
+      "unexpectedUnitCount": "Vehicle count is not needed for this experience."
     },
     "pageTitle": "Book Your Experience",
     "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
@@ -283,8 +291,8 @@
     },
     "success": {
       "badge": "Received",
-      "title": "Request received",
-      "body": "Thanks — we've received your request. Our team will review availability and follow up to confirm your booking.",
+      "title": "Thank you — request received",
+      "body": "Our manager will contact you to confirm availability, timing and final price.",
       "reference": "Reference: {id}",
       "backHome": "Back to home",
       "viewExperiences": "Explore more experiences"
@@ -360,7 +368,7 @@
       "subtotal": "Estimated subtotal",
       "total": "Estimated total",
       "pending": "Manager to confirm",
-      "managerNotice": "The final price will be confirmed by our manager after reviewing your request.",
+      "managerNotice": "Final price and availability will be confirmed by our manager.",
       "durationPending": "Manager to confirm",
       "missingTiers": "Our manager will agree the duration and price with you before confirming your visit.",
       "durationHelp": "Changing duration may require a different start time.",
@@ -375,7 +383,63 @@
         "group": "per group"
       },
       "price": "Price",
-      "from": "From {amount}"
+      "from": "From {amount}",
+      "startsFrom": "Starts from"
+    },
+    "v3": {
+      "title": "Plan your visit",
+      "intro": "Choose a day, tell us who is coming and pick your experiences. Our manager will take care of the details.",
+      "visitTitle": "Your visit",
+      "date": "Visit date",
+      "time": "Preferred arrival time",
+      "timeHelp": "Times are local to Thailand. Exact activity timing will be confirmed by our manager.",
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "contactTitle": "Your details",
+      "choicesTitle": "Choose your experiences",
+      "choicesHelp": "Add the experiences you would like to enjoy. Duration and price are agreed with our manager when approved options are not yet available.",
+      "add": "Add experience",
+      "remove": "Remove",
+      "included": "Included in your request",
+      "guests": "Guests",
+      "maxWeight": "Maximum rider weight",
+      "kg": "kg",
+      "capacityHelp": "Up to {max} guests per vehicle",
+      "capacitySummary": "{guests} guests · {label}: {units}",
+      "increase": "Increase {label}: {name}",
+      "decrease": "Decrease {label}: {name}",
+      "notes": "Anything else we should know?",
+      "optional": "Optional",
+      "notesTitle": "Notes",
+      "review": "Review request",
+      "reviewTitle": "Review your request",
+      "reviewIntro": "A moment to check the details before sending your request to our team.",
+      "experiencesTitle": "Your experiences",
+      "edit": "Edit request",
+      "send": "Send booking request",
+      "sending": "Sending your request…",
+      "selectionCount": "{count, plural, one {# selection in your request} other {# selections in your request}}",
+      "noneSelected": "Choose at least one experience",
+      "guestSummary": "{count, plural, one {# guest} other {# guests}}",
+      "requestNotice": "This is a request to book. Availability, timing and final price will be confirmed by our manager.",
+      "fixErrors": "Please check these details",
+      "added": "{name} added to your request.",
+      "removed": "{name} removed from your request.",
+      "packageNote": "Package details are still being confirmed. Please choose individual experiences below; you can mention your package interest in the notes."
+    },
+    "units": {
+      "atv": "ATVs"
+    },
+    "promotions": {
+      "subtotal": "Subtotal",
+      "applied": "Offer applied",
+      "eligible": "Eligible offer · amount to be confirmed"
+    },
+    "packages": {
+      "subtotal": "Package subtotal",
+      "shared": "Shared",
+      "solo": "Solo"
     }
   }
 }

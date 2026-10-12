@@ -26,14 +26,9 @@ export function Restaurant() {
             <p className="eyebrow mb-5 text-brand-cream">ON GROUND · {t("title")}</p>
             <h2 className="font-display text-canvas">{t("title")}</h2>
             <p className="mt-5 max-w-md text-canvas/80">{t("description")}</p>
-            <dl className="mt-7 border-y border-canvas/20 py-5 text-sm">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
-                <dt className="text-canvas/70">{t("hoursLabel")}</dt>
-                <dd className="font-medium tabular-nums text-canvas">
-                  {restaurant.operatingHours.open}–{restaurant.operatingHours.close}
-                </dd>
-              </div>
-            </dl>
+            <p className="mt-7 border-y border-canvas/20 py-5 text-sm tabular-nums text-brand-cream">
+              {t("hoursLabel")} · {restaurant.operatingHours.open}–{restaurant.operatingHours.close}
+            </p>
             <p className="mt-5 text-sm text-canvas/65">{t("menuComingSoon")}</p>
             <Link href="/book" className={buttonVariants({ variant: "inverse", size: "md", className: "mt-7 w-full sm:w-auto" })}>
               {t("cta")} <span aria-hidden="true">↗</span>

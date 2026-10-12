@@ -10,7 +10,7 @@ import {planDeliveries,type DeliveryPlan} from '@/lib/booking/outbox/plan';
 import {retryDelay,RETRY_POLICY} from '@/lib/booking/outbox/processor';
 import {ProviderError,PROVIDER_TIMEOUT_MS} from '@/lib/booking/providers/http';
 import {authorizedProcessor} from '@/lib/booking/internal-auth';
-import type {BookingDraft} from '@/types/domain';
+import type {BookingDraft,BookingRequestDraft} from '@/types/domain';
 function draft():BookingDraft{const a=createActivity('atv',new Date(Date.now()+5*86400000).toISOString().slice(0,10));a.time='10:00';return {schemaVersion:2,locale:'en',items:[a],customer:{name:'Test Only',email:'qa@example.com',phone:'+66000000000'}};}
 const line:DeliveryPlan={provider:'line',target:'TEST',part:0,body:{to:'TEST',messages:[{type:'text',text:'TEST ONLY'}]}};
 const whatsapp:DeliveryPlan={provider:'whatsapp',target:'123456789',part:0,apiVersion:'v99.0',phoneNumberId:'1234',body:{messaging_product:'whatsapp',to:'123456789',type:'template',template:{name:'test_only',language:{code:'en'},components:[]}}};
@@ -42,13 +42,15 @@ describe('payload and provider-specific safeguards',()=>{
 describe('API infrastructure behavior',()=>{
  const repository=new InMemoryBookingRepository();
  const make=(afterCreate=async(_id:string)=>{})=>createBookingHandler(()=>({repository,processSecret:'',process:async()=>({processed:0}),afterCreate}));
- const request=(d:BookingDraft,key?:string)=>new Request('http://localhost/api/booking',{method:'POST',headers:key?{'Idempotency-Key':key}:{},body:JSON.stringify(d)});
- it('requires an idempotency key',async()=>expect((await make()(request(draft()))).status).toBe(400));
- it('same key/body yields same reference; conflicting reuse is 409',async()=>{const d=draft(),key=crypto.randomUUID(),post=make();const a=await (await post(request(d,key))).json(),b=await (await post(request(d,key))).json();expect(a).toEqual(b);expect(a.reference).toMatch(/^ODIN-/);expect((await post(request({...d,notes:'different'},key))).status).toBe(409);});
- it('notification failure never changes received',async()=>{const res=await make(async()=>{throw new Error('offline');})(request(draft(),crypto.randomUUID()));expect(res.status).toBe(201);expect((await res.json()).status).toBe('received');});
- it('DB failure returns safe error and never attempts delivery',async()=>{const afterCreate=vi.fn();const post=createBookingHandler(()=>({repository:{create:async()=>{throw new Error('secret SQL');},getById:async()=>null},afterCreate,process:async()=>({processed:0}),processSecret:''}));const res=await post(request(draft(),crypto.randomUUID()));expect(res.status).toBe(503);expect(await res.text()).not.toContain('secret');expect(afterCreate).not.toHaveBeenCalled();});
+ const request=(d:BookingRequestDraft,key?:string)=>new Request('http://localhost/api/booking',{method:'POST',headers:key?{'Idempotency-Key':key}:{},body:JSON.stringify(d)});
+ it('requires an idempotency key',async()=>expect((await make()(request(requestDraft()))).status).toBe(400));
+ it('same key/body yields same reference; conflicting reuse is 409',async()=>{const d=requestDraft(),key=crypto.randomUUID(),post=make();const a=await (await post(request(d,key))).json(),b=await (await post(request(d,key))).json();expect(a).toEqual(b);expect(a.reference).toMatch(/^ODIN-/);expect((await post(request({...d,notes:'different'},key))).status).toBe(409);});
+ it('notification failure never changes received',async()=>{const res=await make(async()=>{throw new Error('offline');})(request(requestDraft(),crypto.randomUUID()));expect(res.status).toBe(201);expect((await res.json()).status).toBe('received');});
+ it('DB failure returns safe error and never attempts delivery',async()=>{const afterCreate=vi.fn();const post=createBookingHandler(()=>({repository:{create:async()=>{throw new Error('secret SQL');},getById:async()=>null},afterCreate,process:async()=>({processed:0}),processSecret:''}));const res=await post(request(requestDraft(),crypto.randomUUID()));expect(res.status).toBe(503);expect(await res.text()).not.toContain('secret');expect(afterCreate).not.toHaveBeenCalled();});
 });
 
 describe('internal endpoint',()=>{
  it('rejects unauthenticated calls before opening database',async()=>{const {POST}=await import('@/app/api/internal/notifications/process/route');expect((await POST(new Request('http://localhost/api/internal/notifications/process',{method:'POST'}))).status).toBe(401);});
 });
+
+function requestDraft():BookingRequestDraft {return {schemaVersion:3,visitDate:new Date(Date.now()+5*86400000).toISOString().slice(0,10),preferredStartTime:"10:00",customer:{fullName:"Test Only",email:"qa@example.com",phone:"+66000000000"},activities:[{activityId:"atv",durationMinutes:30,guestCount:5,unitCount:3}],locale:"en"};}

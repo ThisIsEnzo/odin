@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { buttonVariants } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { siteConfig } from "@/data/odin/site";
 import { reviews } from "@/data/odin/reviews";
@@ -26,7 +25,7 @@ export function ReviewsLocation() {
         <div>
           <p className="eyebrow mb-5 text-brand-primary">{location("distanceBadge", {distance: siteConfig.locationDistanceFromPattaya})}</p>
           <h2>{location("heading")}</h2>
-          <p className="mt-5 max-w-md text-ink/70">{location("body", {distance: siteConfig.locationDistanceFromPattaya})}</p>
+          <p className="location-copy">{location("body")}</p>
         </div>
         <div className="location-map-panel">
           <div className="location-map-frame">
@@ -39,9 +38,6 @@ export function ReviewsLocation() {
               allowFullScreen
             />
           </div>
-          <a href={siteConfig.mapsUrl} target="_blank" rel="noopener noreferrer" className={buttonVariants({variant:"primary", className:"location-map-link"})}>
-            {location("openInMaps")} <span aria-hidden="true">↗</span>
-          </a>
         </div>
       </Reveal>
     </Container>

@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "Ride. Explore. Relax. Eat.",
-    "openDaily": "Restaurant open daily {hours}",
+    "openDaily": "Open daily · {hours}",
     "navigationHeading": "Explore",
     "contactHeading": "Contact",
     "languageHeading": "Language",
@@ -124,7 +124,7 @@
   "restaurant": {
     "title": "Restaurant",
     "description": "Restaurant hours are shown below. Menu details are coming soon.",
-    "hoursLabel": "Open",
+    "hoursLabel": "Open daily",
     "avgSpendLabel": "Average spend",
     "menuComingSoon": "Full menu details coming soon.",
     "cta": "Plan your visit"

@@ -534,18 +534,23 @@ textarea.form-control { resize: vertical; }
 :lang(th) .request-card-body h3, :lang(zh) .request-card-body h3 { letter-spacing: 0; line-height: 1.5; }
 
 /* Final UI QA: shared native language control and pointer/keyboard interactions. */
+.ground-header { --material-base: var(--color-brand-terra-deep); }
+.ground-header nav { gap: clamp(.125rem, .35vw, .5rem); }
 .ground-header nav .ground-nav-link {
   display: inline-flex; align-items: center; min-height: 48px;
-  padding: .75rem clamp(.6rem, 1vw, .9rem); border: 0;
-  color: var(--color-text-on-terra); font-size: 1rem; font-weight: 500; letter-spacing: .015em;
+  padding: .75rem .625rem; border: 0;
+  color: var(--color-brand-cream); font-size: 1.0625rem; font-weight: 400; letter-spacing: .01em; line-height: 1.45;
   text-decoration: none; transition: background-color 180ms ease, color 180ms ease;
 }
-.ground-header nav .ground-nav-link:hover { background: rgb(40 27 22 / .12); text-decoration: none; }
-.ground-header nav .ground-nav-link:active { background: rgb(40 27 22 / .18); text-decoration: none; }
+.ground-header nav .ground-nav-link:hover { color: var(--color-canvas); text-decoration: none; }
+.ground-header nav .ground-nav-link:active { color: var(--color-canvas); text-decoration: none; }
 .ground-header nav .ground-nav-link:focus:not(:focus-visible) { outline: none; }
-.ground-header nav .ground-nav-link:focus-visible { outline: 2px solid var(--color-brand-cream); outline-offset: 3px; background: rgb(40 27 22 / .12); }
+.ground-header nav .ground-nav-link:focus-visible { outline: 2px solid var(--color-brand-cream); outline-offset: 3px; }
 .language-control { position: relative; max-width: 100%; color: var(--color-ink); }
-.ground-header .language-control { color: var(--color-text-on-terra); }
+.ground-header .language-control { color: var(--color-brand-cream); }
+.ground-header .language-select { font-size: .875rem; border-bottom-color: rgb(244 227 202 / .35); padding-left: .25rem; }
+.ground-header .language-select:hover { background: transparent; color: var(--color-canvas); }
+.ground-header .language-chevron { width: 12px; height: 12px; }
 .ground-footer .language-control { color: var(--color-brand-cream); }
 .language-select {
   appearance: none; -webkit-appearance: none; min-height: 48px; max-width: 100%;

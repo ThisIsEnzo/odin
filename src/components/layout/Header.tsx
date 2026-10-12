@@ -21,7 +21,7 @@ export function Header() {
 
   return (
     <header className={`ground-header brand-material sticky top-0 z-30 border-b border-brand-cream/20 ${scrolled ? "is-scrolled" : ""}`}>
-      <Container className={`flex items-center justify-between gap-3 transition-[min-height] duration-300 ${scrolled ? "min-h-19" : "min-h-22"}`}>
+      <Container className="flex min-h-22 items-center justify-between gap-3">
         
         <Link
           href="/"

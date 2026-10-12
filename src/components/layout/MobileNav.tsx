@@ -55,7 +55,7 @@ export function MobileNav() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-ink/15 py-4 text-2xl font-medium tracking-tight text-ink hover:text-brand-primary"
+                className="border-b border-ink/15 py-4 text-2xl font-normal tracking-[-.015em] text-ink hover:text-brand-primary"
               >
                 {t(item.translationKey)}
               </Link>

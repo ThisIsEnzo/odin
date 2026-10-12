@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "Катайтесь. Исследуйте. Отдыхайте. Ешьте.",
-    "openDaily": "Ресторан открыт ежедневно {hours}",
+    "openDaily": "Ежедневно · {hours}",
     "navigationHeading": "Разделы",
     "contactHeading": "Контакты",
     "languageHeading": "Язык",
@@ -124,7 +124,7 @@
   "restaurant": {
     "title": "Ресторан",
     "description": "Часы работы ресторана указаны ниже. Подробности меню появятся позже.",
-    "hoursLabel": "Часы работы",
+    "hoursLabel": "Ежедневно",
     "avgSpendLabel": "Средний чек",
     "menuComingSoon": "Полное меню появится позже.",
     "cta": "Спланировать визит"

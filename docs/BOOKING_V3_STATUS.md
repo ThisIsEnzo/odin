@@ -113,3 +113,41 @@ limit. All available recovered files were Git-blob hash checked; the unavailable
 photos are preserved unchanged through the original remote base tree. Screenshots
 verify typography/layout/official logo assets, not complete photography rendering.
 Google Maps content and physical devices/Safari/Firefox were not certified.
+
+
+## Hospitality navigation, hours and transparent app icons — 2026-10-12
+
+Follow-up based on remote `51e8932c413742a99f72804e92ae3b9d5acae1f2`.
+Restaurant and Footer now say `Open daily · 07:00–23:00`, with natural
+RU (`Ежедневно`), TH (`เปิดทุกวัน`) and ZH (`每日营业`) equivalents. Canonical
+operating hours are unchanged.
+
+Desktop navigation is 17px/400 with restrained tracking, balanced gaps and
+cream text on the existing deep terracotta token. Hover/press changes text tone
+only: no filled boxes, tabs, pills or underline. The language selector is a
+secondary 14px control with a quiet bottom rule; cream Book CTA and accessible
+keyboard focus remain. Header height stays constant while scrolling; mobile
+navigation uses the same calmer weight. Item order, destinations and architecture
+are unchanged. Official wordmark/emblem geometry and textured surfaces remain.
+
+`src/app/favicon.ico`, `icon.png` and `apple-icon.png` replace all three active
+opaque icons with transparent official horse derivatives. ICO contains 16/32/48px;
+app icon is 32px and Apple icon 180px. Reusable 16/32/48/192/512 PNG derivatives
+are in `public/images/brand/icons/`. `scripts/prepare_brand_icons.py` reproducibly
+uses the official transparent relief source, preserves aspect ratio, resamples
+premultiplied alpha and carries a restrained earth shadow for light surfaces.
+No generic horse, tint, white halo or opaque background. Existing Next file-based
+metadata automatically serves cache-versioned icon URLs; no manifest exists and
+unrelated metadata is unchanged.
+
+Validation: 252 tests, typecheck, production build, 324-key translation parity
+and diff whitespace check pass. Clean headless Chromium 153 checks all seven
+requested widths in EN/RU/TH/ZH (28 combinations): no horizontal overflow,
+logo/nav/actions collisions, header-height shift or menu overflow. Hover has no
+filled background/underline and keyboard focus remains visible. Browser requests
+for all three emitted metadata icon URLs return bytes matching the new source
+icons exactly. Actual served favicon and small derivatives render at native sizes
+on light/dark chrome-like surfaces; alpha corners are transparent with smooth
+intermediate coverage. Native browser tab-strip chrome itself was not visually
+inspectable in this headless environment; no claim of a headful tab screenshot.
+Previous full-photography/iframe and inherited lint/PR-conflict limits still apply.

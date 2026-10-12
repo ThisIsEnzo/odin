@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "骑马。探索。放松。用餐。",
-    "openDaily": "餐厅每日营业 {hours}",
+    "openDaily": "每日营业 · {hours}",
     "navigationHeading": "浏览",
     "contactHeading": "联系方式",
     "languageHeading": "语言",
@@ -124,7 +124,7 @@
   "restaurant": {
     "title": "餐厅",
     "description": "餐厅营业时间见下方，菜单详情即将公布。",
-    "hoursLabel": "营业时间",
+    "hoursLabel": "每日营业",
     "avgSpendLabel": "人均消费",
     "menuComingSoon": "完整菜单详情即将公布。",
     "cta": "规划您的行程"

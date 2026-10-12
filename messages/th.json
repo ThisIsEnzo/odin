@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "ขี่ม้า ผจญภัย พักผ่อน รับประทานอาหาร",
-    "openDaily": "ร้านอาหารเปิดทุกวัน {hours}",
+    "openDaily": "เปิดทุกวัน · {hours}",
     "navigationHeading": "สำรวจ",
     "contactHeading": "ติดต่อ",
     "languageHeading": "ภาษา",
@@ -124,7 +124,7 @@
   "restaurant": {
     "title": "ร้านอาหาร",
     "description": "ดูเวลาเปิดร้านอาหารได้ด้านล่าง รายละเอียดเมนูจะมาเร็ว ๆ นี้",
-    "hoursLabel": "เวลาทำการ",
+    "hoursLabel": "เปิดทุกวัน",
     "avgSpendLabel": "ค่าใช้จ่ายเฉลี่ย",
     "menuComingSoon": "รายละเอียดเมนูฉบับเต็มจะแจ้งให้ทราบเร็วๆ นี้",
     "cta": "วางแผนการมาเยือน"

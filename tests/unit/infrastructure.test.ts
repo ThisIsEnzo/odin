@@ -53,4 +53,4 @@ describe('internal endpoint',()=>{
  it('rejects unauthenticated calls before opening database',async()=>{const {POST}=await import('@/app/api/internal/notifications/process/route');expect((await POST(new Request('http://localhost/api/internal/notifications/process',{method:'POST'}))).status).toBe(401);});
 });
 
-function requestDraft():BookingRequestDraft {return {schemaVersion:3,visitDate:new Date(Date.now()+5*86400000).toISOString().slice(0,10),preferredStartTime:"10:00",customer:{fullName:"Test Only",email:"qa@example.com",phone:"+66000000000"},activities:[{activityId:"atv",guestCount:5,unitCount:3}],locale:"en"};}
+function requestDraft():BookingRequestDraft {return {schemaVersion:3,visitDate:new Date(Date.now()+5*86400000).toISOString().slice(0,10),preferredStartTime:"10:00",customer:{fullName:"Test Only",email:"qa@example.com",phone:"+66000000000"},activities:[{activityId:"atv",durationMinutes:30,guestCount:5,unitCount:3}],locale:"en"};}

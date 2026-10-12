@@ -1,4 +1,6 @@
 # Booking V3 — simplified request flow
+> Updated package/pricing behavior: see [PACKAGE_PRICING_STATUS.md](PACKAGE_PRICING_STATUS.md). Confirmed Horse/Pony/ATV tiers and real V3 package selection supersede earlier statements that all prices/packages are mock or excluded. Fixed package prices, package durations and Sauna billing basis remain pending.
+
 
 The public flow is one visit/contact/activity form → Review → Send booking request → Request received. It is a hospitality request, not checkout or instant confirmation. Global visit date and arrival preference apply to the whole visit. Count-based canonical activity selections, approved duration tiers and explicit price quantity bases determine estimates. Historical V2 records retain their original meaning.
 

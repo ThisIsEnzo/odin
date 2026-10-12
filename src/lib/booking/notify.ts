@@ -22,6 +22,17 @@ export function buildBookingNotificationPayload(booking: StoredBookingRequest): 
   if (booking.schemaVersion === 3) {
     lines.push(`Visit date: ${booking.visitDate}`, `Preferred arrival time: ${booking.preferredStartTime} Asia/Bangkok`, "Exact activity timing will be confirmed by our manager.");
     const textAt = (key: string) => key.split('.').reduce<unknown>((value, part) => value && typeof value==='object' ? (value as Record<string,unknown>)[part] : undefined, messages);
+    for(const pack of booking.estimate.packages??[]) {
+      const title=textAt(`${pack.translationNamespace}.title`);
+      lines.push(`Package: ${typeof title==='string'?title:pack.packageId}`,`Package ID: ${pack.packageId}`,`Pricing model: ${pack.pricingMode}`);
+      for(const component of pack.components) {
+        const activity=experiences.find(e=>e.id===component.activityId);
+        const name=activity?textAt(`${activity.translationNamespace}.title`):component.activityId;
+        lines.push(`Included: ${name}`,`Guests: ${component.guestCount}`,`Duration: ${component.durationMinutes===undefined?'manager to confirm':`${component.durationMinutes} minutes`}`);
+        if(component.unitCount!==undefined)lines.push(`ATVs: ${component.unitCount}`);
+      }
+      lines.push(`Package subtotal: ${pack.amount===null?'manager to confirm':`${pack.amount} THB`}`);
+    }
     booking.activities.forEach((selection, index) => {
       const activity = experiences.find(e => e.id === selection.activityId);
       const title = activity ? textAt(`${activity.translationNamespace}.title`) : undefined;
@@ -46,7 +57,10 @@ export function buildBookingNotificationPayload(booking: StoredBookingRequest): 
     }
   });
   if (booking.estimate) {
-    for (const line of booking.estimate.items) lines.push(`Estimate ${line.itemId}: ${line.amount === null ? "manager to confirm" : `${line.amount} THB`}${line.unitAmount === undefined ? "" : ` (${line.unitAmount} THB/${line.unit} × ${line.quantity})`}`);
+    for (const line of booking.estimate.items) {if(line.occupancy)lines.push(`ATV occupancy: ${line.occupancy.shared} shared × ${line.occupancy.sharedAmount} THB + ${line.occupancy.solo} solo × ${line.occupancy.soloAmount} THB`);lines.push(`Estimate ${line.itemId}: ${line.amount === null ? "manager to confirm" : `${line.amount} THB`}${line.unitAmount === undefined ? "" : ` (${line.unitAmount} THB/${line.unit} × ${line.quantity})`}`);}
+    for(const discount of booking.estimate.packageDiscounts??[]) {
+      lines.push(`Package discount: ${discount.benefit.type==='percentage'?`${discount.benefit.basisPoints/100}%`:discount.labels.en}`,`Package discount ID: ${discount.id}; status: ${discount.status}`,`Package deduction: ${discount.discountAmount===null?'manager to confirm':`−${discount.discountAmount} THB`}`);
+    }
     if (booking.estimate.promotions) {
       // Presentation only: use frozen results, never evaluate config/eligibility here.
       const snapshot = booking.estimate.promotions;

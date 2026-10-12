@@ -17,7 +17,7 @@ function futureDate(daysFromNow: number): string {
 // Existing behavioral cases expressed in V2 structure. Test-only fixture adapter.
 const bookingSchema={safeParse(input:{experienceId:string;date:string;time:string;guests:number;weightKg?:number;customer:typeof validCustomer;locale:string;company?:string}) {
  const {experienceId,date,time,guests,weightKg,customer,locale,company}=input;
- return v2Schema.safeParse({schemaVersion:2,items:[{id:"item-1",type:"activity",experienceId,date,time,participants:Array.from({length:guests},(_,i)=>({id:`guest-${i}`,weightKg})),options:[]}],customer,locale,company});
+ return v2Schema.safeParse({schemaVersion:2,items:[{id:"item-1",type:"activity",experienceId,date,time,durationMinutes:experienceId==="atv"?30:60,participants:Array.from({length:guests},(_,i)=>({id:`guest-${i}`,weightKg})),options:[]}],customer,locale,company});
 }};
 describe("bookingSchema", () => {
   it("accepts a valid horse-riding booking", () => {

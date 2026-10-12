@@ -1,4 +1,6 @@
 # ON GROUND — Booking request rules
+> Updated package/pricing behavior: see [PACKAGE_PRICING_STATUS.md](PACKAGE_PRICING_STATUS.md). Confirmed Horse/Pony/ATV tiers and real V3 package selection supersede earlier statements that all prices/packages are mock or excluded. Fixed package prices, package durations and Sauna billing basis remain pending.
+
 
 The public flow is Booking V3: one form → Review → Send booking request → Request received. A request never reserves availability or confirms a booking/payment.
 

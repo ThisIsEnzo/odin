@@ -1,12 +1,13 @@
 import {sql} from 'drizzle-orm';
 import {pgTable,uuid,text,integer,timestamp,jsonb,uniqueIndex,unique,index,check,foreignKey,doublePrecision} from 'drizzle-orm/pg-core';
-import type {BookingEstimate} from '@/types/domain';
+import type {BookingEstimate,BookingPackageSelection} from '@/types/domain';
 import type {BookingNotificationPayload} from '../booking/notify';
 import type {DeliveryPlan} from '../booking/outbox/plan';
 const stamp=(name:string)=>timestamp(name,{withTimezone:true,mode:'date'});
 export const bookings=pgTable('bookings',{
  id:uuid('id').primaryKey(),reference:text('reference').notNull().unique(),status:text('status').notNull().default('received'),
  estimate:jsonb('estimate').$type<BookingEstimate>(),
+ requestPackages:jsonb('request_packages').$type<BookingPackageSelection[]>(),
  schemaVersion:integer('schema_version').notNull().default(2),locale:text('locale').notNull(),
  visitDate:text('visit_date'),preferredStartTime:text('preferred_start_time'),
  customerName:text('customer_name').notNull(),email:text('email').notNull(),phone:text('phone').notNull(),

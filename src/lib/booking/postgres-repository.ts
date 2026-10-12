@@ -25,7 +25,7 @@ export class PostgresBookingRepository implements BookingRepository {
    const estimate=draft.schemaVersion===3?calculateRequestEstimate(draft,undefined,createdAt):calculateBookingEstimate(draft.items);
    const customerName=draft.schemaVersion===3?draft.customer.fullName:draft.customer.name;
    const legacyCustomer=draft.schemaVersion===2?draft.customer:undefined;
-   const inserted=await tx.insert(s.bookings).values({id,reference,estimate,status:'received',schemaVersion:draft.schemaVersion,visitDate:draft.schemaVersion===3?draft.visitDate:null,preferredStartTime:draft.schemaVersion===3?draft.preferredStartTime:null,locale:draft.locale,customerName,email:draft.customer.email,phone:draft.customer.phone,preferredChannel:legacyCustomer?.preferredChannel,channelIdentity:legacyCustomer?.channelIdentity,notes:draft.notes,idempotencyKey:key,requestHash:hash,createdAt,updatedAt:createdAt}).onConflictDoNothing({target:s.bookings.idempotencyKey}).returning({id:s.bookings.id});
+   const inserted=await tx.insert(s.bookings).values({id,reference,estimate,requestPackages:draft.schemaVersion===3?draft.packages??[]:null,status:'received',schemaVersion:draft.schemaVersion,visitDate:draft.schemaVersion===3?draft.visitDate:null,preferredStartTime:draft.schemaVersion===3?draft.preferredStartTime:null,locale:draft.locale,customerName,email:draft.customer.email,phone:draft.customer.phone,preferredChannel:legacyCustomer?.preferredChannel,channelIdentity:legacyCustomer?.channelIdentity,notes:draft.notes,idempotencyKey:key,requestHash:hash,createdAt,updatedAt:createdAt}).onConflictDoNothing({target:s.bookings.idempotencyKey}).returning({id:s.bookings.id});
    if(!inserted.length){const [existing]=await tx.select().from(s.bookings).where(eq(s.bookings.idempotencyKey,key));if(!existing||existing.requestHash!==hash)throw new IdempotencyConflict();return (await this.read(tx,existing.id))!;}
    const insertItem=async(item:BookingItem,position:number,parentId?:string)=>{
     const rowId=randomUUID();
@@ -35,7 +35,7 @@ export class PostgresBookingRepository implements BookingRepository {
     if(item.type==='package')for(const [i,c] of item.components.entries())await insertItem(c,i,rowId);
    };
    if(draft.schemaVersion===3){
-    await tx.insert(s.bookingRequestActivities).values(draft.activities.map((activity,position)=>({id:randomUUID(),bookingId:id,position,...activity})));
+    if(draft.activities.length)await tx.insert(s.bookingRequestActivities).values(draft.activities.map((activity,position)=>({id:randomUUID(),bookingId:id,position,...activity})));
    }else for(const [i,item] of draft.items.entries())await insertItem(item,i);
    // Render staff payload only after request + authoritative snapshot are stored.
    // Read back inside the same transaction; outbox and delivery plans commit atomically.
@@ -54,7 +54,7 @@ export class PostgresBookingRepository implements BookingRepository {
   if(b.schemaVersion===3){
    const activities=await db.select().from(s.bookingRequestActivities).where(eq(s.bookingRequestActivities.bookingId,id)).orderBy(asc(s.bookingRequestActivities.position));
    if(!b.visitDate||!b.preferredStartTime||!b.estimate)throw new Error('Invalid stored V3 request');
-   return {schemaVersion:3,id:b.id,reference:b.reference,status:b.status as BookingRequestV3['status'],createdAt:b.createdAt.toISOString(),locale:b.locale as Locale,visitDate:b.visitDate,preferredStartTime:b.preferredStartTime,customer:{fullName:b.customerName,email:b.email,phone:b.phone},...(b.notes===null?{}:{notes:b.notes}),estimate:b.estimate,activities:activities.map(a=>({activityId:a.activityId,guestCount:a.guestCount,...(a.durationMinutes===null?{}:{durationMinutes:a.durationMinutes}),...(a.unitCount===null?{}:{unitCount:a.unitCount})}))};
+   return {schemaVersion:3,id:b.id,reference:b.reference,status:b.status as BookingRequestV3['status'],createdAt:b.createdAt.toISOString(),locale:b.locale as Locale,visitDate:b.visitDate,preferredStartTime:b.preferredStartTime,customer:{fullName:b.customerName,email:b.email,phone:b.phone},...(b.notes===null?{}:{notes:b.notes}),estimate:b.estimate,...(b.requestPackages?.length?{packages:b.requestPackages}:{}),activities:activities.map(a=>({activityId:a.activityId,guestCount:a.guestCount,...(a.durationMinutes===null?{}:{durationMinutes:a.durationMinutes}),...(a.unitCount===null?{}:{unitCount:a.unitCount})}))};
   }
   if(b.schemaVersion!==2)throw new Error('Unsupported stored booking version');
   const rows=await db.select().from(s.bookingItems).where(eq(s.bookingItems.bookingId,id)).orderBy(asc(s.bookingItems.position));

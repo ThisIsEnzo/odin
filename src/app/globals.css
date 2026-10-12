@@ -600,3 +600,13 @@ textarea.form-control { resize: vertical; }
   .language-select:focus-visible, .ground-header nav .ground-nav-link:focus-visible { outline-color: Highlight; }
   .request-promotions, .request-total { border: 1px solid CanvasText; }
 }
+
+.request-package {border:1px solid var(--color-ink); border-color: color-mix(in srgb, var(--color-ink) 15%, transparent);border-radius:4px; min-width:0;}
+.request-package.is-included {border-color:var(--color-brand-primary);}
+.request-package-heading {margin:2rem 0 1rem;font-size:1.5rem;}
+.request-package-components {list-style:none; padding:0;display:grid;gap:1rem;margin:1.5rem 0;}
+.request-package-components p {font-size:.875rem;margin:.25rem 0;}
+.request-package-components label {display:grid;gap:.4rem;font-size:.875rem;}
+.request-package-included {font-size:.875rem;color:var(--color-brand-primary);margin-top:1rem;}
+.request-package-discount {margin:1rem 0;}
+.request-package-discount>div {display:flex;justify-content:space-between;gap:1rem;}

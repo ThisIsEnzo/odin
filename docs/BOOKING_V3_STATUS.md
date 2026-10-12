@@ -1,4 +1,6 @@
 # ON GROUND — Simplified booking request V3
+> Updated package/pricing behavior: see [PACKAGE_PRICING_STATUS.md](PACKAGE_PRICING_STATUS.md). Confirmed Horse/Pony/ATV tiers and real V3 package selection supersede earlier statements that all prices/packages are mock or excluded. Fixed package prices, package durations and Sauna billing basis remain pending.
+
 
 ## Delivery
 

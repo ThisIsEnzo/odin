@@ -24,6 +24,7 @@ export function RequestActivityCard({activity, selection, onChange, error, price
   const all = useTranslations(), t = useTranslations("booking.v3"), p = useTranslations("booking.pricing");
   const addButton = useRef<HTMLButtonElement>(null);
   const name = all(`${activity.translationNamespace}.title`), prefix = `activity-${activity.id}`;
+  const packages = useTranslations("booking.packages");
   const capacity = activity.booking?.model === "capacity_unit" ? activity.booking : undefined;
   const bounds = selection && capacity ? unitBounds(selection.guestCount, capacity.maxGuestsPerUnit) : undefined;
   const tiers = activity.durationOptions ?? [];
@@ -40,7 +41,7 @@ export function RequestActivityCard({activity, selection, onChange, error, price
           {capacity && bounds && <CountControl id={`${prefix}-units`} label={all(capacity.unitTranslationKey)} value={selection.unitCount ?? bounds.min} min={bounds.min} max={bounds.max} context={name}
             onChange={unitCount => onChange({...selection, unitCount})}/>}
         </div>
-        {capacity && <p className="request-capacity">{t("capacitySummary", {guests: selection.guestCount, units: selection.unitCount ?? 1, label: all(capacity.unitTranslationKey)})}<br/>{t("capacityHelp", {max: capacity.maxGuestsPerUnit})}</p>}
+        {capacity && <p className="request-capacity">{t("capacitySummary", {guests: selection.guestCount, units: selection.unitCount ?? 1, label: all(capacity.unitTranslationKey)})}<br/>{t("capacityHelp", {max: capacity.maxGuestsPerUnit})}{capacity.maxGuestsPerUnit===2 && <><br/>{packages("shared")}: {selection!.guestCount-(selection!.unitCount??1)} · {packages("solo")}: {2*(selection!.unitCount??1)-selection!.guestCount}</>}</p>}
         <fieldset className="request-durations" aria-describedby={error("durationMinutes") ? `${prefix}-duration-error` : undefined}><legend>{p("duration")}</legend>
           {tiers.length ? <div>{tiers.map(tier => <button key={tier.durationMinutes} type="button" aria-pressed={selection.durationMinutes === tier.durationMinutes}
             onClick={() => onChange({...selection, durationMinutes: tier.durationMinutes})}>{p("minutes", {count: tier.durationMinutes})}</button>)}</div> : <p className="request-pending">{p("pending")}</p>}

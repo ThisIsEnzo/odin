@@ -131,23 +131,27 @@
   },
   "packages": {
     "heading": "套餐",
-    "intro": "几种将 ON GROUND 体验项目组合成一天行程的方式。",
+    "intro": "选择乡野体验套餐。套餐价格与活动安排由经理确认。",
     "includesRestaurant": "含餐厅用餐",
-    "mockNote": "套餐内容和价格仅为示例，尚待确认。",
-    "cta": "安排到访",
+    "mockNote": "套餐价格与安排由经理确认。",
+    "cta": "选择套餐",
     "familyDay": {
       "title": "家庭日",
       "description": "适合全家人的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
     },
     "adventureDay": {
-      "title": "探险日",
-      "description": "越野车探索之后，在我们餐厅享用美食。"
+      "title": "冒险一日游",
+      "description": "骑ATV和骑马，探索乡野风光。"
     },
     "coupleEscape": {
-      "title": "情侣度假",
-      "description": "骑马、桑拿，以及一顿双人晚餐。"
+      "title": "双人度假",
+      "description": "两位骑手的骑马体验，加桑拿。桑拿人数及安排由经理确认。"
     },
-    "pricePending": "由经理确认"
+    "pricePending": "由经理确认",
+    "allInclusive": {
+      "title": "全包套餐",
+      "description": "一次乡野之旅，体验骑马、ATV与桑拿。"
+    }
   },
   "gallery": {
     "heading": "图库",
@@ -415,7 +419,7 @@
       "edit": "修改申请",
       "send": "发送预订申请",
       "sending": "正在发送申请…",
-      "selectionCount": "已选择 {count} 项体验",
+      "selectionCount": "已选择 {count} 个项目",
       "noneSelected": "请至少选择一项体验",
       "guestSummary": "{count} 位参加者",
       "requestNotice": "这是预订申请。可用名额、具体时间及最终价格将由我们的经理与您确认。",
@@ -431,6 +435,11 @@
       "subtotal": "优惠前小计",
       "applied": "已应用优惠",
       "eligible": "符合优惠条件 · 金额由经理确认"
+    },
+    "packages": {
+      "subtotal": "套餐小计",
+      "shared": "双人同乘",
+      "solo": "单人驾驶"
     }
   }
 }

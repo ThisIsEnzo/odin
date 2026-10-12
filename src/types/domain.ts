@@ -51,7 +51,8 @@ export interface DurationOption {
   durationMinutes: number;
   price: Money;
   /** Explicit billing quantity: never infer vehicles/groups from guest count. */
-  quantityBasis: "participant" | "booking" | "unit";
+  quantityBasis: "participant" | "booking" | "unit" | "occupancy" | "pending";
+  sharedPrice?: Money;
 }
 export interface EstimateLine {
   itemId: string;
@@ -59,6 +60,7 @@ export interface EstimateLine {
   /** Exact THB minor units on V3; legacy lines need not have this field. */
   amountMinor?: number | null;
   durationMinutes?: number;
+  occupancy?: {solo: number; shared: number; soloAmount: number; sharedAmount: number};
   unitAmount?: number;
   quantity?: number;
   unit?: PricingUnit;
@@ -70,6 +72,8 @@ export interface BookingEstimate {
   currency: Currency;
   amount: number | null;
   items: EstimateLine[];
+  packages?: PackageEstimateLine[];
+  packageDiscounts?: import("@/lib/booking/promotions").AppliedPromotion[];
 }
 export interface Experience {
   id: ExperienceId;
@@ -95,7 +99,15 @@ export interface Experience {
   };
 }
 
+export interface PackageComponent { activityId: ExperienceId; guestCount: number; unitCount?: number; durationMinutes?: number }
+export interface BookingPackageSelection { packageId: string; components: BookingActivitySelection[] }
+export interface PackageEstimateLine extends EstimateLine { packageId: string; translationNamespace: string; pricingMode: "fixed" | "sum_components"; components: (BookingActivitySelection & {amount: number | null})[] }
 export interface Package {
+  components?: PackageComponent[];
+  pricingMode?: "fixed" | "sum_components";
+  discountPercent?: number | null;
+  discountStacking?: "STACKABLE" | "EXCLUSIVE" | "BEST_ONLY";
+  discountStackingGroup?: string;
   id: string;
   slug: string;
   translationNamespace: string;
@@ -214,6 +226,7 @@ export interface BookingRequestDraft {
   preferredStartTime: string;
   customer: { fullName: string; email: string; phone: string };
   activities: BookingActivitySelection[];
+  packages?: BookingPackageSelection[];
   notes?: string;
   locale: Locale;
 }

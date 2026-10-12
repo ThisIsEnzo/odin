@@ -1,9 +1,11 @@
 "use client";
 import {useRef, useState} from "react";
 import {useTranslations} from "next-intl";
+import {packages} from "@/data/odin/packages";
+import {RequestPackageCard} from "./RequestPackageCard";
 import {bookableExperiences} from "@/data/odin/experiences";
 import type {BookingActivitySelection, BookingRequestDraft, ExperienceId, Locale} from "@/types/domain";
-import {bookingRequestSchema, calculateRequestEstimate, createSelection} from "@/lib/booking/request";
+import {bookingRequestSchema, calculateRequestEstimate, createSelection, createPackageSelection} from "@/lib/booking/request";
 import {maxBookingDate, thailandToday} from "@/lib/booking/rules";
 import {collectFieldErrors, type FieldErrorEntry} from "@/lib/validation/booking.schema";
 import {buttonVariants} from "@/components/ui/Button";
@@ -16,7 +18,7 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
   const t = useTranslations("booking.v3"), all = useTranslations(), p = useTranslations("booking.pricing"), te = useTranslations("booking.errors");
   const catalog = bookableExperiences();
   const [draft, setDraft] = useState<BookingRequestDraft>(() => ({schemaVersion: 3, visitDate: "", preferredStartTime: "", customer: {fullName: "", email: "", phone: ""}, locale,
-    activities: catalog.filter(e => e.id === initialExperienceId).map(createSelection), notes: ""}));
+    activities: catalog.filter(e => e.id === initialExperienceId).map(createSelection), packages: packages.filter(p=>p.id===contextPackageId).map(createPackageSelection), notes: ""}));
   const [review, setReview] = useState(false), [received, setReceived] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, FieldErrorEntry>>({}), [failure, setFailure] = useState("");
   const [company, setCompany] = useState(""), [busy, setBusy] = useState(false), [notice, setNotice] = useState("");
@@ -58,6 +60,7 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
     finally {submitting.current = false; setBusy(false);}
   }
   function errorTarget(path: string) {
+    if (path.startsWith("packages")) return "request-choices";
     if (path.startsWith("activities.")) return `activity-${draft.activities[Number(path.split(".")[1])]?.activityId ?? "choices"}`;
     return path === "activities" ? "request-choices" : `request-${path.replace("customer.", "")}`;
   }
@@ -92,27 +95,29 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
           <div className="request-contact-fields">{input("fullName", t("fullName"), "text", "name")}{input("email", t("email"), "email", "email")}{input("phone", t("phone"), "tel", "tel")}</div>
         </section>
         <section className="request-section" id="request-choices" tabIndex={-1} aria-labelledby="request-choices-title"><div className="request-section-heading"><span aria-hidden="true">02</span><h2 id="request-choices-title">{t("choicesTitle")}</h2></div>
-          <p className="request-help">{t("choicesHelp")}</p>{contextPackageId && <p className="request-package-note">{t("packageNote")}</p>}
+          <p className="request-help">{t("choicesHelp")}</p>
           {message("activities") && <p className="request-field-error">{message("activities")}</p>}
           <div className="request-card-grid">{catalog.map(activity => {
             const index = draft.activities.findIndex(a => a.activityId === activity.id), selection = draft.activities[index];
             return <RequestActivityCard key={activity.id} activity={activity} selection={selection} onChange={value => select(activity.id, value)}
               error={field => message(`activities.${index}.${field}`)} price={money(estimate.items.find(item => item.itemId === activity.id)?.amount ?? null)}/>;
           })}</div>
-          {draft.activities.length > 0 && <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} locale={locale} money={money}/>}
+          <h3 className="request-package-heading">{all("packages.heading")}</h3>
+          <div className="request-card-grid">{packages.map(pack=><RequestPackageCard key={pack.id} pack={pack} selection={draft.packages?.find(s=>s.packageId===pack.id)} price={money(estimate.packages?.find(s=>s.packageId===pack.id)?.amount??null)} onChange={value=>change({packages:packages.flatMap(p=>{const chosen=p.id===pack.id?value:draft.packages?.find(s=>s.packageId===p.id);return chosen?[chosen]:[];})})}/>)}</div>
+          {(draft.activities.length > 0 || !!draft.packages?.length) && <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} packageDiscounts={estimate.packageDiscounts} locale={locale} money={money}/>}
         </section>
         <section className="request-section request-notes"><label htmlFor="request-notes">{t("notes")}</label><span>{t("optional")}</span>
           <textarea className="request-input" id="request-notes" name="notes" rows={4} maxLength={500} value={draft.notes ?? ""} aria-invalid={!!message("notes")} onChange={e => change({notes: e.target.value})}/>
           {message("notes") && <p className="request-field-error">{message("notes")}</p>}
         </section>
         <div className="sr-only" aria-hidden="true"><label htmlFor="request-company">Company</label><input id="request-company" name="company" tabIndex={-1} autoComplete="off" value={company} onChange={e => setCompany(e.target.value)}/></div>
-        <div className="request-actions"><p>{draft.activities.length ? t("selectionCount", {count: draft.activities.length}) : t("noneSelected")}</p><button type="submit" className={buttonVariants({variant: "primary", size: "lg"})}>{t("review")} <span aria-hidden="true">→</span></button></div>
+        <div className="request-actions"><p>{(draft.activities.length + (draft.packages?.length??0)) ? t("selectionCount", {count: draft.activities.length + (draft.packages?.length??0)}) : t("noneSelected")}</p><button type="submit" className={buttonVariants({variant: "primary", size: "lg"})}>{t("review")} <span aria-hidden="true">→</span></button></div>
         <p className="request-disclaimer">{t("requestNotice")}</p>
       </fieldset>
     </form> : <div className="request-review">
       <section className="request-section"><h2>{t("visitTitle")}</h2><dl className="request-review-details"><div><dt>{t("date")}</dt><dd>{date(draft.visitDate)}</dd></div><div><dt>{t("time")}</dt><dd>{draft.preferredStartTime}</dd></div></dl><p className="request-help">{t("timeHelp")}</p></section>
       <section className="request-section"><h2>{t("contactTitle")}</h2><dl className="request-review-details"><div><dt>{t("fullName")}</dt><dd>{draft.customer.fullName}</dd></div><div><dt>{t("email")}</dt><dd>{draft.customer.email}</dd></div><div><dt>{t("phone")}</dt><dd>{draft.customer.phone}</dd></div></dl></section>
-      <section className="request-section"><h2>{t("experiencesTitle")}</h2>{draft.activities.map((selection, index) => {
+      {draft.activities.length > 0 && <section className="request-section"><h2>{t("experiencesTitle")}</h2>{draft.activities.map((selection, index) => {
         const activity = catalog.find(e => e.id === selection.activityId)!;
         return <article className="request-review-activity" key={activity.id}><span className="request-review-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><div><h3>{all(`${activity.translationNamespace}.title`)}</h3>
           <p>{t("guestSummary", {count: selection.guestCount})} · {duration(selection.durationMinutes)}</p>
@@ -120,9 +125,13 @@ export function BookingFlow({locale, initialExperienceId, contextPackageId}: Boo
           {activity.restrictions.maxWeightKg !== undefined && <p className="request-review-restriction">{t("maxWeight")}: {activity.restrictions.maxWeightKg} {t("kg")}</p>}
           <p className="request-line-price"><span>{p("subtotal")}</span><strong>{money(estimate.items[index]?.amount ?? null)}</strong></p>
         </div></article>;
-      })}</section>
+      })}</section>}
+      {estimate.packages?.map(pack=><section className="request-section request-review-package" key={pack.packageId}><h2>{all(`${pack.translationNamespace}.title`)}</h2>
+        {pack.components.map(component=><div className="request-review-activity" key={component.activityId}><div><h3>{all(`${catalog.find(e=>e.id===component.activityId)!.translationNamespace}.title`)}</h3><p>{t("guestSummary",{count:component.guestCount})} · {duration(component.durationMinutes)}</p>{component.unitCount!==undefined && <p>{all("booking.units.atv")}: {component.unitCount}</p>}</div></div>)}
+        <p className="request-line-price"><span>{all("booking.packages.subtotal")}</span><strong>{money(pack.amount)}</strong></p>
+      </section>)}
       {draft.notes && <section className="request-section"><h2>{t("notesTitle")}</h2><p className="request-review-notes">{draft.notes}</p></section>}
-      <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} locale={locale} money={money} review/>
+      <RequestEstimate amount={estimate.amount} snapshot={estimate.promotions} packageDiscounts={estimate.packageDiscounts} locale={locale} money={money} review/>
       {failure && <p role="alert" className="request-errors">{failure}</p>}
       <div className="request-actions"><button type="button" disabled={busy} className="request-edit" onClick={edit}>← {t("edit")}</button><button type="button" disabled={busy} aria-busy={busy} onClick={submit} className={buttonVariants({variant: "primary", size: "lg"})}>{busy ? t("sending") : t("send")} <span aria-hidden="true">→</span></button></div>
       <p className="request-disclaimer">{t("requestNotice")}</p>

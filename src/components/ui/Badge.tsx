@@ -3,13 +3,12 @@ import { cn } from "@/lib/utils";
 
 export type BadgeVariant = "moss" | "saddle" | "dusk" | "terracotta" | "outline";
 
+// Light, legible chips (they sit on dark photography in the showcase). Each
+// variant is visually distinct while staying inside the approved brand.
 const variants: Record<BadgeVariant, string> = {
-  moss: "bg-brand-cream text-ink",
-  saddle: "bg-brand-cream text-ink",
-  dusk: "bg-brand-cream text-ink",
-  // PHASE 4 FINALIZATION — new brand accent (see globals.css). Additive
-  // only: existing variants/usages are unchanged, this is available for a
-  // future "featured"/selected badge use, not applied anywhere by default.
+  moss: "bg-canvas-soft text-ink ring-1 ring-ink/5",
+  saddle: "bg-canvas text-brand-primary-active ring-1 ring-ink/5",
+  dusk: "bg-brand-cream text-ink ring-1 ring-ink/5",
   terracotta: "bg-brand-primary text-canvas",
   outline: "border border-ink/20 text-ink/80 bg-transparent",
 };
@@ -22,7 +21,7 @@ export function Badge({ variant = "outline", className, ...props }: BadgeProps) 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium tracking-wide",
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium tracking-wide shadow-sm shadow-ink/5",
         variants[variant],
         className,
       )}

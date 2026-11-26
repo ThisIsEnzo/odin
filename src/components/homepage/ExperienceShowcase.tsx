@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,6 @@ function toCamelCase(id: string): string {
   return id.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
 }
 
-
 const experienceImages: Partial<Record<string, { src: string; focus: string }>> = {
   "horse-riding": { src: "/images/experiences/odin-horse.jpg", focus: "50% 35%" },
   "pony-riding": { src: "/images/experiences/odin-pony.jpg", focus: "50% 40%" },
@@ -28,11 +27,25 @@ const experienceImages: Partial<Record<string, { src: string; focus: string }>> 
   sauna: { src: "/images/experiences/odin-sauna.jpg", focus: "55% 55%" },
 };
 
-
 export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const tExperiences = useTranslations("experiences");
   const tExperienceCard = useTranslations("experienceCard");
+  const tHome = useTranslations("home");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function onTabKeyDown(event: React.KeyboardEvent, index: number) {
+    const last = experiences.length - 1;
+    let next: number | null = null;
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") next = index === last ? 0 : index + 1;
+    else if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = index === 0 ? last : index - 1;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = last;
+    if (next === null) return;
+    event.preventDefault();
+    setActiveIndex(next);
+    tabRefs.current[next]?.focus();
+  }
 
   if (experiences.length === 0) {
     return null;
@@ -40,11 +53,11 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
 
   return (
     <>
-      
       <div className="hidden gap-3 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch lg:gap-8">
-      
       <div
-        aria-label={tExperienceCard("bookCta")}
+        role="tablist"
+        aria-label={tHome("experiencesHeading")}
+        aria-orientation="vertical"
         className={cn(
           "flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide",
           "lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0 lg:snap-none",
@@ -55,10 +68,15 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
           return (
             <button
               key={experience.id}
+              ref={(el) => { tabRefs.current[index] = el; }}
+              id={`desktop-tab-${experience.id}`}
+              role="tab"
               type="button"
               aria-controls={`desktop-experience-${experience.id}`}
-              aria-pressed={isActive}
+              aria-selected={isActive}
+              tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
+              onKeyDown={(e) => onTabKeyDown(e, index)}
               className={cn(
                 "flex items-center gap-4 shrink-0 border-b px-0 py-6 text-left text-xl font-medium",
                 "transition-colors duration-200",
@@ -74,7 +92,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
         })}
       </div>
 
-      
       <div className="surface-inverse relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-surface-dark">
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
@@ -86,6 +103,9 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
             <div
               key={experience.id}
               id={`desktop-experience-${experience.id}`}
+              role="tabpanel"
+              aria-labelledby={`desktop-tab-${experience.id}`}
+              tabIndex={0}
               aria-hidden={!isActive} inert={!isActive}
               className={cn(
                 "absolute inset-0 transition-opacity duration-[600ms] ease-out",
@@ -122,9 +142,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                 </div>
 
                 <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <Badge
-                    variant="dusk"
-                  >
+                  <Badge variant="dusk">
                     {tExperienceCard("hours", {
                       open: experience.operatingHours.open,
                       close: experience.operatingHours.close,
@@ -133,7 +151,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   {maxWeight ? (
                     <Badge variant="saddle">{tExperienceCard("maxWeight", { max: maxWeight })}</Badge>
                   ) : null}
-
                 </div>
 
                 <div className="experience-offer-inverse"><OfferFacts experience={experience}/></div>
@@ -154,7 +171,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       </div>
       </div>
 
-      
       <div className="lg:hidden">
         <div className="flex flex-col gap-2">
           {experiences.map((experience, index) => {
@@ -168,7 +184,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
             return (
               <div
                 key={experience.id}
-                // The selected experience uses the shared accessible brand accent.
                 className={cn(
                   "overflow-hidden border-t transition-colors duration-200",
                   isActive ? "border-brand-primary bg-canvas-soft" : "border-ink/10 bg-transparent",
@@ -202,7 +217,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   />
                 </button>
 
-                
                 <div
                   id={panelId}
                   role="region"
@@ -244,7 +258,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                             {tExperienceCard("maxWeight", { max: maxWeight })}
                           </Badge>
                         ) : null}
-
                       </div>
 
                       <OfferFacts experience={experience}/>

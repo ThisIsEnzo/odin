@@ -452,3 +452,31 @@ section[id] { scroll-margin-top: 7rem; }
   .language-select:focus-visible, .ground-header nav .ground-nav-link:focus-visible { outline-color: Highlight; }
   .request-promotions, .request-total { border: 1px solid CanvasText; }
 }
+
+/* "The Slow Country" cinematic motion layer */
+:root{--dur-fast:180ms;--dur-base:320ms;--dur-slow:640ms;--dur-cinematic:1100ms;--ease-soft:cubic-bezier(.33,1,.68,1)}
+.split-text{display:block}.split-word{display:inline-block}
+.split-armed .split-word{opacity:0;transform:translateY(.45em);transition:none}
+.split-armed.split-visible .split-word{opacity:1;transform:none;transition:opacity var(--dur-cinematic) var(--ease-out),transform var(--dur-cinematic) var(--ease-out)}
+.reveal.reveal-mask{opacity:0;transform:none;clip-path:inset(0 0 100% 0);transition:opacity var(--dur-slow) var(--ease-out),clip-path var(--dur-cinematic) var(--ease-out)}
+.reveal.reveal-mask.reveal-visible{opacity:1;clip-path:inset(0 0 0 0)}
+.hero-location-chip{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgb(255 255 255/.82);border:1px solid rgb(255 255 255/.28);border-radius:999px;padding:.4rem .9rem;backdrop-filter:blur(4px)}
+:lang(th) .hero-location-chip,:lang(zh) .hero-location-chip{letter-spacing:.02em}
+.hero-secondary-link{transition:border-color 200ms ease,color 200ms ease}
+.hero-scroll-line{display:block;width:1px;height:56px;position:relative;overflow:hidden;background:linear-gradient(to bottom,rgb(255 255 255/.55),transparent)}
+.hero-scroll-line::after{content:"";position:absolute;top:-45%;left:0;width:100%;height:45%;background:rgb(255 255 255/.95);animation:hero-scroll 2.4s var(--ease-in-out) infinite}
+@keyframes hero-scroll{0%{transform:translateY(0);opacity:0}30%{opacity:1}100%{transform:translateY(260%);opacity:0}}
+.ground-nav-link{position:relative}
+.ground-nav-link::after{content:"";position:absolute;left:.625rem;right:.625rem;bottom:.55rem;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 280ms var(--ease-out)}
+.ground-nav-link:hover::after,.ground-nav-link:focus-visible::after{transform:scaleX(1)}
+.scroll-scene{position:relative}
+.scroll-scene-frame{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center;justify-content:center;--scene-progress:0}
+.finale{background:var(--color-surface-deep);color:var(--color-canvas)}
+.finale-media{position:absolute;inset:0;transform-origin:center;will-change:transform;transform:scale(calc(1.05 + var(--scene-progress)*.18))}
+.finale-media img{object-fit:cover}
+.finale-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgb(40 27 22/.8),rgb(40 27 22/.5))}
+.finale-content{position:relative;z-index:1}
+.finale-heading{font-family:var(--font-display);font-size:var(--type-heading);font-weight:500;line-height:1.1;letter-spacing:-.015em;color:var(--color-canvas)}
+:lang(th) .finale-heading,:lang(zh) .finale-heading{letter-spacing:0;line-height:1.3}
+@media(max-width:767px){.finale-media{transform:none}.scroll-scene.finale{height:120vh!important}.hero-scroll-line{height:40px}}
+@media(prefers-reduced-motion:reduce){.split-word{opacity:1!important;transform:none!important}.reveal.reveal-mask{clip-path:none!important}.hero-scroll-line::after{animation:none}.ground-nav-link::after{transition:none}.finale-media{transform:none!important}}

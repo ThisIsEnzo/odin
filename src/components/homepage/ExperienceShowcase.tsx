@@ -114,7 +114,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
             >
               {image ? (
                 <>
-                  <Parallax strength={20} className="absolute -inset-4">
+                  <Parallax strength={20} scale={0.05} className="absolute -inset-4">
                     <Image
                       src={image.src}
                       alt={title}

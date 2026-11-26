@@ -78,7 +78,7 @@ export function Gallery() {
 
         
         <div className="gallery-editorial mt-10 hidden gap-5 sm:grid">
-          {galleryItems.map((item, index) => <Reveal key={item.id} variant="scale" className={`gallery-frame gallery-frame-${index}`}>
+          {galleryItems.map((item, index) => <Reveal key={item.id} variant="mask" className={`gallery-frame gallery-frame-${index}`}>
             <button type="button" onClick={() => setOpenIndex(index)} aria-label={t(item.altTranslationKey)} className="group relative block h-full w-full overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-surface-dark">
               <Image src={resolveSrc(index) ?? item.src} alt={t(item.altTranslationKey)} fill sizes={index === 0 || index > 2 ? "(min-width: 1440px) 580px, 50vw" : "25vw"} className="object-cover transition-transform duration-700 group-hover:scale-[1.03] motion-reduce:transform-none" style={{objectPosition: resolveFocus(index)}} />
               <span aria-hidden="true" className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-ink/30 text-white">↗</span>

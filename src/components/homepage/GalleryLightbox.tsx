@@ -20,30 +20,22 @@ export interface GalleryLightboxProps {
   onOpenIndexChange: (index: number | null) => void;
 }
 
-// Minimum horizontal drag distance (px) before a touch gesture counts as a
-// swipe rather than a tap/scroll — generous enough to avoid misfiring on
-// small accidental finger movement.
 const SWIPE_THRESHOLD_PX = 50;
 
 /**
- * PHASE 5A — Gallery lightbox. Reuses Radix Dialog (already a project
- * dependency, already used by MobileNav.tsx for the same reasons: built-in
- * focus trapping, focus return to the trigger on close, and Escape-to-close
- * behavior — nothing about Escape handling needed to be written by hand).
- *
- * Left/right ArrowKey navigation and touch swipe are added on top, since
- * neither is something Radix Dialog provides itself. Both are scoped to
- * only run while the dialog is actually open.
- *
- * This component owns no gallery data itself — `items` is resolved and
- * passed in by Gallery.tsx from the exact same src/data/odin/gallery.ts +
- * translation keys the grid/strip already use, so nothing here duplicates
- * or invents image paths or alt text.
+ * Gallery lightbox built on Radix Dialog (focus trap, focus return, Escape).
+ * Arrow-key navigation and touch swipe are added on top. The swipe now gives
+ * live visual feedback: the image follows the finger and settles on release.
  */
 export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: GalleryLightboxProps) {
   const t = useTranslations("gallery.lightbox");
   const touchStartX = useRef<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const reduceMotion = useRef(false);
+  useEffect(() => {
+    reduceMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
 
   const isOpen = openIndex !== null;
   const current = isOpen ? items[openIndex] : null;
@@ -66,8 +58,6 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
     goTo(openIndex + 1);
   }, [openIndex, goTo]);
 
-  // Arrow-key navigation — only attached while open, cleaned up on close.
-  // Escape itself is handled natively by Dialog.Content, not duplicated here.
   useEffect(() => {
     if (!isOpen) return;
     function handleKeyDown(event: KeyboardEvent) {
@@ -86,6 +76,7 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
   function handleTouchStart(event: React.TouchEvent) {
     touchStartX.current = event.touches[0]?.clientX ?? null;
     setDragOffset(0);
+    setDragging(true);
   }
 
   function handleTouchMove(event: React.TouchEvent) {
@@ -103,6 +94,7 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
     }
     touchStartX.current = null;
     setDragOffset(0);
+    setDragging(false);
   }
 
   return (
@@ -117,9 +109,6 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Radix requires an accessible Title; the image's own alt text
-              already carries the description, so the visible title is
-              hidden rather than duplicated on-screen. */}
           <Dialog.Title className="sr-only">{current?.alt}</Dialog.Title>
 
           <Dialog.Close asChild>
@@ -163,7 +152,13 @@ export function GalleryLightbox({ items, openIndex, onOpenIndexChange }: Gallery
           )}
 
           {current && (
-            <div className="relative h-full max-h-[80vh] w-full max-w-4xl">
+            <div
+              className="relative h-full max-h-[80vh] w-full max-w-4xl touch-pan-y"
+              style={{
+                transform: reduceMotion.current ? undefined : `translateX(${dragOffset}px)`,
+                transition: dragging ? "none" : "transform 220ms cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
               <Image
                 src={current.src}
                 alt={current.alt}

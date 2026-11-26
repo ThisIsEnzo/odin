@@ -21,8 +21,7 @@ export function Header() {
 
   return (
     <header className={`ground-header brand-material sticky top-0 z-30 border-b border-brand-cream/20 ${scrolled ? "is-scrolled" : ""}`}>
-      <Container className="flex min-h-22 items-center justify-between gap-3">
-        
+      <Container className={`flex items-center justify-between gap-3 transition-[min-height] duration-300 ${scrolled ? "min-h-16" : "min-h-20 lg:min-h-22"}`}>
         <Link
           href="/"
           className="ground-brand-zone flex shrink-0 items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
@@ -32,21 +31,17 @@ export function Header() {
 
         <nav
           aria-label={tCommon("primaryNavigation")}
-          className="hidden items-center gap-0 xl:flex"
+          className="hidden items-center gap-0 lg:flex"
         >
           {primaryNavItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="ground-nav-link"
-            >
+            <Link key={item.href} href={item.href} className="ground-nav-link">
               {t(item.translationKey)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden xl:inline-flex" />
+          <LanguageSwitcher className="hidden lg:inline-flex" />
           <Link
             href={bookNowItem.href}
             className={buttonVariants({ variant: "primary", size: "sm", className: "ground-header-cta" })}

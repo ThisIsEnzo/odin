@@ -2,18 +2,24 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
-import { Inter, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
+import { Inter, Cormorant_Garamond, Noto_Sans_Thai, Noto_Sans_SC } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { HomepageAnchorNavigation } from "@/components/layout/HomepageAnchorNavigation";
 import { Footer } from "@/components/layout/Footer";
 import "../globals.css";
 
-// Latin/Cyrillic fonts cover en + ru directly. Thai/Chinese are loaded
-// alongside and referenced later in the CSS font-family fallback stack
-// (globals.css) so th/zh render correctly without any per-locale branching
-// in components — see the comment there for how that works.
+// Inter (Latin/Cyrillic) is the UI/body workhorse for en + ru. Cormorant
+// Garamond is the editorial display voice (also Latin/Cyrillic) wired to
+// --font-display in globals.css. Thai/Chinese load alongside and sit in the
+// CSS fallback stack so th/zh render correctly with no per-locale branching.
 const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter", display: "swap" });
+const displaySerif = Cormorant_Garamond({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600"],
+  variable: "--font-display-serif",
+  display: "swap",
+});
 const notoSansThai = Noto_Sans_Thai({
   subsets: ["thai"],
   weight: ["400", "500", "600", "700"],
@@ -55,21 +61,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
     notFound();
   }
 
-  // Enables static rendering for this locale subtree.
   setRequestLocale(locale);
 
-  // Required so CLIENT components (LanguageSwitcher, MobileNav) have
-  // messages to read — useTranslations() in a Server Component reads the
-  // request context directly and doesn't need this, but it does need to
-  // cross the server/client boundary explicitly for anything marked
-  // "use client". Without this, next-intl throws in those components.
   const messages = await getMessages();
   const common = await getTranslations("common");
 
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
+      className={`${inter.variable} ${displaySerif.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
     >
       <body className="flex min-h-screen flex-col antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>

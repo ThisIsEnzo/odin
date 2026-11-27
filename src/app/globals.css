@@ -612,3 +612,277 @@ section[id] { scroll-margin-top: 7rem; }
 @media (prefers-reduced-motion: reduce) {
   .visit-brief * { scroll-behavior: auto; }
 }
+
+
+/* ===================== FARM JOURNAL — editorial chapter system ===================== */
+.chapter {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: 1.25rem;
+  row-gap: .75rem;
+  min-width: 0;
+}
+.chapter-index {
+  display: block;
+  color: var(--color-brand-primary);
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: 500;
+  line-height: .8;
+  letter-spacing: -.02em;
+  opacity: .16;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.chapter-body { position: relative; z-index: 1; min-width: 0; }
+.chapter-title {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: var(--type-heading);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  text-wrap: balance;
+}
+.chapter-intro {
+  max-width: 34rem;
+  margin-top: .75rem;
+  color: var(--color-text-secondary);
+}
+.chapter-kicker {
+  margin-bottom: .5rem;
+  color: var(--color-brand-primary);
+}
+.chapter-cream .chapter-title,
+.chapter-cream .chapter-intro { color: var(--color-canvas); }
+.chapter-cream .chapter-index {
+  color: var(--color-brand-cream);
+  opacity: .28;
+}
+.chapter-cream .chapter-kicker { color: var(--color-brand-cream); }
+
+.chapter-split { align-items: end; }
+.chapter-stack { grid-template-columns: minmax(0, 1fr); }
+.chapter-stack .chapter-index { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+.chapter-ledger {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.chapter-ledger .chapter-index { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+.chapter-overlay { grid-template-columns: minmax(0, 1fr); }
+.chapter-overlay .chapter-index {
+  position: absolute;
+  top: -.35em;
+  right: 0;
+  z-index: 0;
+  font-size: clamp(4rem, 10vw, 8rem);
+}
+.chapter-overlay .chapter-body { z-index: 1; }
+.chapter-mark {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.chapter-mark-index {
+  color: var(--color-brand-primary);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.chapter-mark-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-hairline);
+}
+@media (min-width: 1024px) {
+  .chapter-split {
+    grid-template-columns: minmax(7rem, .32fr) minmax(0, 1fr);
+    column-gap: 2rem;
+  }
+  .chapter-split .chapter-index {
+    align-self: start;
+    padding-top: .12em;
+  }
+}
+:lang(th) .chapter-title,
+:lang(zh) .chapter-title {
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+:lang(th) .chapter-intro,
+:lang(zh) .chapter-intro { line-height: 1.75; }
+
+/* ---- VisitBrief: turn the practical summary into a small editorial opening. */
+.visit-brief-mark {
+  display: inline-block;
+  color: var(--color-brand-primary);
+  font-size: 1.1rem;
+}
+.visit-brief-title {
+  margin-top: .4rem;
+  font-family: var(--font-display);
+  font-size: var(--type-subheading);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* ---- 02: asymmetric story composition ----------------------------------- */
+.story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+}
+.story-photo {
+  position: relative;
+  height: clamp(340px, 60vw, 560px);
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+.story-copy { min-width: 0; }
+.story-lead {
+  max-width: 36rem;
+  margin-top: 1.25rem;
+  color: var(--color-ink);
+  font-size: 1.1rem;
+  line-height: 1.65;
+}
+.story-distance {
+  margin-top: .6rem;
+  color: var(--color-text-secondary);
+  font-size: .85rem;
+}
+.story-pillars {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.story-pillar {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: .75rem;
+  border-top: 1px solid var(--color-hairline);
+  padding-top: 1rem;
+}
+.story-pillar-index {
+  padding-top: .2rem;
+  color: var(--color-brand-primary);
+  font-size: .8rem;
+  font-variant-numeric: tabular-nums;
+}
+.story-pillar-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.story-pillar-text {
+  margin-top: .3rem;
+  color: var(--color-text-secondary);
+  font-size: .9rem;
+}
+.story-count {
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--color-hairline);
+  padding-top: 1rem;
+  color: var(--color-text-secondary);
+  font-size: .85rem;
+}
+@media (min-width: 1024px) {
+  .story-grid {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: 4rem;
+  }
+  .story-photo {
+    position: sticky;
+    top: 6rem;
+    height: clamp(420px, 44vw, 620px);
+  }
+}
+
+/* ---- 03: packages as a readable ledger, not a row of cards --------------- */
+.ledger {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-hairline);
+  list-style: none;
+}
+.ledger-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  min-width: 0;
+  border-bottom: 1px solid var(--color-hairline);
+  padding-block: 1.75rem;
+}
+.ledger-index {
+  color: var(--color-brand-primary);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  opacity: .7;
+}
+.ledger-main,
+.ledger-aside { min-width: 0; }
+.ledger-title {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.ledger-desc {
+  max-width: 40rem;
+  margin-top: .5rem;
+  color: var(--color-text-secondary);
+}
+.ledger-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ledger-aside {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .35rem;
+  margin-top: .75rem;
+}
+.ledger-price { color: var(--color-ink); font-size: 1.05rem; font-weight: 500; }
+.ledger-unit { color: var(--color-text-secondary); font-size: .85rem; font-weight: 400; }
+.ledger-note { color: var(--color-text-secondary); font-size: .78rem; }
+@media (min-width: 1024px) {
+  .ledger-row {
+    grid-template-columns: 3.5rem minmax(0, 1fr) 240px;
+    column-gap: 2rem;
+    padding-block: 2rem;
+  }
+  .ledger-aside {
+    grid-column: 3;
+    grid-row: 1;
+    margin-top: 0;
+    border-left: 1px solid var(--color-hairline);
+    padding-left: 1.5rem;
+  }
+}
+@media (max-width: 639px) {
+  .chapter { column-gap: .85rem; }
+  .chapter-index { font-size: clamp(3rem, 14vw, 4.5rem); }
+  .chapter-title { text-wrap: initial; }
+  .story-photo { height: 360px; }
+  .ledger-row { gap: .75rem; }
+  .ledger-title { font-size: 1.4rem; }
+}
+:lang(th) .story-lead,
+:lang(zh) .story-lead,
+:lang(th) .ledger-desc,
+:lang(zh) .ledger-desc { line-height: 1.75; }

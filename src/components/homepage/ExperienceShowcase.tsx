@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { OfferFacts } from "@/components/domain/booking/OfferFacts";
 import { Badge } from "@/components/ui/Badge";
@@ -34,251 +33,125 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   const tHome = useTranslations("home");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  function onTabKeyDown(event: React.KeyboardEvent, index: number) {
+  if (experiences.length === 0) return null;
+
+  const activeExperience = experiences[activeIndex] ?? experiences[0];
+  const activeKey = toCamelCase(activeExperience.id);
+  const activeImage = experienceImages[activeExperience.id];
+  const activeTitle = tExperiences(activeKey + ".title");
+  const activeMaxWeight = activeExperience.restrictions.maxWeightKg;
+
+  function onTabKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
     const last = experiences.length - 1;
     let next: number | null = null;
+
     if (event.key === "ArrowDown" || event.key === "ArrowRight") next = index === last ? 0 : index + 1;
     else if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = index === 0 ? last : index - 1;
     else if (event.key === "Home") next = 0;
     else if (event.key === "End") next = last;
+
     if (next === null) return;
     event.preventDefault();
     setActiveIndex(next);
     tabRefs.current[next]?.focus();
   }
 
-  if (experiences.length === 0) {
-    return null;
-  }
-
   return (
-    <>
-      <div className="hidden gap-3 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch lg:gap-8">
+    <div className="exp-stage">
       <div
         role="tablist"
         aria-label={tHome("experiencesHeading")}
         aria-orientation="vertical"
-        className={cn(
-          "flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide",
-          "lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0 lg:snap-none",
-        )}
+        className="exp-rail"
       >
         {experiences.map((experience, index) => {
           const isActive = index === activeIndex;
+          const title = tExperiences(toCamelCase(experience.id) + ".title");
+
           return (
             <button
               key={experience.id}
-              ref={(el) => { tabRefs.current[index] = el; }}
-              id={`desktop-tab-${experience.id}`}
+              ref={(element) => { tabRefs.current[index] = element; }}
+              id={"exp-tab-" + experience.id}
               role="tab"
               type="button"
-              aria-controls={`desktop-experience-${experience.id}`}
+              aria-controls={"exp-panel-" + experience.id}
               aria-selected={isActive}
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
-              onKeyDown={(e) => onTabKeyDown(e, index)}
-              className={cn(
-                "flex items-center gap-4 shrink-0 border-b px-0 py-6 text-left text-xl font-medium",
-                "transition-colors duration-200",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
-                isActive
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-ink/15 text-ink/60 hover:text-ink",
-              )}
+              onKeyDown={(event) => onTabKeyDown(event, index)}
+              className={cn("exp-rail-item", isActive && "is-active")}
             >
-              <span aria-hidden="true" className="text-xs opacity-60">0{index + 1}</span>{tExperiences(`${toCamelCase(experience.id)}.title`)}
+              <span className="exp-rail-index" aria-hidden="true">0{index + 1}</span>
+              <span className="exp-rail-name">{title}</span>
+              <span className="exp-rail-arrow" aria-hidden="true">↗</span>
             </button>
           );
         })}
       </div>
 
-      <div className="surface-inverse relative min-h-[560px] xl:min-h-[600px] overflow-hidden bg-surface-dark">
-        {experiences.map((experience, index) => {
-          const isActive = index === activeIndex;
-          const maxWeight = experience.restrictions.maxWeightKg;
-          const image = experienceImages[experience.id];
-          const title = tExperiences(`${toCamelCase(experience.id)}.title`);
+      <div className="exp-stage-right">
+        <div
+          key={activeExperience.id}
+          id={"exp-panel-" + activeExperience.id}
+          role="tabpanel"
+          aria-labelledby={"exp-tab-" + activeExperience.id}
+          tabIndex={0}
+          className="exp-panel"
+        >
+          <div className="exp-media">
+            {activeImage ? (
+              <Parallax strength={20} scale={0.04} className="absolute -inset-4">
+                <Image
+                  src={activeImage.src}
+                  alt={activeTitle}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 62vw, 100vw"
+                  className="object-cover"
+                  style={{ objectPosition: activeImage.focus }}
+                />
+              </Parallax>
+            ) : null}
+            <div className="exp-media-shade" aria-hidden="true" />
+            <span className="exp-media-index" aria-hidden="true">
+              0{activeIndex + 1} <span>/ 0{experiences.length}</span>
+            </span>
+          </div>
 
-          return (
-            <div
-              key={experience.id}
-              id={`desktop-experience-${experience.id}`}
-              role="tabpanel"
-              aria-labelledby={`desktop-tab-${experience.id}`}
-              tabIndex={0}
-              aria-hidden={!isActive} inert={!isActive}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-[600ms] ease-out",
-                isActive ? "opacity-100" : "pointer-events-none opacity-0",
-              )}
-            >
-              {image ? (
-                <>
-                  <Parallax strength={20} scale={0.05} className="absolute -inset-4">
-                    <Image
-                      src={image.src}
-                      alt={title}
-                      fill
-                      sizes="(min-width: 1024px) 60vw, 100vw"
-                      className="object-cover"
-                      style={{ objectPosition: image.focus }}
-                    />
-                  </Parallax>
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent" />
-                </>
+          <article className="exp-card">
+            <p className="eyebrow exp-card-kicker">ON GROUND · EXPERIENCE {String(activeIndex + 1).padStart(2, "0")}</p>
+            <h3 className="exp-card-title">{activeTitle}</h3>
+            <p className="exp-card-desc">
+              {tExperiences(activeKey + ".shortDescription")}
+            </p>
+            <div className="exp-card-badges">
+              <Badge variant="dusk">
+                {tExperienceCard("hours", {
+                  open: activeExperience.operatingHours.open,
+                  close: activeExperience.operatingHours.close,
+                })}
+              </Badge>
+              {activeMaxWeight !== undefined ? (
+                <Badge variant="saddle">
+                  {tExperienceCard("maxWeight", { max: activeMaxWeight })}
+                </Badge>
               ) : null}
-
-              <div
-                className={cn(
-                  "relative flex h-full flex-col justify-end p-6 sm:p-10",
-                  image ? "text-canvas" : "justify-between text-ink",
-                )}
-              >
-                <div>
-                  <h3 className="font-display text-2xl sm:text-3xl">{title}</h3>
-                  <p className={cn("mt-3 max-w-md", image ? "text-canvas/85" : "text-ink/70")}>
-                    {tExperiences(`${toCamelCase(experience.id)}.shortDescription`)}
-                  </p>
-                </div>
-
-                <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <Badge variant="dusk">
-                    {tExperienceCard("hours", {
-                      open: experience.operatingHours.open,
-                      close: experience.operatingHours.close,
-                    })}
-                  </Badge>
-                  {maxWeight ? (
-                    <Badge variant="saddle">{tExperienceCard("maxWeight", { max: maxWeight })}</Badge>
-                  ) : null}
-                </div>
-
-                <div className="experience-offer-inverse"><OfferFacts experience={experience}/></div>
-                <Link
-                  href={`/book?experience=${experience.id}`}
-                  className={buttonVariants({
-                    variant: "primary",
-                    size: "sm",
-                    className: "mt-5 self-start",
-                  })}
-                >
-                  {tExperienceCard("bookCta")}
-                </Link>
-              </div>
             </div>
-          );
-        })}
-      </div>
-      </div>
-
-      <div className="lg:hidden">
-        <div className="flex flex-col gap-2">
-          {experiences.map((experience, index) => {
-            const isActive = index === activeIndex;
-            const maxWeight = experience.restrictions.maxWeightKg;
-            const image = experienceImages[experience.id];
-            const title = tExperiences(`${toCamelCase(experience.id)}.title`);
-            const headerId = `experience-tab-${experience.id}`;
-            const panelId = `experience-panel-${experience.id}`;
-
-            return (
-              <div
-                key={experience.id}
-                className={cn(
-                  "overflow-hidden border-t transition-colors duration-200",
-                  isActive ? "border-brand-primary bg-canvas-soft" : "border-ink/10 bg-transparent",
-                )}
-              >
-                <button
-                  id={headerId}
-                  type="button"
-                  aria-expanded={isActive}
-                  aria-controls={panelId}
-                  onClick={() => setActiveIndex(index)}
-                  className={cn(
-                    "flex w-full items-center justify-between gap-3 px-4 py-5 text-left",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-dark",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "font-display text-xl",
-                      isActive ? "text-ink" : "text-ink/70",
-                    )}
-                  >
-                    <span aria-hidden="true" className="mr-4 text-xs opacity-50">0{index + 1}</span>{title}
-                  </span>
-                  <ChevronDown
-                    aria-hidden="true"
-                    className={cn(
-                      "h-4 w-4 shrink-0 text-ink/50 transition-transform duration-300",
-                      isActive && "rotate-180",
-                    )}
-                  />
-                </button>
-
-                <div
-                  id={panelId}
-                  role="region"
-                  inert={!isActive} aria-hidden={!isActive}
-                  aria-labelledby={headerId}
-                  className={cn(
-                    "grid transition-[grid-template-rows] duration-300 ease-out",
-                    isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-                  )}
-                >
-                  <div className="overflow-hidden">
-                    <div className="px-4 pb-4">
-                      {image ? (
-                        <div className="relative mb-4 aspect-[5/6] sm:aspect-[4/3] w-full overflow-hidden rounded-button">
-                          <Image
-                            src={image.src}
-                            alt={title}
-                            fill
-                            sizes="100vw"
-                            className="object-cover"
-                            style={{ objectPosition: image.focus }}
-                          />
-                        </div>
-                      ) : null}
-
-                      <p className="text-sm text-ink/70">
-                        {tExperiences(`${toCamelCase(experience.id)}.shortDescription`)}
-                      </p>
-
-                      <div className="mt-4 flex flex-wrap items-center gap-2">
-                        <Badge variant="dusk">
-                          {tExperienceCard("hours", {
-                            open: experience.operatingHours.open,
-                            close: experience.operatingHours.close,
-                          })}
-                        </Badge>
-                        {maxWeight ? (
-                          <Badge variant="saddle">
-                            {tExperienceCard("maxWeight", { max: maxWeight })}
-                          </Badge>
-                        ) : null}
-                      </div>
-
-                      <OfferFacts experience={experience}/>
-                      <Link
-                        href={`/book?experience=${experience.id}`}
-                        className={buttonVariants({
-                          variant: "primary",
-                          size: "sm",
-                          className: "mt-4 w-full",
-                        })}
-                      >
-                        {tExperienceCard("bookCta")}
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+            <OfferFacts experience={activeExperience} />
+            <Link
+              href={"/book?experience=" + activeExperience.id}
+              className={buttonVariants({
+                variant: "primary",
+                size: "sm",
+                className: "mt-5",
+              })}
+            >
+              {tExperienceCard("bookCta")} <span aria-hidden="true">↗</span>
+            </Link>
+          </article>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,45 +1,43 @@
 import { useFormatter, useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/motion/Reveal";
+import { ChapterHeading } from "@/components/ui/ChapterHeading";
 import { packages } from "@/data/odin/packages";
 import type { Package } from "@/types/domain";
-
 
 export function Packages() {
   const t = useTranslations("packages");
 
-  if (!packages || packages.length === 0) {
-    return null;
-  }
+  if (packages.length === 0) return null;
 
   return (
     <Section id="packages" tone="canvas-soft">
       <Container>
         <Reveal>
-          <div className="max-w-2xl">
-            <h2 className="font-display text-2xl text-ink sm:text-3xl">{t("heading")}</h2>
-            <p className="mt-2 text-ink/70">{t("intro")}</p>
-          </div>
+          <ChapterHeading
+            index="03"
+            variant="ledger"
+            title={t("heading")}
+            intro={t("intro")}
+            className="mb-10"
+          />
         </Reveal>
 
-        <div className="mt-14 divide-y divide-ink/20 border-t border-ink/20">
+        <ol className="ledger">
           {packages.map((pkg, index) => (
-            <Reveal key={pkg.id} className="h-full" delayMs={Math.min(index * 100, 300)}>
-              <PackageCard pkg={pkg} index={index} />
-            </Reveal>
+            <PackageRow key={pkg.id} pkg={pkg} index={index} />
           ))}
-        </div>
+        </ol>
       </Container>
     </Section>
   );
 }
 
-function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
+function PackageRow({ pkg, index }: { pkg: Package; index: number }) {
   const t = useTranslations(pkg.translationNamespace);
   const tExperiences = useTranslations("experiences");
   const tPackages = useTranslations("packages");
@@ -47,22 +45,32 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
   const format = useFormatter();
 
   return (
-    <article className="grid grid-cols-[36px_minmax(0,1fr)] gap-4 py-10 sm:py-12 lg:grid-cols-[64px_minmax(0,1fr)]">
-      <span aria-hidden="true" className="pt-1 text-lg font-normal tabular-nums text-brand-primary/70">0{index + 1}</span>
-      <div className="grid gap-x-12 lg:grid-cols-[minmax(0,1fr)_250px]">
-        <div>
-        <h3 className="text-2xl sm:text-3xl">{t("title")}</h3>
-        <p className="mt-4 max-w-xl text-ink/70">{t("description")}</p>
+    <li className="ledger-row">
+      <span className="ledger-index" aria-hidden="true">
+        0{index + 1}
+      </span>
+
+      <Reveal className="ledger-main" delayMs={Math.min(index * 90, 270)}>
+        <h3 className="ledger-title">{t("title")}</h3>
+        <p className="ledger-desc">{t("description")}</p>
 
         {pkg.includedExperienceIds.length > 0 ? (
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {pkg.includedExperienceIds.map((experienceId) => (
-              <li key={experienceId}>
-                <Badge variant="outline">
-                  {tExperiences(`${toCamelCase(experienceId)}.title`)}{(pkg.components?.find(c => c.activityId === experienceId)?.guestCount ?? 1) > 1 ? ` × ${pkg.components!.find(c => c.activityId === experienceId)!.guestCount}` : ""}
-                </Badge>
-              </li>
-            ))}
+          <ul className="ledger-tags">
+            {pkg.includedExperienceIds.map((experienceId) => {
+              const component = pkg.components?.find(
+                (item) => item.activityId === experienceId,
+              );
+              const guestCount = component?.guestCount ?? 1;
+
+              return (
+                <li key={experienceId}>
+                  <Badge variant="outline">
+                    {tExperiences(`${toCamelCase(experienceId)}.title`)}
+                    {guestCount > 1 ? ` × ${guestCount}` : ""}
+                  </Badge>
+                </li>
+              );
+            })}
             {pkg.includesRestaurant ? (
               <li>
                 <Badge variant="outline">{tPackages("includesRestaurant")}</Badge>
@@ -70,27 +78,40 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
             ) : null}
           </ul>
         ) : null}
+      </Reveal>
 
-        </div><div className="mt-6 flex flex-col items-start gap-3 lg:mt-0 lg:border-l lg:border-ink/15 lg:pl-8">
-          <p className="text-sm font-medium text-ink">
-            {pkg.mock.isMock ? tPackages("pricePending") : <>{format.number(pkg.price.amount,{style:"currency",currency:pkg.price.currency})}{" "}
-            <span className="font-normal text-text-secondary">
-              {tPricing(`unit.${pkg.price.unit}`)}
-            </span></>}
-          </p>
+      <Reveal className="ledger-aside" delayMs={Math.min(index * 90 + 60, 330)}>
+        <p className="ledger-price">
           {pkg.mock.isMock ? (
-            <p className="text-xs text-text-secondary">{tPackages("mockNote")}</p>
-          ) : null}
-          
-          <Link
-            href={`/book?package=${encodeURIComponent(pkg.id)}`}
-            className={buttonVariants({ variant: "secondary", size: "sm", className: "mt-2" })}
-          >
-            {tPackages("cta")}
-          </Link>
-        </div>
-      </div>
-    </article>
+            tPackages("pricePending")
+          ) : (
+            <>
+              {format.number(pkg.price.amount, {
+                style: "currency",
+                currency: pkg.price.currency,
+              })}
+              {" "}
+              <span className="ledger-unit">
+                {tPricing(`unit.${pkg.price.unit}`)}
+              </span>
+            </>
+          )}
+        </p>
+        {pkg.mock.isMock ? (
+          <p className="ledger-note">{tPackages("mockNote")}</p>
+        ) : null}
+        <Link
+          href={`/book?package=${encodeURIComponent(pkg.id)}`}
+          className={buttonVariants({
+            variant: "secondary",
+            size: "sm",
+            className: "mt-2",
+          })}
+        >
+          {tPackages("cta")}
+        </Link>
+      </Reveal>
+    </li>
   );
 }
 

@@ -967,3 +967,412 @@ section[id] { scroll-margin-top: 7rem; }
   .visit-brief-inner { grid-template-columns: minmax(0, 1fr); }
   .visit-brief-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+
+/* ================= THE ESTATE — contemporary countryside art direction ================= */
+:root {
+  --estate-forest: #1f2a20;
+  --estate-moss: #3d4a35;
+  --estate-charcoal: #201d1a;
+  --estate-linen: #f4efe6;
+  --estate-ochre: #c07a3a;
+  --estate-clay: #a4553a;
+}
+
+/* Hero: an asymmetric, framed image and a typographic forest-green panel. */
+.estate-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--estate-forest);
+}
+.estate-hero-media {
+  position: relative;
+  order: -1;
+  min-width: 0;
+  min-height: clamp(360px, 54svh, 620px);
+  overflow: hidden;
+  background: var(--estate-charcoal);
+}
+.estate-hero-media::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(0deg, rgb(20 24 19 / .48), transparent 34%);
+}
+.estate-hero-caption {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  color: var(--estate-linen);
+  font-size: .66rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.estate-hero-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  min-width: 0;
+  padding: 3rem var(--page-gutter) 3.5rem;
+  color: var(--estate-linen);
+}
+.estate-hero-kicker { color: var(--estate-ochre); }
+.estate-hero-title {
+  max-width: 11ch;
+  color: var(--estate-linen);
+  font-family: var(--font-display);
+  font-size: clamp(3.15rem, 7vw, 6.2rem);
+  font-weight: 500;
+  line-height: .96;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.estate-hero-sub {
+  max-width: 31rem;
+  color: rgb(244 239 230 / .84);
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+}
+.estate-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.estate-hero-secondary {
+  color: var(--estate-linen);
+  border-bottom: 1px solid rgb(244 239 230 / .55);
+  padding-bottom: .25rem;
+  font-size: .9rem;
+}
+.estate-hero-note { max-width: 28rem; color: rgb(244 239 230 / .62); font-size: .78rem; }
+.estate-hero-place {
+  margin-top: .25rem;
+  color: var(--estate-ochre);
+  font-size: .7rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+@media (min-width: 1024px) {
+  .estate-hero {
+    grid-template-columns: minmax(0, .42fr) minmax(0, .58fr);
+    min-height: min(880px, calc(100svh - 88px));
+  }
+  .estate-hero-media { order: 0; min-height: min(880px, calc(100svh - 88px)); }
+  .estate-hero-panel {
+    padding: 4rem 3.5rem 4rem max(var(--page-gutter), calc((100vw - var(--page-width)) / 2 + var(--page-gutter)));
+  }
+}
+@media (min-width: 1440px) {
+  .estate-hero-panel { padding-right: 4.5rem; }
+}
+:lang(th) .estate-hero-title,
+:lang(zh) .estate-hero-title { line-height: 1.2; letter-spacing: 0; max-width: 14ch; }
+
+/* 01 Experiences: editorial index rail, one cinematic stage, an overlapping offer card. */
+.exp-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  min-width: 0;
+}
+.exp-rail {
+  display: flex;
+  gap: .55rem;
+  min-width: 0;
+  overflow-x: auto;
+  padding: .15rem .1rem .65rem;
+  scrollbar-width: none;
+}
+.exp-rail::-webkit-scrollbar { display: none; }
+.exp-rail-item {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 48px;
+  flex: 0 0 auto;
+  padding: .65rem .9rem;
+  border: 1px solid var(--color-hairline);
+  background: transparent;
+  color: var(--color-text-secondary);
+  text-align: left;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+.exp-rail-item.is-active {
+  border-color: var(--estate-forest);
+  background: var(--estate-forest);
+  color: var(--estate-linen);
+}
+.exp-rail-index { color: var(--estate-ochre); font-size: .68rem; letter-spacing: .12em; }
+.exp-rail-name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 500; white-space: nowrap; }
+.exp-rail-arrow { margin-left: .35rem; font-size: .8rem; opacity: .7; }
+.exp-rail-item:focus-visible { outline: 2px solid var(--estate-ochre); outline-offset: 3px; }
+.exp-stage-right { min-width: 0; padding-bottom: 1rem; }
+.exp-panel { position: relative; min-width: 0; }
+.exp-media {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  min-height: 260px;
+  overflow: hidden;
+  background: var(--color-canvas-soft);
+}
+.exp-media-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgb(20 24 19 / .35), transparent 45%);
+}
+.exp-media-index {
+  position: absolute;
+  z-index: 1;
+  right: 1rem;
+  bottom: 1rem;
+  color: white;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-shadow: 0 1px 10px rgb(0 0 0 / .35);
+}
+.exp-media-index span { color: rgb(255 255 255 / .65); }
+.exp-card {
+  position: relative;
+  z-index: 2;
+  margin: -1.5rem .75rem 0;
+  padding: 1.35rem;
+  background: var(--estate-linen);
+  box-shadow: var(--shadow-lg);
+}
+.exp-card-kicker { color: var(--estate-clay); font-size: .62rem; }
+.exp-card-title {
+  margin-top: .65rem;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+.exp-card-desc { margin-top: .55rem; color: var(--color-text-secondary); }
+.exp-card-badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.exp-card .offer-facts { border-color: var(--color-hairline); }
+@media (min-width: 640px) {
+  .exp-media { aspect-ratio: 16 / 10; }
+  .exp-card { margin-inline: 1.5rem; padding: 1.75rem; }
+}
+@media (min-width: 1024px) {
+  .exp-stage { grid-template-columns: minmax(0, .32fr) minmax(0, .68fr); gap: 3rem; align-items: start; }
+  .exp-rail { display: flex; flex-direction: column; overflow: visible; gap: 0; padding: 0; }
+  .exp-rail-item {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    gap: .55rem;
+    width: 100%;
+    min-height: 0;
+    padding: 1.35rem .5rem 1.35rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-hairline);
+    background: transparent;
+    color: var(--color-text-secondary);
+  }
+  .exp-rail-item.is-active { border-color: var(--estate-ochre); background: transparent; color: var(--color-ink); }
+  .exp-rail-item.is-active .exp-rail-name { color: var(--estate-clay); }
+  .exp-rail-name { white-space: normal; font-size: clamp(1.35rem, 1.8vw, 1.8rem); }
+  .exp-rail-arrow { color: var(--estate-clay); }
+  .exp-stage-right { padding-bottom: 3rem; }
+  .exp-media { aspect-ratio: 16 / 11; min-height: 500px; }
+  .exp-card {
+    position: absolute;
+    left: 2rem;
+    bottom: -2.5rem;
+    width: min(27rem, calc(100% - 4rem));
+    margin: 0;
+    padding: 2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) { .exp-rail-item { transition: none; } }
+:lang(th) .exp-card-title,
+:lang(zh) .exp-card-title { line-height: 1.35; letter-spacing: 0; }
+
+/* 02 The Place: a dark, immersive canvas balanced by a warm field-notes sheet. */
+.estate-story {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--estate-charcoal);
+  color: var(--estate-linen);
+}
+.estate-story-media { position: absolute; inset: 0; overflow: hidden; opacity: .32; }
+.estate-story-media::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgb(25 28 23 / .72), rgb(25 28 23 / .66) 50%, rgb(25 28 23 / .8));
+}
+.estate-story-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+.estate-story-quote-wrap { max-width: 48rem; }
+.estate-story-kicker { color: var(--estate-ochre); }
+.estate-story-index {
+  display: inline-block;
+  margin-top: 1.4rem;
+  color: rgb(244 239 230 / .55);
+  font-size: .68rem;
+  letter-spacing: .16em;
+}
+.estate-story-quote {
+  max-width: 15ch;
+  margin-top: .8rem;
+  color: var(--estate-linen);
+  font-family: var(--font-display);
+  font-size: clamp(2.55rem, 5vw, 5rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -.02em;
+}
+.estate-story-lead { max-width: 34rem; margin-top: 1.35rem; color: rgb(244 239 230 / .86); }
+.estate-story-distance { margin-top: .7rem; color: rgb(244 239 230 / .6); font-size: .85rem; }
+.estate-story-notes {
+  min-width: 0;
+  align-self: center;
+  padding: 1.5rem;
+  background: var(--estate-linen);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-lg);
+}
+.estate-story-note {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: .7rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--color-hairline);
+}
+.estate-story-note:first-child { border-top: 0; padding-top: 0; }
+.estate-story-note-mark { color: var(--estate-clay); font-size: .9rem; }
+.estate-story-note-title { color: var(--color-ink); font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; }
+.estate-story-note-text { margin-top: .3rem; color: var(--color-text-secondary); font-size: .9rem; }
+.estate-story-count { margin-top: 1rem; border-top: 1px solid var(--color-hairline); padding-top: 1rem; color: var(--color-text-secondary); font-size: .82rem; }
+.estate-story-inset { position: relative; width: min(70%, 18rem); aspect-ratio: 4 / 3; margin: 1.5rem 0 0 auto; overflow: hidden; box-shadow: var(--shadow-md); }
+@media (min-width: 640px) {
+  .estate-story-notes { padding: 2rem; }
+  .estate-story-inset { width: 58%; aspect-ratio: 16 / 9; }
+}
+@media (min-width: 1024px) {
+  .estate-story-inner { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(3rem, 5vw, 5.5rem); align-items: center; }
+  .estate-story-quote { font-size: clamp(3rem, 4.6vw, 5rem); }
+}
+:lang(th) .estate-story-quote,
+:lang(zh) .estate-story-quote { line-height: 1.28; letter-spacing: 0; max-width: 18ch; }
+
+/* Booking: retain the request flow and make its existing components feel curated. */
+.estate-booking { background: var(--estate-linen); }
+.estate-booking .booking-surface.request-flow {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding: 0 0 3rem;
+}
+.estate-booking .request-heading {
+  position: relative;
+  isolation: isolate;
+  max-width: none;
+  margin: 0 0 2.5rem;
+  padding: clamp(2rem, 5.2vw, 4.5rem);
+  overflow: hidden;
+  background: var(--estate-forest);
+  color: var(--estate-linen);
+}
+.estate-booking .request-heading::after {
+  position: absolute;
+  z-index: -1;
+  right: -4rem;
+  bottom: -9rem;
+  width: clamp(14rem, 34vw, 28rem);
+  aspect-ratio: 1;
+  border: 1px solid rgb(244 239 230 / .18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2.2rem rgb(244 239 230 / .025), 0 0 0 4.4rem rgb(244 239 230 / .02);
+  content: "";
+}
+.estate-booking .request-heading .eyebrow { color: var(--estate-ochre); }
+.estate-booking .request-heading h1 { position: relative; z-index: 1; max-width: 16ch; color: var(--estate-linen); }
+.estate-booking .request-heading > p:last-child { position: relative; z-index: 1; max-width: 38rem; color: rgb(244 239 230 / .78); }
+.estate-booking .request-form-fields { background: transparent; }
+.estate-booking .request-section { padding-block: 2.5rem; border-color: rgb(31 42 32 / .2); }
+.estate-booking .request-section-heading > span { color: var(--estate-clay); letter-spacing: .1em; }
+.estate-booking .request-input {
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+.estate-booking .request-input:hover:not(:disabled) { border-bottom-color: var(--estate-forest); }
+.estate-booking .request-input:focus-visible { outline-color: var(--estate-ochre); outline-offset: 4px; }
+.estate-booking .request-input[aria-invalid="true"] { border-bottom: 2px solid var(--color-error); }
+.estate-booking .request-activity,
+.estate-booking .request-package {
+  border-radius: 0;
+  border: 1px solid rgb(31 42 32 / .18);
+  background: #fffdf9;
+  box-shadow: var(--shadow-sm);
+}
+.estate-booking .request-activity.is-included,
+.estate-booking .request-package.is-included {
+  border: 2px solid var(--estate-clay);
+  background: #fff;
+  box-shadow: var(--shadow-md);
+}
+.estate-booking .request-photo { background: var(--color-canvas-soft); }
+.estate-booking .request-included { border-radius: 0; background: var(--estate-forest); color: var(--estate-linen); }
+.estate-booking .request-restriction { border-left-color: var(--estate-ochre); }
+.estate-booking .request-durations button[aria-pressed="true"] {
+  border-color: var(--estate-forest);
+  background: var(--estate-forest);
+  color: var(--estate-linen);
+}
+.estate-booking .request-add { border-color: var(--estate-clay); color: var(--estate-clay); }
+.estate-booking .request-add:hover { background: #f3e5d8; }
+.estate-booking .request-remove,
+.estate-booking .request-edit { color: var(--estate-forest); }
+.estate-booking .request-card-bottom { border-color: rgb(31 42 32 / .2); }
+.estate-booking .request-total {
+  border-left: 0;
+  background: var(--estate-forest);
+  color: var(--estate-linen);
+}
+.estate-booking .request-total > span,
+.estate-booking .request-total > p { color: rgb(244 239 230 / .75); }
+.estate-booking .request-total strong { color: var(--estate-linen); }
+.estate-booking .request-review { max-width: 52rem; }
+.estate-booking .request-actions { padding-top: 1.75rem; }
+.estate-booking .request-disclaimer { max-width: 48rem; }
+.estate-booking .booking-surface:not(.request-flow) {
+  max-width: 48rem;
+  margin-inline: auto;
+  border: 1px solid rgb(31 42 32 / .16);
+  background: #fffdf9;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+.estate-booking .booking-surface:not(.request-flow) h1 { color: var(--estate-forest); }
+.estate-booking .booking-surface:not(.request-flow) .eyebrow { color: var(--estate-clay); }
+
+@media (max-width: 639px) {
+  .estate-booking .request-heading { margin-inline: calc(var(--page-gutter) * -1); padding-inline: var(--page-gutter); }
+  .estate-booking .request-section { padding-block: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .estate-hero-media *,
+  .estate-story-media *,
+  .exp-rail-item { transition: none !important; }
+}
+
+/* Cohesive surface rhythm without changing the content or order of existing sections. */
+.homepage #packages,
+.homepage #gallery,
+.homepage #faq { background-color: var(--estate-linen); }

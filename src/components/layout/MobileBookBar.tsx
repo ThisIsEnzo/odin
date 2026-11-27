@@ -18,6 +18,7 @@ export function MobileBookBar() {
     }
 
     const hero =
+      document.querySelector<HTMLElement>(".arrival") ??
       document.querySelector<HTMLElement>(".estate-hero") ??
       document.querySelector<HTMLElement>(".homepage .hero");
 

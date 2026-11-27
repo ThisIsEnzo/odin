@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { experiences } from "@/data/odin/experiences";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
-import { ChapterHeading, ChapterMark } from "@/components/ui/ChapterHeading";
+import { ChapterHeading } from "@/components/ui/ChapterHeading";
 import { HeroSlideshow } from "@/components/homepage/HeroSlideshow";
 import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
 import { WhyOdin } from "@/components/homepage/WhyOdin";
@@ -52,11 +52,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ExperienceShowcase experiences={experiences} />
     </Container></Section>
     <WhyOdin /><Packages /><Restaurant />
-    <Container><ChapterMark index="05" className="pt-16" /></Container>
     <Gallery />
-    <Container><ChapterMark index="06" className="pt-16" /></Container>
     <ReviewsLocation />
-    <Container><ChapterMark index="07" className="pt-16" /></Container>
     <Faq />
     <FinalCta />
   </div>;

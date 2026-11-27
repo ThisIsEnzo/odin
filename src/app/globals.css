@@ -995,12 +995,13 @@ section[id] { scroll-margin-top: 7rem; }
 }
 .estate-hero-media::after {
   position: absolute;
-  z-index: 1;
+  z-index: 0;
   inset: 0;
   content: "";
   pointer-events: none;
   background: linear-gradient(0deg, rgb(20 24 19 / .48), transparent 34%);
 }
+.estate-hero-media > .absolute { z-index: 1; }
 .estate-hero-caption {
   position: absolute;
   z-index: 2;

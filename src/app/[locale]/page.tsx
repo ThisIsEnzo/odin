@@ -22,7 +22,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="homepage">
-      <HeroArrival />ction>
+      <HeroArrival />
 
       <VisitBrief />
 

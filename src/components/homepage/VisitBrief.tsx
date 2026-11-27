@@ -15,7 +15,7 @@ export function VisitBrief() {
     },
     {
       label: t("restaurant.title"),
-      value: facts.restaurantHours,
+      value: `${t("restaurant.hoursLabel")} · ${facts.restaurantHours}`,
     },
     {
       label: t("home.statExperiencesLabel"),
@@ -27,10 +27,11 @@ export function VisitBrief() {
     <section className="visit-brief" aria-labelledby="visit-brief-title">
       <Container className="visit-brief-inner">
         <div className="visit-brief-head">
-          <p className="visit-brief-eyebrow">{t("restaurant.cta")}</p>
-          <p id="visit-brief-title" className="visit-brief-note">
-            {t("home.heroNote")}
-          </p>
+          <span className="visit-brief-mark" aria-hidden="true">✳</span>
+          <h2 id="visit-brief-title" className="visit-brief-title">
+            {t("restaurant.cta")}
+          </h2>
+          <p className="visit-brief-note">{t("home.heroNote")}</p>
           <div className="visit-brief-actions">
             <a
               href={siteConfig.mapsUrl}

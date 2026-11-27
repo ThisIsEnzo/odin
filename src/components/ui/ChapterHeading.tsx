@@ -43,19 +43,3 @@ export function ChapterHeading({
     </div>
   );
 }
-
-/** A restrained numeral rail for sections that keep their existing content layout. */
-export function ChapterMark({
-  index,
-  className,
-}: {
-  index: string;
-  className?: string;
-}) {
-  return (
-    <div className={cn("chapter-mark", className)} aria-hidden="true">
-      <span className="chapter-mark-index">{index}</span>
-      <span className="chapter-mark-rule" />
-    </div>
-  );
-}

@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { HomepageAnchorNavigation } from "@/components/layout/HomepageAnchorNavigation";
 import { Footer } from "@/components/layout/Footer";
+import { MobileBookBar } from "@/components/layout/MobileBookBar";
 import "../globals.css";
 
 // Inter (Latin/Cyrillic) is the UI/body workhorse for en + ru. Cormorant
@@ -85,6 +86,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             {children}
           </main>
           <Footer />
+          <MobileBookBar />
         </NextIntlClientProvider>
       </body>
     </html>

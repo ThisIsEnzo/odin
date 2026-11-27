@@ -21,6 +21,7 @@ export const experiences: Experience[] = [
     slug: "horse-riding",
     translationNamespace: "experiences.horseRiding",
     operatingHours: { open: "07:00", close: "18:00" },
+    hoursConfirmed: true,
     restrictions: { minAge: 12, maxWeightKg: 90 },
     price: { amount: 1200, currency: "THB", unit: "person" },
     durationOptions: [
@@ -43,6 +44,7 @@ export const experiences: Experience[] = [
     slug: "pony-riding",
     translationNamespace: "experiences.ponyRiding",
     operatingHours: { open: "07:00", close: "18:00" },
+    hoursConfirmed: true,
     restrictions: { minAge: 3, maxAge: 12, maxWeightKg: 60 },
     price: { amount: 600, currency: "THB", unit: "child" },
     durationOptions: [

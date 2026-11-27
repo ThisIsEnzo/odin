@@ -1450,3 +1450,69 @@ section[id] { scroll-margin-top: 7rem; }
 }
 .estate-booking .request-input:focus-visible { outline: 2px solid var(--estate-ochre); outline-offset: 2px; border-bottom-color: var(--estate-ochre); }
 .estate-booking .request-input[aria-invalid='true'] { border-bottom-color: var(--color-error); }
+
+
+/* Iteration 03 — trust and media polish */
+.offer-price-value {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.15rem, 1.9vw, 1.55rem);
+}
+.offer-price.is-known .offer-price-value { font-size: clamp(1.2rem, 2vw, 1.7rem); }
+.exp-card .offer-price.is-known .offer-price-value { font-size: clamp(1.15rem, 1.8vw, 1.6rem); }
+
+.gallery-image-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 70% 20%, rgb(181 151 103 / .16), transparent 48%),
+    linear-gradient(135deg, var(--estate-linen), var(--color-canvas-soft));
+  color: var(--estate-clay);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.gallery-expand {
+  position: absolute;
+  z-index: 2;
+  right: .9rem;
+  bottom: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgb(255 255 255 / .5);
+  border-radius: 999px;
+  background: rgb(40 27 22 / .38);
+  color: #fff;
+  backdrop-filter: blur(5px);
+}
+.gallery-expand svg { width: 1rem; height: 1rem; }
+
+.estate-final { background: var(--estate-forest); color: var(--estate-linen); }
+.estate-final-inner { padding-block: clamp(4rem, 8vw, 6.5rem); }
+.estate-final-panel { display: flex; max-width: 42rem; flex-direction: column; gap: 1.1rem; }
+.estate-final-seal { display: block; width: 4.5rem; }
+.estate-final-seal .ground-brand-seal,
+.estate-final-seal .ground-brand-seal img { display: block; width: 100%; height: auto; }
+.estate-final-kicker { color: var(--estate-ochre); }
+.estate-final-title {
+  max-width: 16ch;
+  color: var(--estate-linen);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.6vw, 4.1rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+}
+.estate-final-body { max-width: 32rem; color: rgb(244 239 230 / .8); }
+.estate-final-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.estate-final-secondary { color: var(--estate-linen); border-bottom: 1px solid rgb(244 239 230 / .5); padding-bottom: 2px; }
+:lang(th) .estate-final-title,
+:lang(zh) .estate-final-title { line-height: 1.25; letter-spacing: 0; }

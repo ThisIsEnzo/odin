@@ -43,7 +43,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <p className="estate-hero-place">{location("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}</p>
         </div>
         <div className="estate-hero-media">
-          <HeroSlideshow images={["/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg", "/images/hero/odin-hero.jpg"]} className="absolute inset-0 overflow-hidden" />
+          <HeroSlideshow images={["/images/hero/odin-hero.jpg", "/images/hero/odin-hero-2.jpg"]} className="absolute inset-0 overflow-hidden" />
           <div className="estate-hero-caption" aria-hidden="true">
             <span>ON GROUND</span><span>CHON BURI · THAILAND</span>
           </div>

@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "Ride. Explore. Relax. Eat.",
-    "openDaily": "Open daily · {hours}",
+    "openDaily": "Restaurant open daily · {hours}",
     "navigationHeading": "Explore",
     "contactHeading": "Contact",
     "languageHeading": "Language",

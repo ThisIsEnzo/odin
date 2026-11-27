@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "骑马。探索。放松。用餐。",
-    "openDaily": "每日营业 · {hours}",
+    "openDaily": "餐厅每日营业 · {hours}",
     "navigationHeading": "浏览",
     "contactHeading": "联系方式",
     "languageHeading": "语言",

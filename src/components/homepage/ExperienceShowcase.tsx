@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { OfferFacts } from "@/components/domain/booking/OfferFacts";
@@ -32,6 +32,15 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
   const tExperienceCard = useTranslations("experienceCard");
   const tHome = useTranslations("home");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [isDesktopRail, setIsDesktopRail] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setIsDesktopRail(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   if (experiences.length === 0) return null;
 
@@ -45,8 +54,8 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
     const last = experiences.length - 1;
     let next: number | null = null;
 
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") next = index === last ? 0 : index + 1;
-    else if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = index === 0 ? last : index - 1;
+    if ((isDesktopRail && event.key === "ArrowDown") || (!isDesktopRail && event.key === "ArrowRight")) next = index === last ? 0 : index + 1;
+    else if ((isDesktopRail && event.key === "ArrowUp") || (!isDesktopRail && event.key === "ArrowLeft")) next = index === 0 ? last : index - 1;
     else if (event.key === "Home") next = 0;
     else if (event.key === "End") next = last;
 
@@ -61,7 +70,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       <div
         role="tablist"
         aria-label={tHome("experiencesHeading")}
-        aria-orientation="vertical"
+        aria-orientation={isDesktopRail ? "vertical" : "horizontal"}
         className="exp-rail"
       >
         {experiences.map((experience, index) => {
@@ -106,7 +115,6 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
                   src={activeImage.src}
                   alt={activeTitle}
                   fill
-                  priority
                   sizes="(min-width: 1024px) 62vw, 100vw"
                   className="object-cover"
                   style={{ objectPosition: activeImage.focus }}

@@ -1,4 +1,6 @@
-# ON GROUND — Farm Journal (Stage 1)
+# ON GROUND — Farm Journal (Stage 1 + Stage 2)
+
+Base: `main` after PR #8. Branch: `feature/odin-farm-journal-stage-2`.
 
 ## Creative direction
 
@@ -6,51 +8,72 @@
 editorial craft and practical clarity, not generic luxury-resort conventions.
 
 The existing Editorial Estate and Slow Country foundations remain in place.
-This stage adds an early practical summary and verified restaurant structured
-data without claiming that restaurant hours apply to the entire property.
+The Farm Journal layer gives the homepage a clearer editorial chapter system
+and distinct compositions while retaining the approved earth/terracotta/cream
+identity and existing motion primitives.
 
-## Shipped in this stage
+## Implemented
 
-- A server-rendered VisitBrief immediately after the homepage hero.
+### Stage 1 — practical clarity and metadata
+
+- Server-rendered VisitBrief immediately after the homepage hero.
 - Distance, restaurant hours and configured bookable-experience count sourced
-  from the existing data modules.
-- Directions link to the configured map listing and a request-to-book CTA.
-- Open Graph and Twitter metadata, locale alternates and restaurant JSON-LD.
+  from existing data modules.
+- Restaurant hours are explicitly labelled, not presented as whole-property hours.
+- Existing map listing and request-to-book CTA.
+- Open Graph/Twitter metadata, locale alternates and `NEXT_PUBLIC_SITE_URL`
+  metadata base when configured.
+- LocalBusiness JSON-LD with locality and verified map listing only. No
+  restaurant hours are assigned to the whole property.
 - Unit coverage for the VisitBrief data contract.
+
+### Stage 2 — editorial chapters
+
+- Shared `ChapterHeading` / `ChapterMark` primitives with split, stack,
+  overlay and ledger compositions.
+- **01 Experiences:** chapter-led split heading.
+- **02 The place:** asymmetric photo-led story, editorial narrative and
+  numbered pillars using existing translations and photography.
+- **03 Plan your day:** numbered package ledger. Package definitions and
+  pending-price messaging remain canonical; mock prices are never surfaced.
+- **04 The table:** full-width cinematic restaurant treatment with the
+  existing restaurant image and confirmed restaurant hours only.
+- **05 Moments, 06 Find us, 07 Questions:** restrained numeral rails ahead of
+  the existing Gallery, Location and FAQ sections; their working internals
+  remain unchanged.
 
 ## Factual boundaries
 
 - Age restrictions on Horse Riding, Pony Riding and ATV are marked mock and
   must not be presented as confirmed business facts.
-- Restaurant hours are 07:00–23:00 and describe the restaurant only.
-- Sauna price/quantity basis, package pricing, menu and contact details remain
-  subject to business confirmation where their source data is marked mock.
-- No unverified street address, telephone, coordinates, ratings or price range
-  are emitted in structured data.
+- Restaurant hours (07:00–23:00) describe the restaurant only.
+- Sauna price/quantity basis, package pricing, menu, average spend and contact
+  details remain subject to business confirmation where their source data is
+  marked mock.
+- The street address in `siteConfig` is mock and is not emitted into JSON-LD.
+- No unverified coordinates, phone number, rating or price range is published.
 
-## Homepage narrative direction
+## i18n and accessibility
 
-Arrive → Plan your visit → Experiences → The place → Plan your day →
-The table → Moments → Find us → Questions → Invitation.
-
-This stage implements the early practical-clarity component. The full
-section-by-section editorial art-direction rollout remains a separate stage.
+- All visible copy uses existing EN/TH/RU/ZH translation keys; no new copy keys
+  or hardcoded business claims were introduced.
+- Chapter numerals are decorative and hidden from assistive technology.
+- VisitBrief has a semantic heading; action links retain visible keyboard focus.
+- Existing reduced-motion and Reveal progressive-enhancement behavior is used.
 
 ## Photography and content gaps
 
-Commission real photography for:
-- Family/pony riding.
-- Horse-riding details.
-- ATV in motion.
-- Sauna atmosphere.
-- Restaurant/table and seasonal dishes.
-- Farm grounds and arrival signage.
+Commission real photography for family/pony riding, horse-riding details, ATV
+motion, sauna atmosphere, restaurant/table and seasonal dishes, farm grounds
+and arrival signage. Existing local image assets are reused; no remote image
+source was introduced.
 
-Business confirmation still needed for mock prices, package details, menu,
-verified contact channels, street address/coordinates and response policy.
+Business confirmation still needed for sauna price/quantity basis, package
+prices/arrangements, menu, average spend, verified street address/coordinates,
+phone, LINE, WhatsApp, response-time policy, age restrictions and real reviews.
 
 ## QA status
 
-Automated repository checks and browser QA must be run against this branch
-before merge. No test, build, visual inspection or performance result is
-claimed by this document.
+Typecheck, lint, Vitest, production build, responsive browser QA, keyboard and
+reduced-motion inspection, screenshots and performance measurements have not
+been run in this GitHub-only workflow. They are required before merge.

@@ -84,7 +84,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
               id={"exp-tab-" + experience.id}
               role="tab"
               type="button"
-              aria-controls={"exp-panel-" + experience.id}
+              aria-controls="exp-panel"
               aria-selected={isActive}
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
@@ -102,7 +102,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
       <div className="exp-stage-right">
         <div
           key={activeExperience.id}
-          id={"exp-panel-" + activeExperience.id}
+          id="exp-panel"
           role="tabpanel"
           aria-labelledby={"exp-tab-" + activeExperience.id}
           tabIndex={0}
@@ -128,7 +128,7 @@ export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
           </div>
 
           <article className="exp-card">
-            <p className="eyebrow exp-card-kicker">ON GROUND · EXPERIENCE {String(activeIndex + 1).padStart(2, "0")}</p>
+            <p className="eyebrow exp-card-kicker">ON GROUND · {String(activeIndex + 1).padStart(2, "0")}</p>
             <h3 className="exp-card-title">{activeTitle}</h3>
             <p className="exp-card-desc">
               {tExperiences(activeKey + ".shortDescription")}

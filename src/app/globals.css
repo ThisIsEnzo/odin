@@ -1377,3 +1377,76 @@ section[id] { scroll-margin-top: 7rem; }
 .homepage #packages,
 .homepage #gallery,
 .homepage #faq { background-color: var(--estate-linen); }
+
+
+/* ================= ON GROUND — screenshot critique iteration 02 ================= */
+/* Hero panel is deliberately anchored rather than vertically floating. */
+.estate-hero-panel { justify-content: space-between; gap: 2rem; }
+.estate-hero-rail { color: rgb(244 239 230 / .62); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; }
+.estate-hero-body { display: flex; flex-direction: column; gap: 1.1rem; }
+
+/* Experience selector is a tablist, not a collection of outbound links. */
+.exp-rail-item::after { content: none; }
+.exp-card { min-width: min(29rem, 86vw); }
+.exp-card .offer-price-value {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.15rem, 2vw, 1.75rem);
+}
+.exp-card-kicker { color: var(--estate-clay); margin-bottom: .4rem; }
+
+/* Section 02: let the photograph read; keep the scrim concentrated behind copy. */
+.estate-story-media { opacity: 1; }
+.estate-story-scrim {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(32 29 26 / .82) 0%, rgb(32 29 26 / .48) 48%, rgb(32 29 26 / .12) 78%);
+}
+.estate-story-inner { z-index: 1; }
+.estate-story-quote { font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.02; }
+.estate-story-inset {
+  position: absolute;
+  z-index: 2;
+  right: 4%;
+  bottom: -3rem;
+  width: min(26vw, 320px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+@media (max-width: 1023px) {
+  .estate-story-inset { position: relative; right: auto; bottom: auto; width: 70%; margin: 1.5rem 0 -3rem auto; }
+}
+
+/* Visible media surfaces while images or the map are loading. */
+.gallery-frame, .exp-media, .request-photo { background: var(--color-canvas-soft); }
+.ge-0, .ge-4 { min-height: 260px; }
+.findus-map-frame { position: relative; }
+.findus-map-fallback {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  color: var(--color-ink);
+  font-size: .95rem;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+.findus-map-frame iframe { position: relative; z-index: 1; }
+
+/* Booking fields: more substantial without altering the booking flow. */
+.estate-booking .request-field label { font-weight: 600; color: var(--color-ink); }
+.estate-booking .request-input {
+  background: var(--estate-linen);
+  border: 1px solid var(--color-hairline);
+  border-bottom: 2px solid var(--color-border);
+  border-radius: var(--radius-button);
+  padding: .8rem .9rem;
+}
+.estate-booking .request-input:focus-visible { outline: 2px solid var(--estate-ochre); outline-offset: 2px; border-bottom-color: var(--estate-ochre); }
+.estate-booking .request-input[aria-invalid='true'] { border-bottom-color: var(--color-error); }

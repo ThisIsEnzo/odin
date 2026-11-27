@@ -27,33 +27,25 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="homepage">
-      <section className="hero estate-hero">
+      <section className="estate-hero">
         <div className="estate-hero-panel">
-          <p className="eyebrow estate-hero-kicker">{t("heroKicker")}</p>
-          <h1 className="estate-hero-title">{t("heroTitle")}</h1>
-          <p className="estate-hero-sub">{t("heroSubtitle")}</p>
-          <div className="estate-hero-actions">
-            <Link href="/book" className={buttonVariants({ size: "lg" })}>
-              {nav("bookNow")} <span aria-hidden="true">↗</span>
-            </Link>
-            <Link href="/#experiences" className="estate-hero-secondary">
-              {t("secondaryCta")}
-            </Link>
+          <p className="estate-hero-rail">ON GROUND · KHAO MAI KAEO</p>
+          <div className="estate-hero-body">
+            <p className="eyebrow estate-hero-kicker">{t("heroKicker")}</p>
+            <h1 className="estate-hero-title">{t("heroTitle")}</h1>
+            <p className="estate-hero-sub">{t("heroSubtitle")}</p>
+            <div className="estate-hero-actions">
+              <Link href="/book" className={buttonVariants({ size: "lg" })}>{nav("bookNow")} <span aria-hidden="true">↗</span></Link>
+              <Link href="/#experiences" className="estate-hero-secondary">{t("secondaryCta")}</Link>
+            </div>
+            <p className="estate-hero-note">{t("heroNote")}</p>
           </div>
-          <p className="estate-hero-note">{t("heroNote")}</p>
-          <p className="estate-hero-place">
-            {location("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}
-          </p>
+          <p className="estate-hero-place">{location("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}</p>
         </div>
-
         <div className="estate-hero-media">
-          <HeroSlideshow
-            images={["/images/hero/odin-hero.jpg", "/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg"]}
-            className="absolute inset-0 overflow-hidden"
-          />
+          <HeroSlideshow images={["/images/hero/odin-hero-2.jpg", "/images/hero/odin-hero-3.jpg", "/images/hero/odin-hero.jpg"]} className="absolute inset-0 overflow-hidden" />
           <div className="estate-hero-caption" aria-hidden="true">
-            <span>ON GROUND</span>
-            <span>CHON BURI · THAILAND</span>
+            <span>ON GROUND</span><span>CHON BURI · THAILAND</span>
           </div>
         </div>
       </section>

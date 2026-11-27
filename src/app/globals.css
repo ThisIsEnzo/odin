@@ -452,6 +452,8 @@ section[id] { scroll-margin-top: 7rem; }
 .ground-nav-link{position:relative}
 .ground-nav-link::after{content:"";position:absolute;left:.625rem;right:.625rem;bottom:.55rem;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 280ms var(--ease-out)}
 .ground-nav-link:hover::after,.ground-nav-link:focus-visible::after{transform:scaleX(1)}
+.scroll-scene{position:relative}
+.scroll-scene-frame{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center;justify-content:center;--scene-progress:0}
 @media(max-width:767px){.hero-scroll-line{height:40px}}
 @media(prefers-reduced-motion:reduce){.split-word{opacity:1!important;transform:none!important}.reveal.reveal-mask{clip-path:none!important}.hero-scroll-line::after{animation:none}.ground-nav-link::after{transition:none}}
 
@@ -484,16 +486,6 @@ section[id] { scroll-margin-top: 7rem; }
   .mobile-book-bar { transition: none; }
 }
 
-/* Keep the pinned finale desktop-only; phones get a normal content section. */
-@media (max-width: 767px) {
-  .scroll-scene.finale { height: auto !important; }
-  .scroll-scene.finale .scroll-scene-frame {
-    position: relative;
-    top: auto;
-    height: auto;
-    min-height: 78svh;
-  }
-}
 
 
 /* Farm Journal — early practical clarity, distinct from the cinematic chapters. */

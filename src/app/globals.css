@@ -520,3 +520,95 @@ section[id] { scroll-margin-top: 7rem; }
     min-height: 78svh;
   }
 }
+
+
+/* Farm Journal — early practical clarity, distinct from the cinematic chapters. */
+.visit-brief {
+  background: var(--color-canvas-soft);
+  border-block: 1px solid var(--color-hairline);
+}
+.visit-brief-inner {
+  display: grid;
+  gap: 1.75rem;
+  padding-block: 2.25rem;
+}
+.visit-brief-eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--type-subheading);
+  line-height: 1.2;
+  font-weight: 500;
+}
+.visit-brief-note {
+  margin-top: .65rem;
+  max-width: 34rem;
+  color: var(--color-text-secondary);
+  font-size: .875rem;
+}
+.visit-brief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .9rem 1.5rem;
+  margin-top: 1.1rem;
+}
+.visit-brief-maps {
+  color: var(--color-ink);
+  font-size: .9rem;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+.visit-brief-book {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius-button);
+  background: var(--color-brand-primary);
+  color: var(--color-brand-cream);
+  font-size: .9rem;
+  font-weight: 500;
+}
+.visit-brief-book:hover { background: var(--color-brand-primary-hover); }
+.visit-brief-facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+}
+.visit-brief-fact {
+  min-width: 0;
+  border-top: 1px solid var(--color-hairline);
+  padding-top: .75rem;
+}
+.visit-brief-fact dt {
+  color: var(--color-text-secondary);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.visit-brief-fact dd {
+  margin-top: .3rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.visit-brief a:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 4px;
+}
+@media (min-width: 768px) {
+  .visit-brief-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: 3rem;
+  }
+  .visit-brief-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+:lang(th) .visit-brief-fact dt,
+:lang(zh) .visit-brief-fact dt { letter-spacing: .02em; }
+@media (prefers-reduced-motion: reduce) {
+  .visit-brief * { scroll-behavior: auto; }
+}

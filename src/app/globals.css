@@ -906,3 +906,64 @@ section[id] { scroll-margin-top: 7rem; }
 :lang(th) .faq-a, :lang(zh) .faq-a,
 :lang(th) .invitation-body, :lang(zh) .invitation-body { line-height: 1.75; }
 @media (prefers-reduced-motion: reduce) { .faq-icon { transition: none; } .faq-a-wrap { transition: none; } }
+
+/* ================= Screenshot-driven reliability and hierarchy pass ================= */
+
+/* Keep a visible brand surface behind images while Next/Image is loading or fails. */
+.hero,
+.hero-slide,
+.invitation,
+.invitation-media { background-color: var(--color-surface-deep); }
+.story-photo,
+.restaurant-photo,
+.gallery-frame,
+.findus-map-frame,
+.gallery-essay-section .snap-x > button {
+  background-color: var(--color-canvas-soft);
+}
+.gallery-frame { min-height: 220px; }
+.ge-1 { min-height: 320px; }
+.story-photo { min-height: 340px; }
+
+/* Replace oversized translucent chapter numerals with a compact editorial folio. */
+.homepage .chapter { display: block; }
+.homepage .chapter .chapter-index {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  margin: 0 0 .7rem;
+  color: var(--color-brand-primary);
+  font-family: var(--font-sans);
+  font-size: .8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: .16em;
+  opacity: 1;
+  font-variant-numeric: tabular-nums;
+}
+.homepage .chapter .chapter-index::after {
+  content: "";
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: .5;
+}
+.homepage .chapter-cream .chapter-index { color: var(--color-brand-cream); opacity: 1; }
+.homepage .chapter-overlay .chapter-index {
+  position: static;
+  top: auto;
+  right: auto;
+  z-index: auto;
+  font-size: .8rem;
+}
+.homepage .chapter-split .chapter-intro { margin-top: .75rem; max-width: 34rem; }
+
+/* The visit facts need enough scale to balance the editorial title. */
+.visit-brief-fact dd {
+  font-size: clamp(1.1rem, 1.25vw, 1.35rem);
+  line-height: 1.35;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .visit-brief-inner { grid-template-columns: minmax(0, 1fr); }
+  .visit-brief-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -34,15 +34,12 @@ export default async function BookPage({ params, searchParams }: PageProps) {
     ? (packages.find((p) => p.slug === sp.package || p.id === sp.package) ?? null)
     : null;
 
-  const initialExperienceId: ExperienceId | null =
-    requestedExperienceId;
-
   return (
-    <Section tone="canvas" className="pt-16 sm:pt-20">
+    <Section tone="canvas" className="estate-booking pt-16 sm:pt-20">
       <Container>
         <BookingFlow
           locale={locale as Locale}
-          initialExperienceId={initialExperienceId}
+          initialExperienceId={requestedExperienceId}
           contextPackageId={requestedPackage?.id ?? null}
         />
       </Container>

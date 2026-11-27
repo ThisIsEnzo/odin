@@ -1,74 +1,66 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
-import { ChapterHeading } from "@/components/ui/ChapterHeading";
 import { siteConfig } from "@/data/odin/site";
 import { experiences } from "@/data/odin/experiences";
 
 const pillars = ["pillarRide", "pillarRest", "pillarTable"] as const;
 
-/** 02 — The place: an asymmetric photo-led story with a practical narrative. */
+/** 02 — A more immersive, layered expression of the existing place story. */
 export function WhyOdin() {
   const t = useTranslations("whyOdin");
 
   return (
-    <Section tone="canvas" className="story-section">
-      <Container className="story-grid">
-        <Reveal variant="mask" className="story-photo">
-          <Parallax strength={26} scale={0.06} className="absolute inset-0">
-            <Image
-              src="/images/gallery/odin-gallery-01.jpg"
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 44vw, 100vw"
-              className="object-cover object-[center_60%]"
-            />
-          </Parallax>
+    <section className="estate-story" aria-labelledby="estate-story-title">
+      <div className="estate-story-media" aria-hidden="true">
+        <Parallax strength={22} scale={0.04} className="absolute inset-0">
+          <Image
+            src="/images/gallery/odin-gallery-04.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-[center_55%]"
+          />
+        </Parallax>
+      </div>
+
+      <Container className="estate-story-inner">
+        <Reveal className="estate-story-quote-wrap">
+          <p className="eyebrow estate-story-kicker">{t("kicker")}</p>
+          <span className="estate-story-index" aria-hidden="true">02 / THE PLACE</span>
+          <h2 id="estate-story-title" className="estate-story-quote">{t("heading")}</h2>
+          <p className="estate-story-lead">{t("lead")}</p>
+          <p className="estate-story-distance">
+            {t("distanceNote", { distance: siteConfig.locationDistanceFromPattaya })}
+          </p>
         </Reveal>
 
-        <div className="story-copy">
-          <Reveal>
-            <ChapterHeading
-              index="02"
-              variant="stack"
-              kicker={t("kicker")}
-              title={t("heading")}
-            />
-          </Reveal>
-
-          <Reveal delayMs={80}>
-            <p className="story-lead">{t("lead")}</p>
-            <p className="story-distance">
-              {t("distanceNote", { distance: siteConfig.locationDistanceFromPattaya })}
-            </p>
-          </Reveal>
-
-          <div className="story-pillars">
-            {pillars.map((key, index) => (
-              <Reveal
-                key={key}
-                delayMs={120 + index * 70}
-                className="story-pillar"
-              >
-                <span aria-hidden="true" className="story-pillar-index">
-                  0{index + 1}
-                </span>
-                <div>
-                  <h3 className="story-pillar-title">{t(`${key}.title`)}</h3>
-                  <p className="story-pillar-text">{t(`${key}.description`)}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <p className="story-count">
+        <Reveal delayMs={90} className="estate-story-notes">
+          {pillars.map((key) => (
+            <div key={key} className="estate-story-note">
+              <span className="estate-story-note-mark" aria-hidden="true">✳</span>
+              <div>
+                <h3 className="estate-story-note-title">{t(key + ".title")}</h3>
+                <p className="estate-story-note-text">{t(key + ".description")}</p>
+              </div>
+            </div>
+          ))}
+          <p className="estate-story-count">
             {t("experienceCount", { count: experiences.length })}
           </p>
-        </div>
+          <div className="estate-story-inset">
+            <Image
+              src="/images/gallery/odin-gallery-02.jpg"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 30vw, 80vw"
+              className="object-cover"
+            />
+          </div>
+        </Reveal>
       </Container>
-    </Section>
+    </section>
   );
 }

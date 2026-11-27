@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "Катайтесь. Исследуйте. Отдыхайте. Ешьте.",
-    "openDaily": "Ежедневно · {hours}",
+    "openDaily": "Ресторан открыт ежедневно · {hours}",
     "navigationHeading": "Разделы",
     "contactHeading": "Контакты",
     "languageHeading": "Язык",

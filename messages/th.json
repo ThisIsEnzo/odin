@@ -29,7 +29,7 @@
   },
   "footer": {
     "tagline": "ขี่ม้า ผจญภัย พักผ่อน รับประทานอาหาร",
-    "openDaily": "เปิดทุกวัน · {hours}",
+    "openDaily": "ร้านอาหารเปิดทุกวัน · {hours}",
     "navigationHeading": "สำรวจ",
     "contactHeading": "ติดต่อ",
     "languageHeading": "ภาษา",

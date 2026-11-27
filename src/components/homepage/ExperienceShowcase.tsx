@@ -9,6 +9,7 @@ import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/types/domain";
+import { confirmedHours } from "@/lib/experience-hours";
 
 const IMAGES: Record<string, { src: string; focus: string }> = {
   "horse-riding": { src: "/images/experiences/odin-horse.jpg", focus: "50% 35%" },
@@ -53,6 +54,7 @@ export function ExperienceShowcase({ experiences }: { experiences: Experience[] 
         {experiences.map((x, i) => {
           const img = IMAGES[x.id];
           const title = t(`${camel(x.id)}.title`);
+          const hours = confirmedHours(x);
           return (
             <div key={x.id} id={`exp-panel-${x.id}`} role="tabpanel" aria-labelledby={`exp-tab-${x.id}`}
               hidden={i !== active} className="exp-panel">
@@ -64,7 +66,7 @@ export function ExperienceShowcase({ experiences }: { experiences: Experience[] 
                 <h3 className="exp-card-title">{title}</h3>
                 <p className="exp-card-desc">{t(`${camel(x.id)}.shortDescription`)}</p>
                 <div className="exp-card-badges">
-                  <Badge variant="dusk">{tc("hours", { open: x.operatingHours.open, close: x.operatingHours.close })}</Badge>
+                  {hours ? <Badge variant="dusk">{tc("hours", { open: hours.open, close: hours.close })}</Badge> : null}
                   {x.restrictions.maxWeightKg ? <Badge variant="saddle">{tc("maxWeight", { max: x.restrictions.maxWeightKg })}</Badge> : null}
                 </div>
                 <OfferFacts experience={x} />

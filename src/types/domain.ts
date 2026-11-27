@@ -83,6 +83,8 @@ export interface Experience {
   booking?: BookingBehavior;
   bookingImage?: string;
   operatingHours: OperatingHours;
+  /** Only true after business confirmation; absent/false hours are not public facts. */
+  hoursConfirmed?: boolean;
   restrictions: ExperienceRestrictions;
   price: Money;
   /** Configurable per experience — never hardcode an interval in UI. */
@@ -135,6 +137,8 @@ export interface GalleryItem {
   /** Local path only — never an external hotlink. See MOCK_DATA.md §5. */
   src: string;
   altTranslationKey: string;
+  /** Optional crop focal point used by gallery cards and lightbox. */
+  focus?: string;
   tags: Array<ExperienceId | "restaurant" | "location">;
   width: number;
   height: number;

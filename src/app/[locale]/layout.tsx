@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { HomepageAnchorNavigation } from "@/components/layout/HomepageAnchorNavigation";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBookBar } from "@/components/layout/MobileBookBar";
+import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
 import "../globals.css";
 
 // Inter (Latin/Cyrillic) is the UI/body workhorse for en + ru. Cormorant
@@ -46,12 +47,31 @@ type LayoutProps = {
 export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   return {
+    ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
     title: {
       default: t("defaultTitle"),
       template: `%s — ${t("siteName")}`,
     },
     description: t("description"),
+    openGraph: {
+      type: "website",
+      siteName: t("siteName"),
+      title: t("defaultTitle"),
+      description: t("description"),
+      locale,
+      images: [{ url: "/images/hero/odin-hero.jpg", width: 2752, height: 1536, alt: t("siteName") }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("defaultTitle"),
+      description: t("description"),
+      images: ["/images/hero/odin-hero.jpg"],
+    },
+    alternates: {
+      languages: Object.fromEntries(routing.locales.map((supportedLocale) => [supportedLocale, `/${supportedLocale}`])),
+    },
   };
 }
 
@@ -73,6 +93,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       className={`${inter.variable} ${displaySerif.variable} ${notoSansThai.variable} ${notoSansSC.variable}`}
     >
       <body className="flex min-h-screen flex-col antialiased">
+        <LocalBusinessJsonLd locale={locale} />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <a
             href="#main-content"

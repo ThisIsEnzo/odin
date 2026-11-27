@@ -16,6 +16,7 @@ import { ReviewsLocation } from "@/components/homepage/ReviewsLocation";
 import { Faq } from "@/components/homepage/Faq";
 import { FinalCta } from "@/components/homepage/FinalCta";
 import { siteConfig } from "@/data/odin/site";
+import { VisitBrief } from "@/components/homepage/VisitBrief";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -42,6 +43,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </Container>
       <div className="hero-scroll-cue pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2" aria-hidden="true"><span className="hero-scroll-line" /></div>
     </section>
+    <VisitBrief />
     <Section id="experiences" className="lg:py-28"><Container>
       <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
         <h2>{t("experiencesHeading")}</h2><p className="max-w-md text-ink/70 lg:justify-self-end">{t("experiencesIntro")}</p>

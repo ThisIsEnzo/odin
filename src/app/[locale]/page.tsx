@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { experiences } from "@/data/odin/experiences";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
+import { ChapterHeading, ChapterMark } from "@/components/ui/ChapterHeading";
 import { HeroSlideshow } from "@/components/homepage/HeroSlideshow";
 import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
 import { WhyOdin } from "@/components/homepage/WhyOdin";
@@ -45,11 +46,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     </section>
     <VisitBrief />
     <Section id="experiences" className="lg:py-28"><Container>
-      <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <h2>{t("experiencesHeading")}</h2><p className="max-w-md text-ink/70 lg:justify-self-end">{t("experiencesIntro")}</p>
+      <Reveal>
+        <ChapterHeading index="01" variant="split" title={t("experiencesHeading")} intro={t("experiencesIntro")} className="mb-12" />
       </Reveal>
       <ExperienceShowcase experiences={experiences} />
     </Container></Section>
-    <WhyOdin /><Packages /><Restaurant /><Gallery /><ReviewsLocation /><Faq /><FinalCta />
+    <WhyOdin /><Packages /><Restaurant />
+    <Container><ChapterMark index="05" className="pt-16" /></Container>
+    <Gallery />
+    <Container><ChapterMark index="06" className="pt-16" /></Container>
+    <ReviewsLocation />
+    <Container><ChapterMark index="07" className="pt-16" /></Container>
+    <Faq />
+    <FinalCta />
   </div>;
 }

@@ -1,164 +1,80 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { OfferFacts } from "@/components/domain/booking/OfferFacts";
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
-import { Parallax } from "@/components/motion/Parallax";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/types/domain";
 
-type ExperienceShowcaseProps = {
-  experiences: Experience[];
-};
-
-function toCamelCase(id: string): string {
-  return id.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
-}
-
-const experienceImages: Partial<Record<string, { src: string; focus: string }>> = {
+const IMAGES: Record<string, { src: string; focus: string }> = {
   "horse-riding": { src: "/images/experiences/odin-horse.jpg", focus: "50% 35%" },
   "pony-riding": { src: "/images/experiences/odin-pony.jpg", focus: "50% 40%" },
   atv: { src: "/images/experiences/odin-atv.jpg", focus: "60% 45%" },
   sauna: { src: "/images/experiences/odin-sauna.jpg", focus: "55% 55%" },
 };
+const camel = (id: string) => id.replace(/-([a-z])/g, (_, l: string) => l.toUpperCase());
 
-export function ExperienceShowcase({ experiences }: ExperienceShowcaseProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const tExperiences = useTranslations("experiences");
-  const tExperienceCard = useTranslations("experienceCard");
-  const tHome = useTranslations("home");
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [isDesktopRail, setIsDesktopRail] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setIsDesktopRail(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
+export function ExperienceShowcase({ experiences }: { experiences: Experience[] }) {
+  const [active, setActive] = useState(0);
+  const t = useTranslations("experiences");
+  const tc = useTranslations("experienceCard");
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
   if (experiences.length === 0) return null;
 
-  const activeExperience = experiences[activeIndex] ?? experiences[0];
-  const activeKey = toCamelCase(activeExperience.id);
-  const activeImage = experienceImages[activeExperience.id];
-  const activeTitle = tExperiences(activeKey + ".title");
-  const activeMaxWeight = activeExperience.restrictions.maxWeightKg;
-
-  function onTabKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+  const onKey = (e: React.KeyboardEvent, i: number) => {
     const last = experiences.length - 1;
-    let next: number | null = null;
-
-    if ((isDesktopRail && event.key === "ArrowDown") || (!isDesktopRail && event.key === "ArrowRight")) next = index === last ? 0 : index + 1;
-    else if ((isDesktopRail && event.key === "ArrowUp") || (!isDesktopRail && event.key === "ArrowLeft")) next = index === 0 ? last : index - 1;
-    else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = last;
-
-    if (next === null) return;
-    event.preventDefault();
-    setActiveIndex(next);
-    tabRefs.current[next]?.focus();
-  }
+    let n: number | null = null;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") n = i === last ? 0 : i + 1;
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") n = i === 0 ? last : i - 1;
+    else if (e.key === "Home") n = 0;
+    else if (e.key === "End") n = last;
+    if (n === null) return;
+    e.preventDefault(); setActive(n); refs.current[n]?.focus();
+  };
 
   return (
     <div className="exp-stage">
-      <div
-        role="tablist"
-        aria-label={tHome("experiencesHeading")}
-        aria-orientation={isDesktopRail ? "vertical" : "horizontal"}
-        className="exp-rail"
-      >
-        {experiences.map((experience, index) => {
-          const isActive = index === activeIndex;
-          const title = tExperiences(toCamelCase(experience.id) + ".title");
-
+      <div role="tablist" aria-orientation="vertical" aria-label={t("horseRiding.title")} className="exp-rail">
+        {experiences.map((x, i) => (
+          <button key={x.id} ref={(el) => { refs.current[i] = el; }} role="tab" type="button"
+            id={`exp-tab-${x.id}`} aria-selected={i === active} aria-controls={`exp-panel-${x.id}`}
+            tabIndex={i === active ? 0 : -1} onClick={() => setActive(i)} onKeyDown={(e) => onKey(e, i)}
+            className={cn("exp-rail-item", i === active && "is-active")}>
+            <span className="exp-rail-index" aria-hidden="true">0{i + 1}</span>
+            <span className="exp-rail-name">{t(`${camel(x.id)}.title`)}</span>
+          </button>
+        ))}
+      </div>
+      <div className="exp-stage-right">
+        {experiences.map((x, i) => {
+          const img = IMAGES[x.id];
+          const title = t(`${camel(x.id)}.title`);
           return (
-            <button
-              key={experience.id}
-              ref={(element) => { tabRefs.current[index] = element; }}
-              id={"exp-tab-" + experience.id}
-              role="tab"
-              type="button"
-              aria-controls="exp-panel"
-              aria-selected={isActive}
-              tabIndex={isActive ? 0 : -1}
-              onClick={() => setActiveIndex(index)}
-              onKeyDown={(event) => onTabKeyDown(event, index)}
-              className={cn("exp-rail-item", isActive && "is-active")}
-            >
-              <span className="exp-rail-index" aria-hidden="true">0{index + 1}</span>
-              <span className="exp-rail-name">{title}</span>
-              <span className="exp-rail-arrow" aria-hidden="true">↗</span>
-            </button>
+            <div key={x.id} id={`exp-panel-${x.id}`} role="tabpanel" aria-labelledby={`exp-tab-${x.id}`}
+              hidden={i !== active} className="exp-panel">
+              <div className="exp-media">
+                {img ? <Image src={img.src} alt={title} fill priority={i === 0} sizes="(min-width:1024px) 62vw, 100vw" className="object-cover" style={{ objectPosition: img.focus }} /> : null}
+              </div>
+              <div className="exp-card">
+                <p className="eyebrow exp-card-kicker">ON GROUND · EXPERIENCE 0{i + 1}</p>
+                <h3 className="exp-card-title">{title}</h3>
+                <p className="exp-card-desc">{t(`${camel(x.id)}.shortDescription`)}</p>
+                <div className="exp-card-badges">
+                  <Badge variant="dusk">{tc("hours", { open: x.operatingHours.open, close: x.operatingHours.close })}</Badge>
+                  {x.restrictions.maxWeightKg ? <Badge variant="saddle">{tc("maxWeight", { max: x.restrictions.maxWeightKg })}</Badge> : null}
+                </div>
+                <OfferFacts experience={x} />
+                <Link href={`/book?experience=${x.id}`} className={buttonVariants({ variant: "primary", size: "sm", className: "mt-4" })}>
+                  {tc("bookCta")}
+                </Link>
+              </div>
+            </div>
           );
         })}
-      </div>
-
-      <div className="exp-stage-right">
-        <div
-          key={activeExperience.id}
-          id="exp-panel"
-          role="tabpanel"
-          aria-labelledby={"exp-tab-" + activeExperience.id}
-          tabIndex={0}
-          className="exp-panel"
-        >
-          <div className="exp-media">
-            {activeImage ? (
-              <Parallax strength={20} scale={0.04} className="absolute -inset-4">
-                <Image
-                  src={activeImage.src}
-                  alt={activeTitle}
-                  fill
-                  sizes="(min-width: 1024px) 62vw, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: activeImage.focus }}
-                />
-              </Parallax>
-            ) : null}
-            <div className="exp-media-shade" aria-hidden="true" />
-            <span className="exp-media-index" aria-hidden="true">
-              0{activeIndex + 1} <span>/ 0{experiences.length}</span>
-            </span>
-          </div>
-
-          <article className="exp-card">
-            <p className="eyebrow exp-card-kicker">ON GROUND · {String(activeIndex + 1).padStart(2, "0")}</p>
-            <h3 className="exp-card-title">{activeTitle}</h3>
-            <p className="exp-card-desc">
-              {tExperiences(activeKey + ".shortDescription")}
-            </p>
-            <div className="exp-card-badges">
-              <Badge variant="dusk">
-                {tExperienceCard("hours", {
-                  open: activeExperience.operatingHours.open,
-                  close: activeExperience.operatingHours.close,
-                })}
-              </Badge>
-              {activeMaxWeight !== undefined ? (
-                <Badge variant="saddle">
-                  {tExperienceCard("maxWeight", { max: activeMaxWeight })}
-                </Badge>
-              ) : null}
-            </div>
-            <OfferFacts experience={activeExperience} />
-            <Link
-              href={"/book?experience=" + activeExperience.id}
-              className={buttonVariants({
-                variant: "primary",
-                size: "sm",
-                className: "mt-5",
-              })}
-            >
-              {tExperienceCard("bookCta")} <span aria-hidden="true">↗</span>
-            </Link>
-          </article>
-        </div>
       </div>
     </div>
   );

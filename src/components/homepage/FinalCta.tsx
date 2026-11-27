@@ -9,7 +9,7 @@ import { SplitText } from "@/components/motion/SplitText";
 import { Reveal } from "@/components/motion/Reveal";
 export function FinalCta() {
   const t = useTranslations("finalCta"), home = useTranslations("home");
-  return <ScrollScene height="170vh" className="finale surface-inverse">
+  return <ScrollScene height="150vh" className="finale surface-inverse">
     <div className="finale-media" aria-hidden="true"><Image src="/images/hero/odin-hero-2.jpg" alt="" fill sizes="100vw" className="object-cover" priority={false} /></div>
     <div className="finale-shade" aria-hidden="true" />
     <Container className="finale-content text-center">

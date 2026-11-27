@@ -480,3 +480,43 @@ section[id] { scroll-margin-top: 7rem; }
 :lang(th) .finale-heading,:lang(zh) .finale-heading{letter-spacing:0;line-height:1.3}
 @media(max-width:767px){.finale-media{transform:none}.scroll-scene.finale{height:120vh!important}.hero-scroll-line{height:40px}}
 @media(prefers-reduced-motion:reduce){.split-word{opacity:1!important;transform:none!important}.reveal.reveal-mask{clip-path:none!important}.hero-scroll-line::after{animation:none}.ground-nav-link::after{transition:none}.finale-media{transform:none!important}}
+
+
+/* --- Mobile booking access: restore the primary action below 640px -------- */
+.mobile-book-bar {
+  background: var(--color-brand-primary);
+  border-top: 1px solid rgb(244 227 202 / 0.25);
+  box-shadow: 0 -6px 24px -8px rgb(40 27 22 / 0.35);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  transform: translateY(110%);
+  transition: transform 320ms var(--ease-out);
+  pointer-events: none;
+}
+.mobile-book-bar.is-visible {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.mobile-book-bar-link { color: var(--color-brand-cream); }
+.mobile-book-bar-link:focus-visible {
+  outline: 2px solid var(--color-brand-cream);
+  outline-offset: -4px;
+}
+@media (max-width: 639px) {
+  .ground-footer {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-book-bar { transition: none; }
+}
+
+/* Keep the pinned finale desktop-only; phones get a normal content section. */
+@media (max-width: 767px) {
+  .scroll-scene.finale { height: auto !important; }
+  .scroll-scene.finale .scroll-scene-frame {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 78svh;
+  }
+}

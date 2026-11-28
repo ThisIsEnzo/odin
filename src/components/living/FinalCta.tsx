@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BrandSeal } from "@/components/layout/BrandSeal";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function FinalCta() {
   const t = useTranslations("finalCta");
@@ -22,8 +23,8 @@ export function FinalCta() {
           </div>
         </div>
         <div className="le-close-signature" aria-hidden="true">
-          <BrandSeal />
-          <span>ON GROUND · KHAO MAI KAEO</span>
+          <BrandLogo full />
+          <span className="le-close-location">KHAO MAI KAEO · CHON BURI · THAILAND</span>
         </div>
       </div>
     </section>

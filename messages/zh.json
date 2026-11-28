@@ -25,7 +25,7 @@
     "contact": "联系我们",
     "privacy": "隐私政策",
     "terms": "服务条款",
-    "bookNow": "立即预订"
+    "bookNow": "规划到访"
   },
   "footer": {
     "tagline": "骑马。探索。放松。用餐。",
@@ -35,15 +35,15 @@
     "languageHeading": "语言",
     "distanceFromPattaya": "距芭堤雅约 {distance}",
     "rightsReserved": "版权所有。",
-    "requestContact": "申请到访"
+    "requestContact": "规划到访"
   },
   "home": {
     "badge": "初版预览",
     "heroKicker": "骑马 · 探索 · 放松 · 用餐",
     "heroTitle": "让时光慢下来",
     "heroSubtitle": "骑马漫游，桑拿放松，再享一顿美食。",
-    "heroNote": "这是一份预订申请 — 我们的团队会直接与您确认可预订时间。",
-    "secondaryCta": "查看体验项目",
+    "heroNote": "提交申请后，我们的团队会直接与您确认名额。",
+    "secondaryCta": "浏览体验",
     "statDistanceLabel": "距芭堤雅的距离",
     "statDistance": "距芭堤雅 {distance}",
     "statExperiencesLabel": "体验项目数量",
@@ -79,7 +79,7 @@
     "hours": "营业时间 {open}–{close}",
     "maxWeight": "最大承重 {max} 公斤",
     "priceFrom": "起价 {amount} {currency}",
-    "bookCta": "预订此体验项目",
+    "bookCta": "了解此体验",
     "pricePending": "由经理确认"
   },
   "whyOdin": {
@@ -99,7 +99,7 @@
       "title": "为你留一张餐桌",
       "description": "在餐厅用餐，为一天画上句号。"
     },
-    "experienceCount": "{count} 项特色体验，可单独预订，也可组合成套餐。"
+    "experienceCount": "{count} 项特色体验，可单独申请，也可组合成套餐。"
   },
   "pricing": {
     "unit": {
@@ -128,14 +128,14 @@
     "hoursLabel": "每日营业",
     "avgSpendLabel": "人均消费",
     "menuComingSoon": "完整菜单详情即将公布。",
-    "cta": "规划您的行程"
+    "cta": "规划到访"
   },
   "packages": {
     "heading": "套餐",
     "intro": "选择乡野体验套餐。套餐价格与活动安排由经理确认。",
     "includesRestaurant": "含餐厅用餐",
     "mockNote": "套餐价格与安排由经理确认。",
-    "cta": "选择套餐",
+    "cta": "了解套餐",
     "familyDay": {
       "title": "家庭日",
       "description": "适合全家人的轻松一天：小马骑乘、农场时光，以及在我们餐厅用餐。"
@@ -198,8 +198,8 @@
     "heading": "常见问题",
     "items": {
       "howToBook": {
-        "question": "如何预订体验项目？",
-        "answer": "通过我们的预订表单提交预订申请。我们的团队会直接与您确认可预订时间 — 申请并非自动确认的预订。"
+        "question": "如何提交体验申请？",
+        "answer": "通过表单提交申请。我们的团队会直接与您确认名额 — 申请不等于已确认的预订。"
       },
       "whatToBring": {
         "question": "需要携带什么？",
@@ -214,8 +214,8 @@
   "finalCta": {
     "heading": "准备好安排您在 ON GROUND 的一天了吗？",
     "body": "提交申请，我们的团队会直接与您确认可预订时间。",
-    "primaryCta": "立即预订",
-    "secondaryCta": "查看体验项目"
+    "primaryCta": "规划到访",
+    "secondaryCta": "浏览体验"
   },
   "booking": {
     "errors": {
@@ -231,8 +231,8 @@
       "nameRequired": "请填写您的姓名。",
       "invalidEmail": "请填写有效的电子邮箱地址。",
       "invalidPhone": "请填写有效的电话号码。",
-      "invalidSubmission": "无法处理此次提交。",
-      "networkFailed": "无法连接到服务器，请检查网络连接后重试。",
+      "invalidSubmission": "申请未能提交，请重试。",
+      "networkFailed": "申请未能提交，请检查网络后重试。",
       "emptyVisit": "请至少添加一项活动或套餐。",
       "invalidPackage": "该套餐不可用。",
       "invalidPackageComponents": "活动内容与所选套餐不符。",
@@ -249,7 +249,7 @@
       "invalidUnitCount": "请选择足够的车辆，每位参加者最多一辆。",
       "unexpectedUnitCount": "此体验无需填写车辆数量。"
     },
-    "pageTitle": "预订您的体验",
+    "pageTitle": "规划到访",
     "pageIntro": "告诉我们您想参加的活动以及时间——我们的团队会直接与您联系，确认是否可以预约。",
     "packageContext": "此项目属于「{packageName}」套餐——请选择您想优先申请预约的体验项目。",
     "steps": {
@@ -275,8 +275,8 @@
     "actions": {
       "back": "上一步",
       "next": "继续",
-      "submit": "提交预约请求",
-      "submitting": "正在提交您的请求…",
+      "submit": "提交申请",
+      "submitting": "正在提交申请…",
       "selected": "已选择"
     },
     "review": {
@@ -288,15 +288,15 @@
       "name": "姓名",
       "contact": "联系方式",
       "notes": "备注",
-      "disclaimer": "这是一个预约请求，尚未确认——我们的团队会与您联系以确认是否可以预约。"
+      "disclaimer": "这是一份申请，尚未确认 — 我们的团队会与您联系确认名额。"
     },
     "success": {
       "badge": "已收到请求",
-      "title": "谢谢！我们已收到您的预订申请。",
-      "body": "我们的经理将与您联系，确认可用名额、具体时间及最终价格。",
+      "title": "申请已收到",
+      "body": "感谢您。我们已收到您的申请，团队会核对详情并与您联系确认名额。",
       "reference": "参考编号：{id}",
       "backHome": "返回首页",
-      "viewExperiences": "探索更多体验项目"
+      "viewExperiences": "返回体验项目"
     },
     "v2": {
       "title": "您的行程",
@@ -413,17 +413,17 @@
       "notes": "还有什么需要我们了解的吗？",
       "optional": "选填",
       "notesTitle": "备注",
-      "review": "查看申请",
+      "review": "核对申请",
       "reviewTitle": "确认您的申请信息",
-      "reviewIntro": "发送给我们的团队之前，请核对以下信息。",
+      "reviewIntro": "发送给团队之前，请核对以下信息。",
       "experiencesTitle": "您的体验",
       "edit": "修改申请",
-      "send": "发送预订申请",
-      "sending": "正在发送申请…",
+      "send": "提交申请",
+      "sending": "正在提交申请…",
       "selectionCount": "已选择 {count} 个项目",
       "noneSelected": "请至少选择一项体验",
       "guestSummary": "{count} 位参加者",
-      "requestNotice": "这是预订申请。可用名额、具体时间及最终价格将由我们的经理与您确认。",
+      "requestNotice": "这是一份申请，并非已确认的预订。团队会核对详情并与您联系，确认名额、时间与最终价格。",
       "fixErrors": "请检查以下信息",
       "added": "已将{name}加入申请。",
       "removed": "已将{name}从申请中移除。",

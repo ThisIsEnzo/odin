@@ -8,8 +8,7 @@ export function Location() {
     <section id="location" className="le-find" aria-labelledby="le-location-title">
       <div className="le-wrap le-find-grid">
         <div className="le-find-copy">
-          <p className="le-note">{t("heading")}</p>
-          <h2 id="le-location-title" className="le-display">{t("distanceBadge", { distance: siteConfig.locationDistanceFromPattaya })}</h2>
+          <h2 id="le-location-title" className="le-display">{t("heading")}</h2>
           <p className="le-body">{t("body")}</p>
           <a href={siteConfig.mapsUrl} target="_blank" rel="noopener noreferrer" className="le-link le-directions">
             {t("openInMaps")} <span aria-hidden="true">↗</span>

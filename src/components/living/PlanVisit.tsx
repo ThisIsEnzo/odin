@@ -27,8 +27,8 @@ export function PlanVisit() {
     <section className="le-plan" aria-labelledby="le-plan-title">
       <div className="le-wrap le-plan-inner">
         <div className="le-plan-intro">
-          <p className="le-note">{t("restaurant.cta")}</p>
-          <h2 id="le-plan-title" className="le-display le-plan-title">{t("location.heading")}</h2>
+          <p className="le-note">{t("location.heading")}</p>
+          <h2 id="le-plan-title" className="le-display le-plan-title">{t("restaurant.cta")}</h2>
           <p className="le-body le-plan-copy">{t("location.body")}</p>
           <div className="le-plan-actions">
             <a href={siteConfig.mapsUrl} target="_blank" rel="noopener noreferrer" className="le-link">

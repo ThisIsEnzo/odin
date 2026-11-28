@@ -298,20 +298,6 @@
 }
 
 
-/* Finishing pass: the price line and the closing brand signature both have room to breathe. */
-@media (min-width: 1024px) {
-  .le-plate { max-width: min(30rem, 86%); }
-}
-.le-facts {
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
-}
-.le-facts .le-price-fact .le-amount {
-  font-size: clamp(1.1rem, 1.65vw, 1.45rem);
-  letter-spacing: -.025em;
-}
-@media (max-width: 480px) {
-  .le-facts .le-price-fact .le-amount { font-size: clamp(1.05rem, 4.2vw, 1.25rem); }
-}
 .le-close-signature .ground-logo-full {
   display: block;
   width: min(100%, 480px);

@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@/components/ui/Button";
+import { SplitText } from "@/components/motion/SplitText";
 
-/** THE LIVING ESTATE — a single, authentic arrival scene with an editorial message. */
 export function Hero() {
   const t = useTranslations("home");
   const nav = useTranslations("nav");
@@ -24,10 +24,18 @@ export function Hero() {
           />
         </div>
         <div className="le-hero-scrim" aria-hidden="true" />
+        <div className="le-hero-bloom" aria-hidden="true" />
         <p className="le-hero-rail" aria-hidden="true">ON GROUND · KHAO MAI KAEO</p>
+
         <div className="le-hero-inner">
           <p className="le-note le-note-light">{t("heroKicker")}</p>
-          <h1 id="le-hero-title" className="le-display le-hero-title">{t("heroTitle")}</h1>
+          <SplitText
+            as="h1"
+            id="le-hero-title"
+            text={t("heroTitle")}
+            className="le-display le-hero-title"
+            stagger={90}
+          />
           <p className="le-hero-sub">{t("heroSubtitle")}</p>
           <div className="le-hero-actions">
             <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>
@@ -36,6 +44,7 @@ export function Hero() {
             <Link href="/#experiences" className="le-link">{t("secondaryCta")}</Link>
           </div>
         </div>
+        <div className="le-seam" aria-hidden="true" />
       </div>
     </section>
   );

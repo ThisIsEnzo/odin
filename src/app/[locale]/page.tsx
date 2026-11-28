@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { experiences } from "@/data/odin/experiences";
 import { Hero } from "@/components/living/Hero";
+import { Statement } from "@/components/living/Statement";
 import { PlanVisit } from "@/components/living/PlanVisit";
 import { Experiences } from "@/components/living/Experiences";
 import { Story } from "@/components/living/Story";
@@ -19,6 +20,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <div className="homepage">
       <Hero />
+      <Statement />
       <PlanVisit />
       <Experiences items={experiences} />
       <Story />

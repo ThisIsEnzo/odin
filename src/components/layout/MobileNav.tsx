@@ -21,17 +21,17 @@ export function MobileNav() {
         <button
           type="button"
           aria-label={tCommon("openMenu")}
-          className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-button p-2 text-text-on-accent hover:bg-brand-cream/20 lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
+          className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-button p-2 text-text-on-accent hover:bg-brand-cream/20 xl:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
         >
           <Menu aria-hidden="true" className="h-6 w-6" />
         </button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 lg:hidden" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 xl:hidden" />
         <Dialog.Content
           aria-label={tCommon("mobileMenuLabel")} aria-describedby={undefined}
-          className="ground-menu fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 lg:hidden"
+          className="ground-menu fixed inset-y-0 right-0 z-50 flex w-full max-w-lg overflow-y-auto flex-col gap-8 bg-canvas p-6 sm:p-10 xl:hidden"
         >
           <div className="ground-menu-heading brand-material -mx-6 -mt-6 flex items-center justify-between px-6 py-5 sm:-mx-10 sm:-mt-10 sm:px-10">
             <BrandLogo className="ground-menu-logo" />

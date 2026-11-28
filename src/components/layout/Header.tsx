@@ -31,7 +31,7 @@ export function Header() {
 
         <nav
           aria-label={tCommon("primaryNavigation")}
-          className="hidden items-center gap-0 lg:flex"
+          className="hidden items-center gap-0 xl:flex"
         >
           {primaryNavItems.map((item) => (
             <Link key={item.href} href={item.href} className="ground-nav-link">
@@ -41,7 +41,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher className="hidden lg:inline-flex" />
+          <LanguageSwitcher className="hidden xl:inline-flex" />
           <Link
             href={bookNowItem.href}
             className={buttonVariants({ variant: "primary", size: "sm", className: "ground-header-cta" })}

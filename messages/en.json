@@ -25,7 +25,7 @@
     "contact": "Contact",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "bookNow": "Book Now"
+    "bookNow": "Plan Your Visit"
   },
   "footer": {
     "tagline": "Ride. Explore. Relax. Eat.",
@@ -35,15 +35,15 @@
     "languageHeading": "Language",
     "distanceFromPattaya": "Approximately {distance} from Pattaya",
     "rightsReserved": "All rights reserved.",
-    "requestContact": "Request a visit"
+    "requestContact": "Plan Your Visit"
   },
   "home": {
     "badge": "Foundation preview",
     "heroKicker": "Ride · Explore · Relax · Eat",
     "heroTitle": "A slower kind of day.",
     "heroSubtitle": "Ride the trails. Unwind in the sauna. Stay for the table.",
-    "heroNote": "This is a request to book — our team confirms availability with you directly.",
-    "secondaryCta": "See experiences",
+    "heroNote": "Send a request — our team will confirm availability with you directly.",
+    "secondaryCta": "Explore Experiences",
     "statDistanceLabel": "Distance from Pattaya",
     "statDistance": "{distance} from Pattaya",
     "statExperiencesLabel": "Number of experiences",
@@ -79,7 +79,7 @@
     "hours": "Open {open}–{close}",
     "maxWeight": "Max weight {max} kg",
     "priceFrom": "From {amount} {currency}",
-    "bookCta": "Book this experience",
+    "bookCta": "Explore Experience",
     "pricePending": "Manager to confirm"
   },
   "whyOdin": {
@@ -99,7 +99,7 @@
       "title": "A Table Waiting",
       "description": "Stay for a meal at the restaurant."
     },
-    "experienceCount": "{count} signature experiences, each bookable on its own or as part of a package."
+    "experienceCount": "{count} signature experiences, each available on its own or as part of a package."
   },
   "pricing": {
     "unit": {
@@ -128,14 +128,14 @@
     "hoursLabel": "Open daily",
     "avgSpendLabel": "Average spend",
     "menuComingSoon": "Full menu details coming soon.",
-    "cta": "Plan your visit"
+    "cta": "Plan Your Visit"
   },
   "packages": {
     "heading": "Packages",
     "intro": "Choose a countryside package. Package prices and activity arrangements will be confirmed by our manager.",
     "includesRestaurant": "Includes restaurant",
     "mockNote": "Package price and arrangements require manager confirmation.",
-    "cta": "Choose package",
+    "cta": "Explore Package",
     "familyDay": {
       "title": "Family Day",
       "description": "A relaxed day for the whole family: pony riding, time on the farm, and a meal at our restaurant."
@@ -198,8 +198,8 @@
     "heading": "Frequently Asked Questions",
     "items": {
       "howToBook": {
-        "question": "How do I book an experience?",
-        "answer": "Submit a booking request through our booking form. Our team confirms availability with you directly — a request isn't an automatic reservation."
+        "question": "How do I request an experience?",
+        "answer": "Send a request through our form. Our team confirms availability with you directly — a request isn't an automatic reservation."
       },
       "whatToBring": {
         "question": "What should I bring?",
@@ -214,8 +214,8 @@
   "finalCta": {
     "heading": "Ready to plan your day at ON GROUND?",
     "body": "Send a request and our team will confirm availability with you directly.",
-    "primaryCta": "Book Now",
-    "secondaryCta": "See experiences"
+    "primaryCta": "Plan Your Visit",
+    "secondaryCta": "Explore Experiences"
   },
   "booking": {
     "errors": {
@@ -231,8 +231,8 @@
       "nameRequired": "Please enter your name.",
       "invalidEmail": "Please enter a valid email address.",
       "invalidPhone": "Please enter a valid phone number.",
-      "invalidSubmission": "We couldn't process that submission.",
-      "networkFailed": "We couldn't reach our server. Check your connection and try again.",
+      "invalidSubmission": "We couldn't send your request. Please try again.",
+      "networkFailed": "We couldn't send your request. Please check your connection and try again.",
       "emptyVisit": "Add at least one activity or package.",
       "invalidPackage": "The package is not available.",
       "invalidPackageComponents": "Package activities do not match the selected package.",
@@ -249,7 +249,7 @@
       "invalidUnitCount": "Choose enough vehicles for your guests, up to one per guest.",
       "unexpectedUnitCount": "Vehicle count is not needed for this experience."
     },
-    "pageTitle": "Book Your Experience",
+    "pageTitle": "Plan Your Visit",
     "pageIntro": "Tell us what you'd like to do and when — our team will follow up directly to confirm availability.",
     "packageContext": "Part of the {packageName} package — choose which experience you'd like to request first.",
     "steps": {
@@ -275,8 +275,8 @@
     "actions": {
       "back": "Back",
       "next": "Continue",
-      "submit": "Send request",
-      "submitting": "Sending your request…",
+      "submit": "Send Request",
+      "submitting": "Sending Request…",
       "selected": "Selected"
     },
     "review": {
@@ -288,15 +288,15 @@
       "name": "Name",
       "contact": "Contact",
       "notes": "Notes",
-      "disclaimer": "This is a request, not a confirmed booking — our team will follow up to confirm availability."
+      "disclaimer": "This is a request, not a confirmed reservation — our team will contact you to confirm availability."
     },
     "success": {
       "badge": "Received",
-      "title": "Thank you — request received",
-      "body": "Our manager will contact you to confirm availability, timing and final price.",
+      "title": "Request Received",
+      "body": "Thank you. Your request has been received. Our team will review the details and contact you to confirm availability.",
       "reference": "Reference: {id}",
       "backHome": "Back to home",
-      "viewExperiences": "Explore more experiences"
+      "viewExperiences": "Back to Experiences"
     },
     "v2": {
       "title": "Your visit",
@@ -358,7 +358,7 @@
       "stage1": "Choose a start time and guests for each experience. Activities in the same visit can start at different times.",
       "stage2": "Let us know how to reach you about your visit.",
       "stage3": "Check your visit before sending your request.",
-      "reviewCta": "Review request",
+      "reviewCta": "Review Request",
       "detailsCta": "Continue to your details",
       "timeHelp": "When would you like this experience to begin? Times are local to Thailand.",
       "maxWeight": "Maximum rider weight {max} kg"
@@ -413,17 +413,17 @@
       "notes": "Anything else we should know?",
       "optional": "Optional",
       "notesTitle": "Notes",
-      "review": "Review request",
+      "review": "Review Request",
       "reviewTitle": "Review your request",
-      "reviewIntro": "A moment to check the details before sending your request to our team.",
+      "reviewIntro": "Check the details before sending your request to our team.",
       "experiencesTitle": "Your experiences",
-      "edit": "Edit request",
-      "send": "Send booking request",
-      "sending": "Sending your request…",
+      "edit": "Edit Request",
+      "send": "Send Request",
+      "sending": "Sending Request…",
       "selectionCount": "{count, plural, one {# selection in your request} other {# selections in your request}}",
       "noneSelected": "Choose at least one experience",
       "guestSummary": "{count, plural, one {# guest} other {# guests}}",
-      "requestNotice": "This is a request to book. Availability, timing and final price will be confirmed by our manager.",
+      "requestNotice": "This is a request, not a confirmed reservation. Our team will review the details and contact you to confirm availability, timing and final price.",
       "fixErrors": "Please check these details",
       "added": "{name} added to your request.",
       "removed": "{name} removed from your request.",

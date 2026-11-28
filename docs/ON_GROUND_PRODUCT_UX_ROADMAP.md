@@ -5,7 +5,7 @@
 **Branch:** `feature/odin-cinematic-experiences-iteration`  
 **Status:** Planning document — no implementation work or business facts are implied by this roadmap.
 
-This roadmap turns the audit findings into an ordered delivery plan. Priorities are based on business risk: first make the enquiry journey truthful and reliable, then improve confidence and conversion, then complete responsive, accessibility, localization and technical QA.
+This roadmap turns the audit findings into an ordered delivery plan. The delivery order is intentional: fix the visitor experience, content, localization, responsive/accessibility, SEO and performance first. Production credentials, integrations and end-to-end message delivery are the final launch gate, so we configure and verify them only after the rest of the journey is stable.
 
 ## Principles and constraints
 
@@ -20,7 +20,7 @@ This roadmap turns the audit findings into an ordered delivery plan. Priorities 
 
 | Priority | Workstream | Outcome | Dependency |
 |---|---|---|---|
-| P0 — launch blocker | Enquiry delivery and production configuration | A real request reaches the business reliably | Production environment access and a confirmed delivery channel |
+| Final launch gate | Enquiry delivery and production configuration | A real request reaches the business reliably | Production environment access and a confirmed delivery channel; complete after all UX/content/QA work |
 | P0 — trust / conversion | CTA and enquiry-state language | Visitors understand they are submitting a request, not receiving a confirmed booking | Confirm actual response/confirmation process |
 | P1 — high | Booking journey UX | Visitors choose what they want before being asked for personal details | Review current flow and preserve API/schema behaviour |
 | P1 — high | Business trust and visit planning | Accurate location, contact, directions and visit information | Owner-supplied verified business facts |
@@ -31,33 +31,7 @@ This roadmap turns the audit findings into an ordered delivery plan. Priorities 
 
 ---
 
-## P0 — Make the enquiry journey truthful and operational
-
-### P0.1 Verify production enquiry delivery
-
-**Audit finding:** The Iteration 05 implementation note records that Vercel environment variables were not configured and that real enquiry delivery was therefore not ready. This is a documented deployment risk; the current live configuration must be rechecked rather than assumed.
-
-**Tasks**
-1. Inventory every environment variable required by the booking route, persistence layer and notification/outbox worker.
-2. Verify Preview and Production values are present in the correct Vercel environments. Do not put secrets in source control or documentation.
-3. Verify the production database / persistence connection and migration state.
-4. Verify the actual notification destination and delivery provider with the business owner.
-5. Submit a controlled end-to-end test enquiry and confirm:
-   - server accepts valid input;
-   - request is persisted exactly once;
-   - manager notification is delivered;
-   - failures are observable and recoverable;
-   - duplicate submissions are safely handled;
-   - the visitor receives an accurate success or failure state.
-6. Test missing configuration and downstream provider failure. The UI must not show success if the request was not safely accepted.
-
-**Acceptance criteria**
-- One test enquiry is visible in the intended business workflow.
-- Duplicate submission does not create duplicate requests.
-- Failure states are visible to the visitor and diagnosable by the team.
-- No secrets or personal data are exposed in client logs.
-
-**Blocked by:** Vercel project access, confirmed production integration details and a person who can verify receipt.
+## P0 — Make the enquiry journey truthful
 
 ### P0.2 Align CTA and confirmation copy with the real process
 
@@ -270,20 +244,50 @@ Run a browser QA matrix on the actual Preview deployment:
 
 ---
 
+## Final launch gate — Production enquiry delivery
+
+This work is deliberately scheduled **last**, after the public-facing flow, verified content, localization, responsive/accessibility QA, SEO and performance work are complete. Do not delay the current UX fixes while waiting for production API credentials.
+
+### P0.1 Verify production enquiry delivery
+
+**Audit finding:** The Iteration 05 implementation note records that Vercel environment variables were not configured and that real enquiry delivery was therefore not ready. This is a documented deployment risk; the current live configuration must be rechecked rather than assumed.
+
+**Tasks**
+1. Inventory every environment variable required by the booking route, persistence layer and notification/outbox worker.
+2. Verify Preview and Production values are present in the correct Vercel environments. Do not put secrets in source control or documentation.
+3. Verify the production database / persistence connection and migration state.
+4. Verify the actual notification destination and delivery provider with the business owner.
+5. Submit a controlled end-to-end test enquiry and confirm:
+   - server accepts valid input;
+   - request is persisted exactly once;
+   - manager notification is delivered;
+   - failures are observable and recoverable;
+   - duplicate submissions are safely handled;
+   - the visitor receives an accurate success or failure state.
+6. Test missing configuration and downstream provider failure. The UI must not show success if the request was not safely accepted.
+
+**Acceptance criteria**
+- One test enquiry is visible in the intended business workflow.
+- Duplicate submission does not create duplicate requests.
+- Failure states are visible to the visitor and diagnosable by the team.
+- No secrets or personal data are exposed in client logs.
+
+**Blocked by:** Vercel project access, confirmed production integration details and a person who can verify receipt.
+
 ## Delivery sequence
 
 | Slice | Scope | Exit gate |
 |---|---|---|
-| 06A | Production enquiry configuration and end-to-end delivery verification | Real test request reaches the business reliably |
-| 06B | CTA / enquiry copy consistency | All states truthfully describe request vs confirmation |
-| 06C | Booking journey UX review and improvements | Full flow works without losing state or breaking contracts |
-| 06D | Verified location, contact, restaurant and package content | All published business facts approved by owner |
-| 06E | Authentic photo replacement and media optimization | Distinct, correct images across core sections |
-| 06F | EN / TH / RU / ZH typography and copy QA | Locale matrix passes |
-| 06G | Responsive + accessibility QA | Viewport, keyboard, contrast and reduced-motion checks pass |
-| 06H | SEO + performance final pass | Metadata, runtime and performance checks documented |
+| 06A | CTA / enquiry copy consistency | All states truthfully describe request vs confirmation |
+| 06B | Booking journey UX review and improvements | Full flow works without losing state or breaking contracts |
+| 06C | Verified location, contact, restaurant and package content | All published business facts approved by owner |
+| 06D | Authentic photo replacement and media optimization | Distinct, correct images across core sections |
+| 06E | EN / TH / RU / ZH typography and copy QA | Locale matrix passes |
+| 06F | Responsive + accessibility QA | Viewport, keyboard, contrast and reduced-motion checks pass |
+| 06G | SEO + performance final pass | Metadata, runtime and performance checks documented |
+| 06H | Production enquiry configuration and end-to-end delivery verification | Real test request reaches the business reliably |
 
-Slices may be split into smaller PRs. P0 items should be resolved before public launch; P1 content work depends on verified owner inputs and should not be filled with placeholders disguised as facts.
+Slices may be split into smaller PRs. The production enquiry integration is intentionally the final implementation/verification step and must pass before public launch. P1 content work depends on verified owner inputs and should not be filled with placeholders disguised as facts.
 
 ## Release checklist
 

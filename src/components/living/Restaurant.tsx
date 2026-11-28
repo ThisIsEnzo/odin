@@ -9,13 +9,8 @@ export function Restaurant() {
   return (
     <section id="restaurant" className="le-table" aria-labelledby="le-table-title">
       <div className="le-table-media">
-        <Image
-          src="/images/restaurant/odin-restaurant.jpg"
-          alt={t("title")}
-          fill
-          sizes="(min-width:1024px) 58vw, 100vw"
-          style={{ objectPosition: "center 55%" }}
-        />
+        <Image src="/images/restaurant/odin-restaurant.jpg" alt={t("title")} fill
+          sizes="(min-width:1024px) 58vw, 100vw" style={{ objectPosition: "center 55%" }} />
       </div>
       <div className="le-table-copy">
         <p className="le-note le-note-light">04</p>

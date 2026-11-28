@@ -54,7 +54,8 @@
     "heroNextSlide": "下一张",
     "heroGoToSlide": "跳转到第 {number} 张",
     "heroPause": "暂停幻灯片",
-    "heroPlay": "播放幻灯片"
+    "heroPlay": "播放幻灯片",
+    "statement": "距离城市二十公里的真实农场——一天以骑行、树荫、蒸汽与一桌共食来度量。"
   },
   "experiences": {
     "horseRiding": {

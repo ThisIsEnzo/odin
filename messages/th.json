@@ -54,7 +54,8 @@
     "heroNextSlide": "ภาพถัดไป",
     "heroGoToSlide": "ไปที่ภาพที่ {number}",
     "heroPause": "หยุดสไลด์ชั่วคราว",
-    "heroPlay": "เล่นสไลด์"
+    "heroPlay": "เล่นสไลด์",
+    "statement": "ฟาร์มจริงห่างจากเมืองยี่สิบกิโลเมตร — วันที่วัดด้วยเส้นทางขี่ เงาไม้ ไอน้ำ และโต๊ะอาหารร่วม"
   },
   "experiences": {
     "horseRiding": {

@@ -258,3 +258,36 @@ html { scrollbar-color: var(--le-stone) var(--le-sand); scrollbar-width: thin; }
   .st-p .w { transition: none; }
   .cx-bloom { display: none; }
 }
+
+
+/* --- light and seams between environments --- */
+.le-story-scrim {
+  background:
+    linear-gradient(90deg, rgb(28 26 23 / .86), rgb(28 26 23 / .40) 46%, rgb(28 26 23 / .05) 82%),
+    linear-gradient(0deg, rgb(28 26 23 / .5), transparent 58%);
+}
+.le-story-media img { filter: saturate(1.06) contrast(1.02); }
+.le-story-caption {
+  display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin-top: 1.6rem;
+  border-top: 1px solid var(--le-line-light); padding-top: .9rem;
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: rgb(245 240 230 / .62);
+}
+:lang(th) .le-story-caption, :lang(zh) .le-story-caption { letter-spacing: .04em; }
+
+.le-table-media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background: radial-gradient(58% 48% at 74% 20%, rgb(255 214 166 / .34), transparent 70%);
+}
+
+.le-close-bloom {
+  position: absolute; z-index: 0; right: -12%; bottom: -46%;
+  width: min(760px, 92vw); aspect-ratio: 1; border-radius: 50%; filter: blur(10px); pointer-events: none;
+  background: radial-gradient(circle, rgb(214 154 60 / .38), rgb(180 85 47 / .16) 46%, transparent 72%);
+}
+.le-close-location { margin-top: 1.4rem; font-size: .62rem; letter-spacing: .22em; color: rgb(245 240 230 / .45); }
+.le-close-inner { grid-template-columns: minmax(0, 1fr); }
+
+/* Soft transitions between linen, sand and charcoal sections */
+.le-pack { background: linear-gradient(180deg, #ece2ce, var(--le-sand) 20%); }
+.le-find { background: linear-gradient(180deg, #efe6d2, var(--le-sand) 22%); }
+.le-gal, .le-faq, .le-guest { background: linear-gradient(180deg, #fbf7ef, var(--le-linen) 18%); }

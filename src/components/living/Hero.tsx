@@ -25,17 +25,13 @@ export function Hero() {
         </div>
         <div className="le-hero-scrim" aria-hidden="true" />
         <div className="le-hero-bloom" aria-hidden="true" />
-        <p className="le-hero-rail" aria-hidden="true">ON GROUND · KHAO MAI KAEO</p>
+        <p className="le-hero-rail" aria-hidden="true">ON GROUND · KHAO MAI KAEО</p>
 
         <div className="le-hero-inner">
           <p className="le-note le-note-light">{t("heroKicker")}</p>
-          <SplitText
-            as="h1"
-            id="le-hero-title"
-            text={t("heroTitle")}
-            className="le-display le-hero-title"
-            stagger={90}
-          />
+          <h1 id="le-hero-title" className="le-display le-hero-title">
+            <SplitText as="span" text={t("heroTitle")} stagger={90} />
+          </h1>
           <p className="le-hero-sub">{t("heroSubtitle")}</p>
           <div className="le-hero-actions">
             <Link href="/book" className={buttonVariants({ variant: "primary", size: "lg" })}>

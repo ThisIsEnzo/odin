@@ -24,7 +24,7 @@ export function Experiences({ items }: { items: Experience[] }) {
   const t = useTranslations("experiences");
   const tc = useTranslations("experienceCard");
   const pricing = useTranslations("pricing");
-  const bookingPricing = useTranslations("bookingPricing");
+  const bookingPricing = useTranslations("booking.pricing");
   const format = useFormatter();
 
   useEffect(() => {

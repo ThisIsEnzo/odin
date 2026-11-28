@@ -1,51 +1,32 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
+import { setRequestLocale } from "next-intl/server";
 import { experiences } from "@/data/odin/experiences";
-import { Reveal } from "@/components/motion/Reveal";
-import { ChapterHeading } from "@/components/ui/ChapterHeading";
-import { HeroArrival } from "@/components/homepage/HeroArrival";
-import { ExperienceShowcase } from "@/components/homepage/ExperienceShowcase";
-import { WhyOdin } from "@/components/homepage/WhyOdin";
-import { Packages } from "@/components/homepage/Packages";
-import { Restaurant } from "@/components/homepage/Restaurant";
-import { Gallery } from "@/components/homepage/Gallery";
-import { ReviewsLocation } from "@/components/homepage/ReviewsLocation";
-import { Faq } from "@/components/homepage/Faq";
-import { FinalCta } from "@/components/homepage/FinalCta";
-import { VisitBrief } from "@/components/homepage/VisitBrief";
+import { Hero } from "@/components/living/Hero";
+import { PlanVisit } from "@/components/living/PlanVisit";
+import { Experiences } from "@/components/living/Experiences";
+import { Story } from "@/components/living/Story";
+import { Packages } from "@/components/living/Packages";
+import { Restaurant } from "@/components/living/Restaurant";
+import { Gallery } from "@/components/living/Gallery";
+import { GuestStories } from "@/components/living/GuestStories";
+import { Location } from "@/components/living/Location";
+import { Faq } from "@/components/living/Faq";
+import { FinalCta } from "@/components/living/FinalCta";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("home");
 
   return (
     <div className="homepage">
-      <HeroArrival />
-
-      <VisitBrief />
-
-      <Section id="experiences" className="lg:py-28">
-        <Container>
-          <Reveal>
-            <ChapterHeading
-              index="01"
-              variant="split"
-              title={t("experiencesHeading")}
-              intro={t("experiencesIntro")}
-              className="mb-12"
-            />
-          </Reveal>
-          <ExperienceShowcase experiences={experiences} />
-        </Container>
-      </Section>
-
-      <WhyOdin />
+      <Hero />
+      <PlanVisit />
+      <Experiences items={experiences} />
+      <Story />
       <Packages />
       <Restaurant />
       <Gallery />
-      <ReviewsLocation />
+      <GuestStories />
+      <Location />
       <Faq />
       <FinalCta />
     </div>

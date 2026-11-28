@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileBookBar } from "@/components/layout/MobileBookBar";
 import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
 import "../globals.css";
+import "../living-estate.css";
 
 // Inter (Latin/Cyrillic) is the UI/body workhorse for en + ru. Cormorant
 // Garamond is the editorial display voice (also Latin/Cyrillic) wired to

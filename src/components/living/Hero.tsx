@@ -25,7 +25,7 @@ export function Hero() {
         </div>
         <div className="le-hero-scrim" aria-hidden="true" />
         <div className="le-hero-bloom" aria-hidden="true" />
-        <p className="le-hero-rail" aria-hidden="true">ON GROUND · KHAO MAI KAEО</p>
+        <p className="le-hero-rail" aria-hidden="true">ON GROUND · KHAO MAI KAEO</p>
 
         <div className="le-hero-inner">
           <p className="le-note le-note-light">{t("heroKicker")}</p>

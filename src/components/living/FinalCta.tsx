@@ -1,9 +1,6 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BrandSeal } from "@/components/layout/BrandSeal";
-import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function FinalCta() {
   const t = useTranslations("finalCta");
@@ -11,6 +8,7 @@ export function FinalCta() {
 
   return (
     <section className="le-close le-grain" aria-labelledby="le-close-title">
+      <div className="le-close-bloom" aria-hidden="true" />
       <div className="le-wrap le-close-inner">
         <div className="le-close-copy">
           <span className="le-close-seal" aria-hidden="true"><BrandSeal /></span>
@@ -21,10 +19,7 @@ export function FinalCta() {
             <Link href="/book" className="le-cta le-cta-light">{t("primaryCta")} <span aria-hidden="true">↗</span></Link>
             <Link href="/#experiences" className="le-link">{t("secondaryCta")}</Link>
           </div>
-        </div>
-        <div className="le-close-signature" aria-hidden="true">
-          <BrandLogo full />
-          <span className="le-close-location">KHAO MAI KAEO · CHON BURI · THAILAND</span>
+          <p className="le-close-location">KHAO MAI KAEO · CHON BURI · THAILAND</p>
         </div>
       </div>
     </section>

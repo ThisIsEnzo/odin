@@ -11,13 +11,7 @@ export function Story() {
   return (
     <section className="le-story le-grain" aria-labelledby="le-story-title">
       <div className="le-story-media" aria-hidden="true">
-        <Image
-          src="/images/gallery/odin-gallery-01.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          style={{ objectPosition: "center 45%" }}
-        />
+        <Image src="/images/gallery/odin-gallery-01.jpg" alt="" fill sizes="100vw" style={{ objectPosition: "center 42%" }} />
       </div>
       <div className="le-story-scrim" aria-hidden="true" />
       <div className="le-wrap le-story-inner">
@@ -25,6 +19,10 @@ export function Story() {
           <p className="le-note le-note-light">{t("kicker")}</p>
           <h2 id="le-story-title" className="le-display le-story-quote">{t("heading")}</h2>
           <p className="le-story-lead">{t("lead")}</p>
+          <p className="le-story-caption">
+            <span>{t("distanceNote", { distance: siteConfig.locationDistanceFromPattaya })}</span>
+            <span>{t("experienceCount", { count: experiences.length })}</span>
+          </p>
         </div>
         <div className="le-story-notes">
           {PILLARS.map((key) => (
@@ -36,7 +34,6 @@ export function Story() {
               </div>
             </div>
           ))}
-          <p className="le-story-count">{t("experienceCount", { count: experiences.length })}</p>
         </div>
       </div>
     </section>

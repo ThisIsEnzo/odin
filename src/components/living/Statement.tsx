@@ -1,60 +1,41 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
+/** Words transition from muted to ink as the statement enters the viewport.
+ *  Without JS and with reduced motion, the text is visible immediately. */
 export function Statement() {
   const t = useTranslations("home");
-  const locale = useLocale();
   const ref = useRef<HTMLParagraphElement>(null);
   const [armed, setArmed] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const text = t("statement");
-  const segments = locale.startsWith("th") || locale.startsWith("zh")
-    ? [text]
-    : text.trim().split(/\s+/);
+  const [on, setOn] = useState(false);
+  const words = t("statement").split(" ");
 
   useEffect(() => {
     const node = ref.current;
     if (!node || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
     setArmed(true);
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+    if (typeof IntersectionObserver === "undefined") { setOn(true); return; }
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry?.isIntersecting) { setOn(true); io.disconnect(); } },
+      { threshold: 0.3 },
     );
+    io.observe(node);
+    const fallback = window.setTimeout(() => setOn(true), 1400);
+    return () => { io.disconnect(); window.clearTimeout(fallback); };
+  }, []);
 
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [text]);
+  const cls = ["st-p", armed ? "armed" : "", armed && on ? "on" : ""].filter(Boolean).join(" ");
 
   return (
-    <section className="st" aria-label={text}>
+    <section className="st">
       <div className="le-wrap">
-        <p
-          ref={ref}
-          className={"st-p" + (armed ? " armed" : "") + (armed && visible ? " on" : "")}
-        >
-          {segments.map((segment, index) => (
-            <Fragment key={index}>
-              {index > 0 && segments.length > 1 ? " " : null}
-              <span
-                className="w"
-                style={armed ? { transitionDelay: Math.min(index * 55, 660) + "ms" } : undefined}
-              >
-                {segment}
-              </span>
-            </Fragment>
+        <p ref={ref} className={cls}>
+          {words.map((word, i) => (
+            <span key={`${word}-${i}`} className="w" style={armed ? { transitionDelay: `${i * 65}ms` } : undefined}>
+              {word}{" "}
+            </span>
           ))}
         </p>
       </div>
